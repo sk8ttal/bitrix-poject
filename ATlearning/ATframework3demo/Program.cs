@@ -1,12 +1,14 @@
+using atFrameWork2.BaseFramework.LogTools;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
+Log.WriteHtmlHeader(Log.commonLogPath);
+Log.Info(">>>>New session started<<<<");
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
