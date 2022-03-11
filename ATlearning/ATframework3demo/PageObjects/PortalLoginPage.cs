@@ -25,7 +25,7 @@ namespace atFrameWork2.PageObjects
             loginField.SendKeys(admin.Login);
             Thread.Sleep(1000);
             loginField.SendKeys(Keys.Enter);
-            pwdField.SendKeys(admin.Password);
+            pwdField.SendKeys(admin.Password, logInputtedText: false);
             Thread.Sleep(1000);
             pwdField.SendKeys(Keys.Enter);
             return new PortalHomePage();

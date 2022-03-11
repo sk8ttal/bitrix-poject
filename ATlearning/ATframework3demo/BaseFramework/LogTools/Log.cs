@@ -27,7 +27,7 @@ namespace atFrameWork2.BaseFramework.LogTools
 
         static void Add(LogMessage message)
         {
-            string recordContent = $"[{DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss.fff")}][{message.MsgType}]{message.Text}";
+            string recordContent = $"[{DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss.fff")}][{message.MsgType}] {message.Text}";
             var runningTestCase = TestCase.RunningTestCase;
             message.WriteHtml(runningTestCase == default ? commonLogPath : runningTestCase.CaseLogPath, recordContent);
             if(runningTestCase != default)

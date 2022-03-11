@@ -1,7 +1,13 @@
 ﻿@inherits TestRunComponentBase
 @using ATframework3demo.BaseFramework
 
-<button class="btn btn-sm btn-primary" @onclick="RunSelectedTests">Запустить выбранные</button>
+<table width="600px">
+    <input class="form-control" placeholder="Адрес портала" type="text" @bind="PortalUri" style="background-color: @PortalUriBgColor" @onclick="OnInputClick" />
+    <input class="form-control" placeholder="Логин" type="text" @bind="PortalUser.Login" style="background-color: @LoginBgColor" @onclick="OnInputClick" />
+    <input class="form-control" placeholder="Пароль" type="password" @bind="PortalUser.Password" style="background-color: @PwdBgColor" @onclick="OnInputClick" />
+</table>
+
+<button disabled="@RunButtonDisabled" class="btn btn-sm btn-primary" @onclick="RunSelectedTests">Запустить выбранные тесты</button>
 <table class="table table-bordered">
     <thead class="thead-dark">
         <tr>
@@ -39,7 +45,7 @@
                 <td>
                     @if (testCase.Status != TestCaseStatus.idle && testCase.Status != TestCaseStatus.waitingForExecute)
                     {
-                        <a href="@testCase.CaseLogPath">Лог</a>
+                        <button class="btn btn-sm btn-primary" @onclick="() => ShowLog(testCase)">Лог</button>
                     }
                 </td>
                 <td>

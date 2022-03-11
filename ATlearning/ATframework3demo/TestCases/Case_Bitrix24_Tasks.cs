@@ -1,4 +1,5 @@
 ﻿using atFrameWork2.BaseFramework;
+using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.PageObjects;
 using atFrameWork2.SeleniumFramework;
 using atFrameWork2.TestEntities;
@@ -18,7 +19,7 @@ namespace atFrameWork2.TestCases
             {
                 new TestCase("Создание задачи", homePage => CreateTask(homePage)),
                 new TestCase("Редактирование задачи", homePage => throw new NotImplementedException("Заглушка теста редактирования задачи")),
-                new TestCase("Удаление задачи", homePage => throw new NotImplementedException("Заглушка теста удаления задачи")),
+                new TestCase("Удаление задачи", homePage => { Thread.Sleep(5000); Log.Error("kukus"); }),
             };
         }
 

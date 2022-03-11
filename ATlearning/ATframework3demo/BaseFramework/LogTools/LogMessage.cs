@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ATframework3demo.BaseFramework;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -22,8 +23,8 @@ namespace atFrameWork2.BaseFramework.LogTools
         {
             if (!string.IsNullOrEmpty(text))
             {
-                string hexColor = MessageColor.R.ToString("X2") + MessageColor.G.ToString("X2") + MessageColor.B.ToString("X2");
-                File.AppendAllText(filePath, $"<div style=\"color: #{hexColor}\">{text?.Trim()}</div>\r\n");
+                string hexColor = HelperMethods.GetHexColor(MessageColor);
+                File.AppendAllText(filePath, $"<div style=\"color: {hexColor}\">{text?.Trim()}</div>\r\n");
             }
         }
     }

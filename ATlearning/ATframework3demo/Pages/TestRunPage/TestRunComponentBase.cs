@@ -1,25 +1,94 @@
 ﻿using atFrameWork2.BaseFramework;
+using atFrameWork2.TestEntities;
 using ATframework3demo.BaseFramework;
 using Microsoft.AspNetCore.Components;
+using System.Drawing;
 
 namespace ATframework3demo.Pages.TestRunPage
 {
     public class TestRunComponentBase : ComponentBase
     {
-        CaseCollectionGenerator CaseColBuilder = new CaseCollectionGenerator();
+        const string configFileName = "settings.txt";
+        CaseCollectionGenerator caseColBuilder = new CaseCollectionGenerator();
+
         protected bool RunButtonDisabled { get; set; }
         protected List<TestCase> CaseCollection { get; set; }
+        protected string PortalUri { get; set; }
+        protected string PortalUriBgColor { get; set; }
+        protected string LoginBgColor { get; set; }
+        protected string PwdBgColor { get; set; }
+        protected User PortalUser { get; set; } = new User();
+
+        protected void ShowLog(TestCase testCase)
+        {
+            //show popup with log
+        }
+
+        protected void OnInputClick()
+        {
+            PortalUriBgColor = HelperMethods.GetHexColor(Color.White);
+            LoginBgColor = HelperMethods.GetHexColor(Color.White);
+            PwdBgColor = HelperMethods.GetHexColor(Color.White);
+        }
 
         protected async void RunSelectedTests()
         {
+            RunButtonDisabled = true;
+            Uri portalUri = default;
+            if (string.IsNullOrEmpty(PortalUri) || !Uri.TryCreate(PortalUri, UriKind.Absolute, out portalUri))
+                PortalUriBgColor = HelperMethods.GetHexColor(Color.Red);
+            else if (string.IsNullOrEmpty(PortalUser.Login))
+                LoginBgColor = HelperMethods.GetHexColor(Color.Red);
+            else if (string.IsNullOrEmpty(PortalUser.Password))
+                PwdBgColor = HelperMethods.GetHexColor(Color.Red);
+            else
+            {
+                File.WriteAllText(configFileName, $"{PortalUri}\r\n{PortalUser.Login}\r\n{PortalUser.Password}");
+                var selectedCases = CaseCollection.FindAll(x => x.Node.IsChecked);
+                
+                if (selectedCases.Any())
+                {
+                    selectedCases.ForEach(x => x.Status = TestCaseStatus.waitingForExecute);
+                    var portalInfo = new PortalInfo(portalUri, PortalUser);
 
+                    foreach (var testCase in selectedCases)
+                    {
+                        await Task.Run(() =>
+                        {
+                            testCase.Execute(portalInfo, () => InvokeAsync(StateHasChanged));
+                        });
+                    }
+
+                    return;
+                }
+            }
+         
+            RunButtonDisabled = false;
+            StateHasChanged();
         }
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-
-            CaseCollection = CaseColBuilder.FrameworkCaseCollection;
+            CaseCollection = caseColBuilder.FrameworkCaseCollection;
+            OnInputClick();
+            
+            if(File.Exists(configFileName))
+            {
+                string configContent = File.ReadAllText(configFileName);
+                
+                if (!string.IsNullOrEmpty(configContent))
+                {
+                    var parts = configContent.Split("\r\n", StringSplitOptions.None);
+                    
+                    if(parts.Count() > 2)
+                    {
+                        PortalUri = parts[0];
+                        PortalUser.Login = parts[1];
+                        PortalUser.Password = parts[2];
+                    }
+                }
+            }
         }
     }
 }

@@ -23,13 +23,15 @@ namespace atFrameWork2.BaseFramework
 
         int logCounter = 0;
 
-        public void Execute(PortalInfo testPortal)
+        public void Execute(PortalInfo testPortal, Action uiRefresher)
         {
             Status = TestCaseStatus.running;
+            uiRefresher.Invoke();
             RunningTestCase = this;
             logCounter++;
-            CaseLogPath = $"caselog{DateTime.Now:ddMMyyyyHHmmss}{logCounter}.html";
+            CaseLogPath = Path.Combine(Environment.CurrentDirectory, $"caselog{DateTime.Now:ddMMyyyyHHmmss}{logCounter}.html");
             Log.WriteHtmlHeader(CaseLogPath);
+            uiRefresher.Invoke();
 
             try
             {
@@ -61,6 +63,7 @@ namespace atFrameWork2.BaseFramework
                 Status = TestCaseStatus.passed;
 
             RunningTestCase = default;
+            uiRefresher.Invoke();
         }
 
         public string Title { get; set; }

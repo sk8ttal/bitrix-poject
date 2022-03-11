@@ -49,10 +49,13 @@ namespace atFrameWork2.SeleniumFramework
             }, driver);
         }
 
-        public void SendKeys(string textToInput, IWebDriver driver = default)
+        public void SendKeys(string textToInput, IWebDriver driver = default, bool logInputtedText = true)
         {
             WaitElementDisplayed(driver: driver);
-            PrintActionInfo(nameof(SendKeys));
+            string textToLog = $"'{textToInput}'";
+            if (!logInputtedText)
+                textToLog = "[логирование отключено]";
+            PrintActionInfo($"Ввод текста {textToLog} в элемент");
 
             Execute(input =>
             {
