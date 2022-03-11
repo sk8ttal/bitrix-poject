@@ -23,8 +23,11 @@ namespace atFrameWork2.BaseFramework.LogTools
         {
             if (!string.IsNullOrEmpty(text))
             {
-                string hexColor = HelperMethods.GetHexColor(MessageColor);
-                File.AppendAllText(filePath, $"<div style=\"color: {hexColor}\">{text?.Trim()}</div>\r\n");
+                string hexColor = HelperMethods.GetHexColor(MessageColor);//
+                string htmlToWrite = $"<div style=\"color: {hexColor}\">{text?.Trim()}</div>";
+                if (text?.Contains('\n') == true)
+                    htmlToWrite = $"<pre>{htmlToWrite}</pre>";
+                File.AppendAllText(filePath, htmlToWrite + "\r\n");
             }
         }
     }

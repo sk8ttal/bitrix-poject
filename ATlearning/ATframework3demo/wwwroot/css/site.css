@@ -18,6 +18,11 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
+.blazored-modal-content {
+    height: 600px;
+    overflow-y: auto;
+}
+
 .content {
     padding-top: 1.1rem;
 }

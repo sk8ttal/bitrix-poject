@@ -1,4 +1,5 @@
-﻿using atFrameWork2.SeleniumFramework;
+﻿using atFrameWork2.BaseFramework.LogTools;
+using atFrameWork2.SeleniumFramework;
 using atFrameWork2.TestEntities;
 using OpenQA.Selenium;
 using System;

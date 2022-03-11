@@ -1,6 +1,8 @@
 ﻿using atFrameWork2.BaseFramework;
 using atFrameWork2.TestEntities;
 using ATframework3demo.BaseFramework;
+using Blazored.Modal;
+using Blazored.Modal.Services;
 using Microsoft.AspNetCore.Components;
 using System.Drawing;
 
@@ -18,10 +20,13 @@ namespace ATframework3demo.Pages.TestRunPage
         protected string LoginBgColor { get; set; }
         protected string PwdBgColor { get; set; }
         protected User PortalUser { get; set; } = new User();
+        [CascadingParameter] public IModalService Modal { get; set; }
 
         protected void ShowLog(TestCase testCase)
         {
-            //show popup with log
+            var parameters = new ModalParameters();
+            parameters.Add(nameof(LogViewComponent.TestCase), testCase);
+            Modal.Show<LogViewComponent>($"Лог кейса '{testCase.Title}'", parameters);
         }
 
         protected void OnInputClick()
