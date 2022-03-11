@@ -4,7 +4,7 @@ using System.Text;
 
 namespace atFrameWork2.TestEntities
 {
-    class PortalInfo
+    public class PortalInfo
     {
         public PortalInfo(Uri portalUri, User portalAdmin)
         {

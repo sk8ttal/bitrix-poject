@@ -6,7 +6,7 @@ using System.Text;
 
 namespace atFrameWork2.PageObjects
 {
-    class PortalLeftMenu
+    public class PortalLeftMenu
     {
         public TasksListPage OpenTasks()
         {

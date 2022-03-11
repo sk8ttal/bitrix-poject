@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace atFrameWork2.TestCases
 {
-    class Case_Bitrix24_Tasks : CaseCollectionBuilder
+    public class Case_Bitrix24_Tasks : CaseCollectionBuilder
     {
         protected override List<TestCase> GetCases()
         {

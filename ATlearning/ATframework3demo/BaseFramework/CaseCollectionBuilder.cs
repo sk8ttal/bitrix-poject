@@ -7,9 +7,9 @@ using System.Text;
 
 namespace atFrameWork2.BaseFramework
 {
-    abstract class CaseCollectionBuilder
+    public abstract class CaseCollectionBuilder
     {
-        public List<TestCase> CaseCollection { get; } = new List<TestCase>();
+        List<TestCase> CaseCollection { get; } = new List<TestCase>();
 
         public CaseCollectionBuilder()
         {
@@ -18,7 +18,7 @@ namespace atFrameWork2.BaseFramework
 
         abstract protected List<TestCase> GetCases();
 
-        public static void ActivateTestCaseProvidersInstances()
+        public static void ActivateTestCaseProvidersInstances(List<TestCase> resultCaseCollection)
         {
             IEnumerable<Type> subclassTypes = Assembly
                 .GetAssembly(typeof(CaseCollectionBuilder))
@@ -29,7 +29,8 @@ namespace atFrameWork2.BaseFramework
             {
                 try
                 {
-                    var _ = Activator.CreateInstance(subClassType);
+                    var instance = Activator.CreateInstance(subClassType) as CaseCollectionBuilder;
+                    resultCaseCollection.AddRange(instance.CaseCollection);
                 }
                 catch (Exception e)
                 {

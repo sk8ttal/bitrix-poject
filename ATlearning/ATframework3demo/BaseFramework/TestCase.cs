@@ -10,7 +10,7 @@ using System.Text;
 
 namespace atFrameWork2.BaseFramework
 {
-    class TestCase
+    public class TestCase
     {
         public static TestCase RunningTestCase { get; set; }
 

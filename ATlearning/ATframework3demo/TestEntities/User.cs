@@ -4,7 +4,7 @@ using System.Text;
 
 namespace atFrameWork2.TestEntities
 {
-    class User
+    public class User
     {
         public string Login { get; set; }
         public string Password { get; set; }

@@ -1,0 +1,53 @@
+﻿@inherits TestRunComponentBase
+@using ATframework3demo.BaseFramework
+
+<button class="btn btn-sm btn-primary" @onclick="RunSelectedTests">Запустить выбранные</button>
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Статус</th>
+            <th></th>
+            <th>Кейс</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var testCase in CaseCollection)
+        {
+            <tr>
+                <td>
+                    @{
+                        string badgeType = "badge bg-";
+                        if (testCase.Status == TestCaseStatus.failed)
+                        {
+                            badgeType += "danger";
+                        }
+                        else if (testCase.Status == TestCaseStatus.passed)
+                        {
+                            badgeType += "success";
+                        }
+                        else if (testCase.Status == TestCaseStatus.running)
+                        {
+                            badgeType += "primary";
+                        }
+                        else
+                        {
+                            badgeType += "secondary";
+                        }
+                    }
+                    <span class="@badgeType">@testCase.Status</span>
+                </td>
+                <td>
+                    @if (testCase.Status != TestCaseStatus.idle && testCase.Status != TestCaseStatus.waitingForExecute)
+                    {
+                        <a href="@testCase.CaseLogPath">Лог</a>
+                    }
+                </td>
+                <td>
+                    <input type="checkbox" @bind="@testCase.Node.IsChecked">
+                    @testCase.Title
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

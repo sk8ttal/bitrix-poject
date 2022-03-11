@@ -5,7 +5,7 @@ using System.Text;
 
 namespace atFrameWork2.BaseFramework.LogTools
 {
-    abstract class LogMessage
+    public abstract class LogMessage
     {
         public string MsgType { get; protected set; }
         public string Text { get; protected set; }

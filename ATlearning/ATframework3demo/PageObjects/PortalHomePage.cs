@@ -5,7 +5,7 @@ using System.Text;
 
 namespace atFrameWork2.PageObjects
 {
-    class PortalHomePage
+    public class PortalHomePage
     {
         public PortalLeftMenu LeftMenu => new PortalLeftMenu();
     }
