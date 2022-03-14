@@ -13,4 +13,19 @@
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="99.0.4844.5100" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="dotnet publish ATframework3demo.csproj -c:Debug --no-build" />
+  </Target>
+
+  <Target Name="MakeWwwroot" AfterTargets="Build">
+    <MakeDir Directories="$(OutDir)wwwroot" />
+  </Target>
+
+  <Target Name="CopyFiles" AfterTargets="Build">
+    <ItemGroup>
+      <AquaBuildAdditionalFiles Include="$(TargetDir)publish\wwwroot\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AquaBuildAdditionalFiles)" DestinationFiles="@(AquaBuildAdditionalFiles->'$(TargetDir)\wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+
 </Project>
