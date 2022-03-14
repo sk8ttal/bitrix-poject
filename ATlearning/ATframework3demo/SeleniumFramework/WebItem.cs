@@ -1,8 +1,10 @@
 ﻿using atFrameWork2.BaseFramework;
 using atFrameWork2.BaseFramework.LogTools;
+using ATframework3demo.BaseFramework;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -43,7 +45,7 @@ namespace atFrameWork2.SeleniumFramework
             WaitElementDisplayed(driver: driver);
             PrintActionInfo(nameof(Click));
 
-            Execute(button =>
+            Execute((button, drv) =>
             {
                 button.Click();
             }, driver);
@@ -57,7 +59,7 @@ namespace atFrameWork2.SeleniumFramework
                 textToLog = "[логирование отключено]";
             PrintActionInfo($"Ввод текста {textToLog} в элемент");
 
-            Execute(input =>
+            Execute((input, drv) =>
             {
                 input.SendKeys(textToInput);
             }, driver);
@@ -66,9 +68,9 @@ namespace atFrameWork2.SeleniumFramework
         public void SwitchToFrame(IWebDriver driver = default)
         {
             PrintActionInfo(nameof(SwitchToFrame));
-            Execute(frame =>
+            Execute((frame, drv) =>
             {
-                driver.SwitchTo().Frame(frame);
+                drv.SwitchTo().Frame(frame);
             }, driver);
         }
 
@@ -76,7 +78,7 @@ namespace atFrameWork2.SeleniumFramework
         {
             PrintActionInfo(nameof(AssertTextContains));
 
-            Execute(targetElement =>
+            Execute((targetElement, drv) =>
             {
                 string factText = targetElement.Text;
 
@@ -116,10 +118,10 @@ namespace atFrameWork2.SeleniumFramework
             {
                 bool expectedState = false;
 
-                Execute(el =>
+                Execute((el, drv) =>
                 {
                     expectedState = el.Displayed == waitDirection;
-                }, driver);
+                }, driver, true);
 
                 return expectedState;
             }, 1, maxWait_s, waitDescription);
@@ -128,60 +130,69 @@ namespace atFrameWork2.SeleniumFramework
             return result;
         }
 
-        void Execute(Action<IWebElement> seleniumCode, IWebDriver driver)
+        void Execute(Action<IWebElement, IWebDriver> seleniumCode, IWebDriver driver, bool throwAtDebug = false)
         {
             driver ??= DefaultDriver;
 
-            foreach (var locator in Locators)
+            try
             {
-                IWebElement targetElement = default;
-                int staleRetryCount = 3;
-                bool interceptedHandlerFirstTry = true;
-
-                for (int i = 0; i < staleRetryCount; i++)
+                foreach (var locator in Locators)
                 {
-                    try
+                    IWebElement targetElement = default;
+                    int staleRetryCount = 3;
+                    bool interceptedHandlerFirstTry = true;
+
+                    for (int i = 0; i < staleRetryCount; i++)
                     {
-                        targetElement = driver.FindElement(By.XPath(locator));
-                        seleniumCode.Invoke(targetElement);
-                        break;
-                    }
-                    catch (WebDriverException ex)
-                    {
-                        if (ex is NoSuchElementException)
+                        try
                         {
-                            if (locator == Locators.Last())
-                                throw;
+                            targetElement = driver.FindElement(By.XPath(locator));
+                            seleniumCode.Invoke(targetElement, driver);
+                            break;
                         }
-                        else if (ex is StaleElementReferenceException)
+                        catch (WebDriverException ex)
                         {
-                            if (i == staleRetryCount - 1)
-                                throw;
-                            Thread.Sleep(2000);
-                            continue;
-                        }
-                        else if (ex is ElementClickInterceptedException)
-                        {
-                            if (ex.Message.Contains("helpdesk-notification-popup"))
+                            if (ex is NoSuchElementException)
                             {
-                                new WebItem("//div[contains(@class, 'popup-close-btn')]", "Кнопка закрытия баннера").Click(driver);
-                                if (interceptedHandlerFirstTry)
-                                    i++;
-                                interceptedHandlerFirstTry = false;
+                                if (locator == Locators.Last())
+                                    throw;
+                            }
+                            else if (ex is StaleElementReferenceException)
+                            {
+                                if (i == staleRetryCount - 1)
+                                    throw;
+                                Thread.Sleep(2000);
                                 continue;
+                            }
+                            else if (ex is ElementClickInterceptedException)
+                            {
+                                if (ex.Message.Contains("helpdesk-notification-popup"))
+                                {
+                                    new WebItem("//div[contains(@class, 'popup-close-btn')]", "Кнопка закрытия баннера").Click(driver);
+                                    if (interceptedHandlerFirstTry)
+                                        i++;
+                                    interceptedHandlerFirstTry = false;
+                                    continue;
+                                }
+                                else
+                                    throw;
                             }
                             else
                                 throw;
                         }
-                        else
-                            throw;
+
+                        break;
                     }
 
-                    break;
+                    if (targetElement != default)
+                        break;
                 }
-
-                if (targetElement != default)
-                    break;
+            }
+            catch (Exception e)
+            {
+                if(throwAtDebug || !EnvironmentSettings.IsDebug)
+                    throw;
+                Debug.Fail(e.ToString());
             }
         }
 

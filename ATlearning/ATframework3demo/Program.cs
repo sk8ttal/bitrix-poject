@@ -1,10 +1,13 @@
 using atFrameWork2.BaseFramework.LogTools;
+using ATframework3demo.BaseFramework;
 using Blazored.Modal;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
 Log.WriteHtmlHeader(Log.commonLogPath);
 Log.Info(">>>>New session started<<<<");
+if(args != default)
+    EnvironmentSettings.AppArgs = args.ToList();
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();

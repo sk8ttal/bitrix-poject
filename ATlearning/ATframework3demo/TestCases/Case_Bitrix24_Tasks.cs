@@ -52,6 +52,7 @@ namespace atFrameWork2.TestCases
             DriverActions.SwitchToDefaultContent();
             var gridTaskLink = new WebItem($"//a[contains(text(), '{task.Title}') and contains(@class, 'task-title')]", 
                 $"Ссылка на задачу '{task.Title}' в гриде");
+            gridTaskLink.WaitElementDisplayed();
             gridTaskLink.Click();
             sliderFrame.SwitchToFrame();
             //открыть задачу, ассертнуть тайтл и дескрипшн
