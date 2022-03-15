@@ -2,6 +2,7 @@
 using atFrameWork2.BaseFramework.LogTools;
 using ATframework3demo.BaseFramework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,17 +27,17 @@ namespace atFrameWork2.SeleniumFramework
             set => _defaultDriver = value;
         }
 
-        List<string> Locators { get; set; } = new List<string>();
+        List<string> XPathLocators { get; set; } = new List<string>();
         public string Description { get; set; }
-        public string DescriptionFull { get => $"'{Description}' локаторы: {string.Join(", ", Locators)}"; }
+        public string DescriptionFull { get => $"'{Description}' локаторы: {string.Join(", ", XPathLocators)}"; }
 
-        public WebItem(string locator, string description) : this(new List<string> { locator }, description)
+        public WebItem(string xpathLocator, string description) : this(new List<string> { xpathLocator }, description)
         {
         }
 
-        public WebItem(List<string> locators, string description)
+        public WebItem(List<string> xpathLocators, string description)
         {
-            Locators = locators;
+            XPathLocators = xpathLocators;
             Description = description;
         }
 
@@ -71,6 +72,29 @@ namespace atFrameWork2.SeleniumFramework
             Execute((frame, drv) =>
             {
                 drv.SwitchTo().Frame(frame);
+            }, driver);
+        }
+
+        public void SelectListItemByText(string listItemToSelect, IWebDriver driver = default)
+        {
+            WaitElementDisplayed(driver: driver);
+            PrintActionInfo($"Выбор пункта списка '{listItemToSelect}' в списке");
+
+            Execute((select, drv) =>
+            {
+                var selEl = new SelectElement(select);
+                string itemToSelectResultText = default;
+                bool optionExists = selEl.Options.ToList().Find(x => x.Text == listItemToSelect) != null;
+
+                if (!optionExists)
+                    itemToSelectResultText = selEl.Options.ToList().Find(x => x.Text.Contains(listItemToSelect))?.Text;
+                else
+                    itemToSelectResultText = listItemToSelect;
+
+                if (itemToSelectResultText != null)
+                    selEl.SelectByText(itemToSelectResultText);
+                else
+                    throw new Exception($"Пункт списка '{listItemToSelect}' не найден в списке {DescriptionFull}");
             }, driver);
         }
 
@@ -136,7 +160,7 @@ namespace atFrameWork2.SeleniumFramework
 
             try
             {
-                foreach (var locator in Locators)
+                foreach (var locator in XPathLocators)
                 {
                     IWebElement targetElement = default;
                     int staleRetryCount = 3;
@@ -154,7 +178,7 @@ namespace atFrameWork2.SeleniumFramework
                         {
                             if (ex is NoSuchElementException)
                             {
-                                if (locator == Locators.Last())
+                                if (locator == XPathLocators.Last())
                                     throw;
                             }
                             else if (ex is StaleElementReferenceException)
