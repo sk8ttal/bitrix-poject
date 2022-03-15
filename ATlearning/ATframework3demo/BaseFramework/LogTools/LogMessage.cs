@@ -23,12 +23,22 @@ namespace atFrameWork2.BaseFramework.LogTools
         {
             if (!string.IsNullOrEmpty(text))
             {
-                string hexColor = HelperMethods.GetHexColor(MessageColor);//
-                string htmlToWrite = $"<div style=\"color: {hexColor}\">{text?.Trim()}</div>";
+                string hexColor = HelperMethods.GetHexColor(MessageColor);
+                string htmlToWrite = GetFormattedLine(text, hexColor);
+
                 if (text?.Contains('\n') == true)
-                    htmlToWrite = $"<pre>{htmlToWrite}</pre>";
-                File.AppendAllText(filePath, htmlToWrite + "\r\n");
+                {
+                    var msgLines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                    htmlToWrite = String.Join(Environment.NewLine, msgLines.Select(x => GetFormattedLine(x, hexColor)));
+                }
+
+                File.AppendAllText(filePath, htmlToWrite + Environment.NewLine);
             }
+        }
+
+        private static string GetFormattedLine(string text, string hexColor)
+        {
+            return $"<div style=\"color: {hexColor}\">{text?.Trim()}</div>";
         }
     }
 }
