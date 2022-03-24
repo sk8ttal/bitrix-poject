@@ -125,20 +125,25 @@ namespace atFrameWork2.SeleniumFramework
             return resultAttrValue;
         }
 
-        public void AssertTextContains(string expectedText, string failMessage, IWebDriver driver = default)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expectedText"></param>
+        /// <param name="failMessage"></param>
+        /// <param name="driver"></param>
+        /// <returns>true if expectedText present at element's innerText</returns>
+        public bool AssertTextContains(string expectedText, string failMessage, IWebDriver driver = default)
         {
             PrintActionInfo(nameof(AssertTextContains));
+            bool result = false;
 
             Execute((targetElement, drv) =>
             {
                 string factText = targetElement.Text;
-
-                if (string.IsNullOrEmpty(factText) || !factText.Contains(expectedText))
-                {
-                    Log.Error(failMessage + Environment.NewLine +
-                        $"Ожидалось наличие подстроки: {expectedText}, но было:{Environment.NewLine}{factText}");
-                }
+                result = !(string.IsNullOrEmpty(factText) || !factText.Contains(expectedText));
             }, driver);
+
+            return result;
         }
 
         public bool WaitElementDisplayed(int maxWait_s = 5, IWebDriver driver = default)
