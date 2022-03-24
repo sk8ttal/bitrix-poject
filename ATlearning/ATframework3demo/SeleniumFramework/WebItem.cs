@@ -98,6 +98,33 @@ namespace atFrameWork2.SeleniumFramework
             }, driver);
         }
 
+        public bool Checked(IWebDriver driver = default)
+        {
+            WaitElementDisplayed(driver: driver);
+            bool isChecked = false;
+
+            Execute((checkBox, drv) =>
+            {
+                isChecked = checkBox.Selected;
+            }, driver);
+
+            PrintActionInfo($"Чекбокс {(isChecked ? "отмечен" : "снят")}. Элемент");
+            return isChecked;
+        }
+
+        public string GetAttribute(string attributeName, IWebDriver driver = default)
+        {
+            string resultAttrValue = default;
+
+            Execute((el, drv) =>
+            {
+                resultAttrValue = el.GetAttribute(attributeName);
+            }, driver);
+
+            PrintActionInfo($"Значение аттрибута {attributeName}='{resultAttrValue}'. Элемент");
+            return resultAttrValue;
+        }
+
         public void AssertTextContains(string expectedText, string failMessage, IWebDriver driver = default)
         {
             PrintActionInfo(nameof(AssertTextContains));
