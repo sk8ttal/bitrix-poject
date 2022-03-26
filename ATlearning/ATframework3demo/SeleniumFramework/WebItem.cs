@@ -146,6 +146,19 @@ namespace atFrameWork2.SeleniumFramework
             return result;
         }
 
+        public string InnerText(IWebDriver driver = default)
+        {
+            string elementText = default;
+
+            Execute((targetElement, drv) =>
+            {
+                elementText = targetElement.Text;
+            }, driver);
+
+            PrintActionInfo($"Получен текст '{elementText}'. Элемент");
+            return elementText;
+        }
+
         public bool WaitElementDisplayed(int maxWait_s = 5, IWebDriver driver = default)
         {
             return WaitDisplayedCommon(driver, maxWait_s, true, "Ожидание отображения элемента " + DescriptionFull);
