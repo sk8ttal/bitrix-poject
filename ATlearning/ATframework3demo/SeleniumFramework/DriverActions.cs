@@ -33,6 +33,27 @@ namespace atFrameWork2.SeleniumFramework
             driver.Navigate().GoToUrl(uri);
         }
 
+        public static void BrowserAlert(bool accept, IWebDriver driver = default)
+        {
+            driver ??= WebItem.DefaultDriver;
+            IAlert alert = driver.SwitchTo().Alert();
+            string alertText = alert.Text;
+            string result = $"Алерт браузера '{alertText}': нажата кнопка ";
+
+            if (accept)
+            {
+                alert.Accept();
+                result += "ОK";
+            }
+            else
+            {
+                alert.Dismiss();
+                result += "Отмена";
+            }
+
+            Log.Info(result);
+        }
+
         public static void SwitchToDefaultContent(IWebDriver driver = default)
         {
             Log.Info($"{nameof(SwitchToDefaultContent)}");

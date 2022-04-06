@@ -2,6 +2,7 @@
 using atFrameWork2.BaseFramework.LogTools;
 using ATframework3demo.BaseFramework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
@@ -49,6 +50,21 @@ namespace atFrameWork2.SeleniumFramework
             Execute((button, drv) =>
             {
                 button.Click();
+            }, driver);
+        }
+
+        /// <summary>
+        /// Наведение курсора на объект
+        /// </summary>
+        /// <param name="driver"></param>
+        public void Hover(IWebDriver driver = default)
+        {
+            PrintActionInfo("Наведение курсора мыши");
+
+            Execute((element, drv) =>
+            {
+                Actions action = new Actions(drv);
+                action.MoveToElement(element).Build().Perform();
             }, driver);
         }
 
