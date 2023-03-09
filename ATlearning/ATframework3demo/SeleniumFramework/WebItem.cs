@@ -68,6 +68,12 @@ namespace atFrameWork2.SeleniumFramework
             }, driver);
         }
 
+        /// <summary>
+        /// Ввод текста в поле
+        /// </summary>
+        /// <param name="textToInput"></param>
+        /// <param name="driver"></param>
+        /// <param name="logInputtedText">Выводить ли введённый текст в лог</param>
         public void SendKeys(string textToInput, IWebDriver driver = default, bool logInputtedText = true)
         {
             WaitElementDisplayed(driver: driver);
@@ -82,6 +88,10 @@ namespace atFrameWork2.SeleniumFramework
             }, driver);
         }
 
+        /// <summary>
+        /// Переключение контекста драйвера на заданный iframe
+        /// </summary>
+        /// <param name="driver"></param>
         public void SwitchToFrame(IWebDriver driver = default)
         {
             PrintActionInfo(nameof(SwitchToFrame));
@@ -91,6 +101,12 @@ namespace atFrameWork2.SeleniumFramework
             }, driver);
         }
 
+        /// <summary>
+        /// Выбирает элемент списка по его тексту
+        /// </summary>
+        /// <param name="listItemToSelect">Текст элемента списка</param>
+        /// <param name="driver"></param>
+        /// <exception cref="Exception"></exception>
         public void SelectListItemByText(string listItemToSelect, IWebDriver driver = default)
         {
             WaitElementDisplayed(driver: driver);
@@ -114,6 +130,11 @@ namespace atFrameWork2.SeleniumFramework
             }, driver);
         }
 
+        /// <summary>
+        /// Показывает отмечен ли чекбокс/элемента списка
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
         public bool Checked(IWebDriver driver = default)
         {
             WaitElementDisplayed(driver: driver);
@@ -128,6 +149,12 @@ namespace atFrameWork2.SeleniumFramework
             return isChecked;
         }
 
+        /// <summary>
+        /// Получает значение произвольного аттрибута элемента по его имени
+        /// </summary>
+        /// <param name="attributeName"></param>
+        /// <param name="driver"></param>
+        /// <returns></returns>
         public string GetAttribute(string attributeName, IWebDriver driver = default)
         {
             string resultAttrValue = default;
@@ -142,7 +169,7 @@ namespace atFrameWork2.SeleniumFramework
         }
 
         /// <summary>
-        /// 
+        /// Проверяет наличие заданной подстроки в тексте элемента
         /// </summary>
         /// <param name="expectedText"></param>
         /// <param name="failMessage"></param>
@@ -162,6 +189,11 @@ namespace atFrameWork2.SeleniumFramework
             return result;
         }
 
+        /// <summary>
+        /// Получает весь текст, содержащийся в ветке потомков элемента
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
         public string InnerText(IWebDriver driver = default)
         {
             string elementText = default;
@@ -175,16 +207,34 @@ namespace atFrameWork2.SeleniumFramework
             return elementText;
         }
 
+        /// <summary>
+        /// Ждёт пока элемент отобразится на странице
+        /// </summary>
+        /// <param name="maxWait_s"></param>
+        /// <param name="driver"></param>
+        /// <returns></returns>
         public bool WaitElementDisplayed(int maxWait_s = 5, IWebDriver driver = default)
         {
             return WaitDisplayedCommon(driver, maxWait_s, true, "Ожидание отображения элемента " + DescriptionFull);
         }
 
+        /// <summary>
+        /// Ждёт пока элемент перестанет отображаться на странице
+        /// </summary>
+        /// <param name="maxWait_s"></param>
+        /// <param name="driver"></param>
+        /// <returns></returns>
         public bool WaitWhileElementDisplayed(int maxWait_s = 5, IWebDriver driver = default)
         {
             return WaitDisplayedCommon(driver, maxWait_s, false, "Ожидание пропадания элемента " + DescriptionFull);
         }
 
+        /// <summary>
+        /// Получает размеры элемента
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="noLog"></param>
+        /// <returns></returns>
         public Size Size(IWebDriver driver = default, bool noLog = false)
         {
             Size elementSize = default;

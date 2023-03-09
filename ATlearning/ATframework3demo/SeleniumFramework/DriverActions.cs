@@ -10,6 +10,10 @@ namespace atFrameWork2.SeleniumFramework
 {
     class DriverActions
     {
+        /// <summary>
+        /// Создаёт настроенный объект вебдрайвера
+        /// </summary>
+        /// <returns></returns>
         public static IWebDriver GetNewDriver()
         {
             IWebDriver driver;
@@ -19,6 +23,10 @@ namespace atFrameWork2.SeleniumFramework
             return driver;
         }
 
+        /// <summary>
+        /// Обновляет текущую страницу
+        /// </summary>
+        /// <param name="driver"></param>
         public static void Refresh(IWebDriver driver = default)
         {
             Log.Info($"{nameof(Refresh)}");
@@ -26,6 +34,11 @@ namespace atFrameWork2.SeleniumFramework
             driver.Navigate().Refresh();
         }
 
+        /// <summary>
+        /// Переход на заданный адрес
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="driver"></param>
         public static void OpenUri(Uri uri, IWebDriver driver = default)
         {
             Log.Info($"{nameof(OpenUri)}: {uri}");
@@ -33,6 +46,11 @@ namespace atFrameWork2.SeleniumFramework
             driver.Navigate().GoToUrl(uri);
         }
 
+        /// <summary>
+        /// Обрабатывает алерт на странице (да\нет). Если алерта нет, то выбросит исключение.
+        /// </summary>
+        /// <param name="accept"></param>
+        /// <param name="driver"></param>
         public static void BrowserAlert(bool accept, IWebDriver driver = default)
         {
             driver ??= WebItem.DefaultDriver;
@@ -54,6 +72,10 @@ namespace atFrameWork2.SeleniumFramework
             Log.Info(result);
         }
 
+        /// <summary>
+        /// Переключает контекст драйвера в исходное состояние
+        /// </summary>
+        /// <param name="driver"></param>
         public static void SwitchToDefaultContent(IWebDriver driver = default)
         {
             Log.Info($"{nameof(SwitchToDefaultContent)}");

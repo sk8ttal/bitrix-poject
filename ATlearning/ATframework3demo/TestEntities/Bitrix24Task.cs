@@ -4,7 +4,7 @@ using System.Text;
 
 namespace atFrameWork2.TestEntities
 {
-    class Bitrix24Task
+    public class Bitrix24Task
     {
         public Bitrix24Task(string title)
         {

@@ -14,6 +14,12 @@ namespace atFrameWork2.BaseFramework
     {
         public static TestCase RunningTestCase { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title">Название тесткейса</param>
+        /// <param name="body">Ссылка на метод тела кейса</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public TestCase(string title, Action<PortalHomePage> body)
         {
             Title = title ?? throw new ArgumentNullException(nameof(title));

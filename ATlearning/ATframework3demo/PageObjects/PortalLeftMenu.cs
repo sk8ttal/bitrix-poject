@@ -21,7 +21,7 @@ namespace atFrameWork2.PageObjects
             return new SiteListPage();
         }
 
-        internal PortalSettingsMainPage OpenSettings()
+        public PortalSettingsMainPage OpenSettings()
         {
             var btnSettings = new WebItem("//li[@id='bx_left_menu_menu_configs_sect']", "Пункт левого меню настройки");
             ClickMenuItem(btnSettings);
@@ -49,7 +49,7 @@ namespace atFrameWork2.PageObjects
             menuItem.Click();
         }
 
-        internal NewsPage OpenNews()
+        public NewsPage OpenNews()
         {
             //клик в пункт меню Новости
             var btnNews = new WebItem("//li[@id='bx_left_menu_menu_live_feed']", "Пункт левого меню Новости");
