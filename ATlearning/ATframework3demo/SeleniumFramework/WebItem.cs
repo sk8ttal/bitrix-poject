@@ -185,6 +185,20 @@ namespace atFrameWork2.SeleniumFramework
             return WaitDisplayedCommon(driver, maxWait_s, false, "Ожидание пропадания элемента " + DescriptionFull);
         }
 
+        public Size Size(IWebDriver driver = default, bool noLog = false)
+        {
+            Size elementSize = default;
+
+            Execute((targetElement, drv) =>
+            {
+                elementSize = targetElement.Size;
+            }, driver);
+
+            if(!noLog)
+                PrintActionInfo($"Получен размер '{elementSize}'. Элемент");
+            return elementSize;
+        }
+
         /// <summary>
         /// 
         /// </summary>

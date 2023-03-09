@@ -30,6 +30,15 @@ namespace atFrameWork2.PageObjects
 
         private static void ClickMenuItem(WebItem menuItem)
         {
+            var menuItemsArea = new WebItem("//div[@id='menu-items-block']", "Область с пунктами левого меню");
+            if(menuItemsArea.Size().Width < 150)
+            {
+                var expandMenuButton = new WebItem("//div[@class='menu-switcher']", "Кнопка сворачивания левого меню");
+                expandMenuButton.Hover();
+                var menuHeader = new WebItem("//div[@class='menu-items-header-title']", "Кнопка сворачивания левого меню");
+                menuHeader.Click();
+            }
+
             if (menuItem.WaitElementDisplayed() == false)
             {
                 //развернуть меню
