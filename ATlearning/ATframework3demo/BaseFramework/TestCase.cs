@@ -78,5 +78,12 @@ namespace atFrameWork2.BaseFramework
         public string CaseLogPath { get; set; }
         public List<LogMessage> CaseLog { get; } = new List<LogMessage>();
         public TestCaseStatus Status { get; set; }
+        public TestCaseEnvType EnvType { get; set; }
+    }
+    
+    public enum TestCaseEnvType
+    {
+        Web,
+        Mobile
     }
 }
