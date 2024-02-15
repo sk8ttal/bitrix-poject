@@ -44,12 +44,12 @@ namespace atFrameWork2.TestCases
             editorFrame.SwitchToFrame();
             var body = new WebItem("//body", "Это просто бади какой то");
             body.SendKeys(task.Description);
-            DriverActions.SwitchToDefaultContent();
+            WebDriverActions.SwitchToDefaultContent();
             sliderFrame.SwitchToFrame();
             //сохранить 
             var btnSaveTask = new WebItem("//button[@data-bx-id='task-edit-submit' and @class='ui-btn ui-btn-success']", "Кнопка сохранения задачи");
             btnSaveTask.Click();
-            DriverActions.SwitchToDefaultContent();
+            WebDriverActions.SwitchToDefaultContent();
             var gridTaskLink = new WebItem($"//a[contains(text(), '{task.Title}') and contains(@class, 'task-title')]", 
                 $"Ссылка на задачу '{task.Title}' в гриде");
             gridTaskLink.WaitElementDisplayed();

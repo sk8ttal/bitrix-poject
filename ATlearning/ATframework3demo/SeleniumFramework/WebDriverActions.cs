@@ -1,14 +1,11 @@
 ﻿using atFrameWork2.BaseFramework.LogTools;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Remote;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace atFrameWork2.SeleniumFramework
 {
-    class DriverActions
+    class WebDriverActions
     {
         /// <summary>
         /// Создаёт настроенный объект вебдрайвера
