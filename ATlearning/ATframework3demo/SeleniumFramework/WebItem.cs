@@ -34,23 +34,6 @@ namespace atFrameWork2.SeleniumFramework
         }
 
         /// <summary>
-        /// Ввод текста в поле
-        /// </summary>
-        /// <param name="textToInput"></param>
-        /// <param name="driver"></param>
-        /// <param name="logInputtedText">Выводить ли введённый текст в лог</param>
-        public void SendKeys(string textToInput, IWebDriver driver = default, bool logInputtedText = true)
-        {
-            WaitElementDisplayed(driver: driver);
-            string textToLog = $"'{textToInput}'";
-            if (!logInputtedText)
-                textToLog = "[логирование отключено]";
-            PrintActionInfo($"Ввод текста {textToLog} в элемент");
-
-            Execute((input, drv) => { input.SendKeys(textToInput); }, driver);
-        }
-
-        /// <summary>
         /// Переключение контекста драйвера на заданный iframe
         /// </summary>
         /// <param name="driver"></param>
