@@ -6,16 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using ATframework3demo.PageObjects;
 
 namespace atFrameWork2.PageObjects
 {
-    class PortalLoginPage
+    class PortalLoginPage : BaseLoginPage
     {
-        PortalInfo portalInfo;
-
-        public PortalLoginPage(PortalInfo portal)
+        public PortalLoginPage(PortalInfo portal):base(portal)
         {
-            portalInfo = portal;
         }
 
         public PortalHomePage Login(User admin)
