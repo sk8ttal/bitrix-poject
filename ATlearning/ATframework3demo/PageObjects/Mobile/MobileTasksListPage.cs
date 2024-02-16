@@ -1,3 +1,4 @@
+using atFrameWork2.BaseFramework;
 using atFrameWork2.SeleniumFramework;
 using atFrameWork2.TestEntities;
 
@@ -7,13 +8,31 @@ public class MobileTasksListPage
 {
     public MobileTasksListPage CreateTask(Bitrix24Task task)
     {
-        var createNewTaskBtn = new MobileItem("", "");
+        var createNewTaskBtn = new MobileItem("//android.view.ViewGroup[@content-desc=\"task-list_ADD_BTN\"]",
+            "Кнопка добавления новой задачи");
+        createNewTaskBtn.Click();
+        Thread.Sleep(1000);
+
+        var taskNameField = new MobileItem("//android.view.ViewGroup[@content-desc=\"title_FIELD\"]//android.widget.EditText",
+            "Поле названия задачи");
+        var createBtn = new MobileItem("//android.view.ViewGroup[@content-desc=\"taskCreateToolbar_createButton\"]", 
+            "Кнопка подтверждения создания задачи");
+        taskNameField.SendKeys(task.Title);
+        Thread.Sleep(1000);
+        createBtn.Click();
+        Thread.Sleep(1000);
+
         return this;
     }
 
-    public void IsTaskPresent(Bitrix24Task task)
+    public bool IsTaskPresent(Bitrix24Task task)
     {
-        throw new NotImplementedException();
+        var taskTitle = new MobileItem("//android.widget.TextView[@content-desc=\"task-list_SECTION_TITLE\" and @text=\"1231231\"]",
+            $"Заголовок задачи с текстом {task.Title}");
+        
+        bool isTaskPresent = Waiters.WaitForCondition(() => taskTitle.WaitElementDisplayed(), 2, 6,
+            $"Ожидание появления задачи '{task.Title}' в списке задач");
+        return isTaskPresent;
     }
     
 }

@@ -1,3 +1,5 @@
+using atFrameWork2.SeleniumFramework;
+
 namespace ATframework3demo.PageObjects.Mobile;
 
 /// <summary>
@@ -7,6 +9,11 @@ public class MobileMainPanel
 {
     public MobileTasksListPage SelectTasks()
     {
+        var tasksTab = new MobileItem("//android.widget.TextView[@resource-id=\"com.bitrix24.android:id/bb_bottom_bar_title\" and @text=\"Tasks\"]",
+            "Таб 'Задачи'");
+        tasksTab.Click();
+        Thread.Sleep(1000);
+
         return new MobileTasksListPage(); 
     }
 }
