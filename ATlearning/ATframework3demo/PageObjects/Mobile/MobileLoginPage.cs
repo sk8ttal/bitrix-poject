@@ -19,7 +19,7 @@ public class MobileLoginPage : BaseLoginPage
             "Поле для ввода логина");
         var pwdField = new MobileItem("//android.widget.EditText[@content-desc='passwordFormInput']", 
             "Поле для ввода пароля");
-        var nextBtn = new MobileItem("//android.widget.EditText[@content-desc='passwordFormInput']", 
+        var nextBtn = new MobileItem("//android.widget.Button[@resource-id='com.bitrix24.android:id/btnNext']", 
             "Кнопка 'Далее'");
         
         // переходим к форме ввода адреса портала
@@ -28,18 +28,21 @@ public class MobileLoginPage : BaseLoginPage
         
         // вводим адресс портала и дальше
         portalAddresField.SendKeys(portalInfo.PortalUri.ToString());
+        Thread.Sleep(1000);
         nextBtn.Click();
         Thread.Sleep(1000);
 
         // вводим логин и дальше
         loginField.SendKeys(admin.Login);
+        Thread.Sleep(1000);
         nextBtn.Click();
         Thread.Sleep(1000);
         
         // вводим пароль и дальше
         pwdField.SendKeys(admin.Password, logInputtedText: false);
         Thread.Sleep(1000);
-        
+        nextBtn.Click();
+
         return new MobileHomePage();
     }
 }

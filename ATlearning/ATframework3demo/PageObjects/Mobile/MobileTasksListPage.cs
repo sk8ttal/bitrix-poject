@@ -27,7 +27,7 @@ public class MobileTasksListPage
 
     public bool IsTaskPresent(Bitrix24Task task)
     {
-        var taskTitle = new MobileItem("//android.widget.TextView[@content-desc=\"task-list_SECTION_TITLE\" and @text=\"1231231\"]",
+        var taskTitle = new MobileItem($"//android.widget.TextView[@content-desc=\"task-list_SECTION_TITLE\" and @text=\"{task.Title}\"]",
             $"Заголовок задачи с текстом {task.Title}");
         
         bool isTaskPresent = Waiters.WaitForCondition(() => taskTitle.WaitElementDisplayed(), 2, 6,
