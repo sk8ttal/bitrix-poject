@@ -18,8 +18,8 @@ namespace atFrameWork2.TestCases
             return new List<TestCase>
             {
                 new TestCase("Создание задачи", homePage => CreateTask(homePage)),
-                new TestCase("Редактирование задачи", homePage => throw new NotImplementedException("Заглушка теста редактирования задачи")),
-                new TestCase("Удаление задачи", homePage => { Thread.Sleep(5000); Log.Error("kukus"); }),
+                new TestCase("Редактирование задачи", (PortalHomePage homePage) => throw new NotImplementedException("Заглушка теста редактирования задачи")),
+                new TestCase("Удаление задачи", (PortalHomePage homePage) => { Thread.Sleep(5000); Log.Error("kukus"); }),
             };
         }
 
