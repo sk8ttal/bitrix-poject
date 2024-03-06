@@ -11,16 +11,13 @@ namespace ATframework3demo.PageObjects.Mobile
             var createNewTaskBtn = new MobileItem("//android.view.ViewGroup[@content-desc=\"task-list_ADD_BTN\"]",
                 "Кнопка добавления новой задачи");
             createNewTaskBtn.Click();
-            Thread.Sleep(1000);
 
             var taskNameField = new MobileItem("//android.view.ViewGroup[@content-desc=\"title_FIELD\"]//android.widget.EditText",
                 "Поле названия задачи");
             var createBtn = new MobileItem("//android.view.ViewGroup[@content-desc=\"taskCreateToolbar_createButton\"]",
                 "Кнопка подтверждения создания задачи");
             taskNameField.SendKeys(task.Title);
-            Thread.Sleep(1000);
             createBtn.Click();
-            Thread.Sleep(1000);
 
             return this;
         }

@@ -24,23 +24,17 @@ namespace ATframework3demo.PageObjects.Mobile
 
             // переходим к форме ввода адреса портала
             enterAddresBtn.Click();
-            Thread.Sleep(1000);
 
             // вводим адресс портала и дальше
             portalAddresField.SendKeys(portalInfo.PortalUri.ToString());
-            Thread.Sleep(1000);
             nextBtn.Click();
-            Thread.Sleep(1000);
 
             // вводим логин и дальше
             loginField.SendKeys(admin.Login);
-            Thread.Sleep(1000);
             nextBtn.Click();
-            Thread.Sleep(1000);
 
             // вводим пароль и дальше
             pwdField.SendKeys(admin.Password, logInputtedText: false);
-            Thread.Sleep(1000);
             nextBtn.Click();
 
             return new MobileHomePage();

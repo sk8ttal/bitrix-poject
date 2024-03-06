@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using atFrameWork2.BaseFramework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System.Drawing;
@@ -31,6 +32,8 @@ namespace atFrameWork2.SeleniumFramework
                 Actions action = new Actions(drv);
                 action.MoveToElement(element).Build().Perform();
             }, driver);
+
+            Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
         }
 
         /// <summary>
@@ -70,6 +73,8 @@ namespace atFrameWork2.SeleniumFramework
                 else
                     throw new Exception($"Пункт списка '{listItemToSelect}' не найден в списке {DescriptionFull}");
             }, driver);
+
+            Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
         }
 
         /// <summary>

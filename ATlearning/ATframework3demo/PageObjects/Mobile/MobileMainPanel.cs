@@ -12,7 +12,6 @@ namespace ATframework3demo.PageObjects.Mobile
             var tasksTab = new MobileItem("//android.widget.TextView[@resource-id=\"com.bitrix24.android:id/bb_bottom_bar_title\" and @text=\"Tasks\"]",
                 "Таб 'Задачи'");
             tasksTab.Click();
-            Thread.Sleep(1000);
 
             return new MobileTasksListPage();
         }

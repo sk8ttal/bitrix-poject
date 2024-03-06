@@ -36,6 +36,8 @@ namespace atFrameWork2.SeleniumFramework
             Description = description;
         }
 
+        public int DefaultWaitAfterActiveAction_s { get; set; } = 1;
+
         public void Click(IWebDriver driver = default)
         {
             WaitElementDisplayed(driver: driver);
@@ -45,6 +47,8 @@ namespace atFrameWork2.SeleniumFramework
             {
                 button.Click();
             }, driver);
+
+            Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
         }
 
         /// <summary>
@@ -103,6 +107,7 @@ namespace atFrameWork2.SeleniumFramework
             PrintActionInfo($"Ввод текста {textToLog} в элемент");
 
             Execute((input, drv) => { input.SendKeys(textToInput); }, driver);
+            Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
         }
 
         protected void Execute(Action<IWebElement, IWebDriver> seleniumCode, IWebDriver driver, bool throwAtDebug = false)
