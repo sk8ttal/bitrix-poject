@@ -1,10 +1,11 @@
+using ATframework3demo.SeleniumFramework.DriverActions;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.Enums;
 
 namespace atFrameWork2.SeleniumFramework
 {
-    class MobileDriverActions
+    public class MobileDriverActions : BaseDriverActions
     {
         /// <summary>
         /// Создает настроенный объект мобильного драйвера
