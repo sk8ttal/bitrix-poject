@@ -1,6 +1,8 @@
-namespace ATframework3demo.PageObjects.Mobile;
-
-public class MobileHomePage
+namespace ATframework3demo.PageObjects.Mobile
 {
-    public MobileMainPanel TabsPanel => new MobileMainPanel();
+    public class MobileHomePage
+    {
+        public MobileMainPanel TabsPanel => new MobileMainPanel();
+    }
 }
+

@@ -3,10 +3,6 @@ using atFrameWork2.PageObjects;
 using atFrameWork2.SeleniumFramework;
 using atFrameWork2.TestEntities;
 using ATframework3demo.BaseFramework;
-using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using ATframework3demo.PageObjects.Mobile;
 
 namespace atFrameWork2.BaseFramework
@@ -28,7 +24,7 @@ namespace atFrameWork2.BaseFramework
             Node = new TestCaseTreeNode(title);
             EnvType = TestCaseEnvType.Web;
         }
-        
+
         public TestCase(string title, Action<MobileHomePage> body)
         {
             Title = title ?? throw new ArgumentNullException(nameof(title));
@@ -36,7 +32,7 @@ namespace atFrameWork2.BaseFramework
             Node = new TestCaseTreeNode(title);
             EnvType = TestCaseEnvType.Mobile;
         }
-        
+
         int logCounter = 0;
 
         public void Execute(PortalInfo testPortal, Action uiRefresher)
@@ -64,7 +60,7 @@ namespace atFrameWork2.BaseFramework
                     var homePage = loginPage.Login(testPortal.PortalAdmin);
                     MobileBody.Invoke(homePage);
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -83,7 +79,7 @@ namespace atFrameWork2.BaseFramework
             }
             catch (Exception) { }
 
-            if(CaseLog.Any(x => x is LogMessageError))
+            if (CaseLog.Any(x => x is LogMessageError))
                 Status = TestCaseStatus.failed;
             else
                 Status = TestCaseStatus.passed;
@@ -101,7 +97,7 @@ namespace atFrameWork2.BaseFramework
         public TestCaseStatus Status { get; set; }
         public TestCaseEnvType EnvType { get; set; }
     }
-    
+
     public enum TestCaseEnvType
     {
         Web,

@@ -1,14 +1,15 @@
 using atFrameWork2.TestEntities;
 
-namespace ATframework3demo.PageObjects;
-
-public abstract class BaseLoginPage
+namespace ATframework3demo.PageObjects
 {
-    protected PortalInfo portalInfo;
-
-    protected BaseLoginPage(PortalInfo portal)
+    public abstract class BaseLoginPage
     {
-        portalInfo = portal;
+        protected PortalInfo portalInfo;
+
+        protected BaseLoginPage(PortalInfo portal)
+        {
+            portalInfo = portal;
+        }
     }
-    
 }
+
