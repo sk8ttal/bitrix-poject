@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace atFrameWork2.SeleniumFramework
 {
-    class WebItem : BaseItem
+    public class WebItem : BaseItem
     {
         public WebItem(string xpathLocator, string description) : this(new List<string> {xpathLocator}, description)
         {
@@ -124,7 +124,7 @@ namespace atFrameWork2.SeleniumFramework
             Execute((targetElement, drv) =>
             {
                 string factText = targetElement.Text;
-                result = !(string.IsNullOrEmpty(factText) || !factText.Contains(expectedText));
+                result = !string.IsNullOrEmpty(factText) && factText.Contains(expectedText);
             }, driver);
 
             return result;
