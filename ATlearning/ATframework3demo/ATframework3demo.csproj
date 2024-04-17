@@ -11,7 +11,7 @@
     <PackageReference Include="Blazored.Modal" Version="6.0.1" />
     <PackageReference Include="Selenium.Support" Version="4.16.2" />
     <PackageReference Include="Selenium.WebDriver" Version="4.16.2" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="121.0.6167.5700-beta" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="123.0.6312.400-beta" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

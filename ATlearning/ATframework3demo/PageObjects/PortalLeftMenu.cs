@@ -1,14 +1,17 @@
 ﻿using atFrameWork2.SeleniumFramework;
 using ATframework3demo.PageObjects;
-using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace atFrameWork2.PageObjects
 {
     public class PortalLeftMenu
     {
+        public FormsMainPage OpenForms()
+        {
+            var uri = new Uri("http://dev.bx/forms/");
+            WebDriverActions.OpenUri(uri);
+            return new FormsMainPage();
+        }
+
         public TasksListPage OpenTasks()
         {
             ClickMenuItem(new WebItem("//li[@id='bx_left_menu_menu_tasks']", "Пункт левого меню 'Задачи'"));
@@ -31,7 +34,7 @@ namespace atFrameWork2.PageObjects
         private static void ClickMenuItem(WebItem menuItem)
         {
             var menuItemsArea = new WebItem("//div[@id='menu-items-block']", "Область с пунктами левого меню");
-            if(menuItemsArea.Size().Width < 150)
+            if (menuItemsArea.Size().Width < 150)
             {
                 var expandMenuButton = new WebItem("//div[@class='menu-switcher']", "Кнопка сворачивания левого меню");
                 expandMenuButton.Hover();
