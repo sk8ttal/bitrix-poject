@@ -3,7 +3,6 @@ using atFrameWork2.PageObjects;
 using atFrameWork2.SeleniumFramework;
 using atFrameWork2.TestEntities;
 using ATframework3demo.BaseFramework;
-using ATframework3demo.PageObjects.Mobile;
 
 namespace atFrameWork2.BaseFramework
 {
@@ -23,14 +22,6 @@ namespace atFrameWork2.BaseFramework
             Body = body ?? throw new ArgumentNullException(nameof(body));
             Node = new TestCaseTreeNode(title);
             EnvType = TestCaseEnvType.Web;
-        }
-
-        public TestCase(string title, Action<MobileHomePage> body)
-        {
-            Title = title ?? throw new ArgumentNullException(nameof(title));
-            MobileBody = body ?? throw new ArgumentNullException(nameof(body));
-            Node = new TestCaseTreeNode(title);
-            EnvType = TestCaseEnvType.Mobile;
         }
 
         int logCounter = 0;
@@ -54,13 +45,6 @@ namespace atFrameWork2.BaseFramework
                     var homePage = portalLoginPage.Login(testPortal.PortalAdmin);
                     Body.Invoke(homePage);
                 }
-                else
-                {
-                    var loginPage = new MobileLoginPage(testPortal);
-                    var homePage = loginPage.Login(testPortal.PortalAdmin);
-                    MobileBody.Invoke(homePage);
-                }
-
             }
             catch (Exception e)
             {
@@ -90,7 +74,6 @@ namespace atFrameWork2.BaseFramework
 
         public string Title { get; set; }
         Action<PortalHomePage> Body { get; set; }
-        Action<MobileHomePage> MobileBody { get; set; }
         public TestCaseTreeNode Node { get; set; }
         public string CaseLogPath { get; set; }
         public List<LogMessage> CaseLog { get; } = new List<LogMessage>();
@@ -100,7 +83,6 @@ namespace atFrameWork2.BaseFramework
 
     public enum TestCaseEnvType
     {
-        Web,
-        Mobile
+        Web
     }
 }
