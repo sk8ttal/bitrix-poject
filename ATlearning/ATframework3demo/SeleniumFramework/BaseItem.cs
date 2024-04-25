@@ -3,6 +3,7 @@ using atFrameWork2.BaseFramework;
 using OpenQA.Selenium;
 using atFrameWork2.BaseFramework.LogTools;
 using ATframework3demo.BaseFramework;
+using OpenQA.Selenium.Interactions;
 
 namespace atFrameWork2.SeleniumFramework
 {
@@ -44,6 +45,19 @@ namespace atFrameWork2.SeleniumFramework
             Execute((button, drv) =>
             {
                 button.Click();
+            }, driver);
+
+            Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
+        }
+
+        public void DoubleClick(IWebDriver driver = default)
+        {
+            WaitElementDisplayed(driver: driver);
+            PrintActionInfo(nameof(Click));
+
+            Execute((button, drv) =>
+            {
+                new Actions(drv).DoubleClick(button).Perform();
             }, driver);
 
             Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);

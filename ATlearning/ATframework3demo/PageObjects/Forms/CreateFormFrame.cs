@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using atFrameWork2.BaseFramework;
 using atFrameWork2.SeleniumFramework;
+using ATframework3demo.PageObjects.Forms;
 
 namespace ATframework3demo.PageObjects
 {
@@ -30,7 +31,7 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame NumberQuestion()
+        public CreateFormFrame SetNumberQuestion()
         {
             WebItem Question = new WebItem("//h3[text()='Название']", "Поле названия вопроса");
             WebItem Field = new WebItem("//input[@value='Название']", "Поле для ввода названия вопроса");
@@ -95,6 +96,8 @@ namespace ATframework3demo.PageObjects
             WebItem Button = new WebItem("//button[text()='Сохранить']", "Кнопка 'Сохранить'");
             Button.Hover();
             Button.Click();
+
+            Waiters.StaticWait_s(2);
 
             return new FormsMainPage();
         }
