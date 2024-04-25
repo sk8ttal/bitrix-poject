@@ -50,6 +50,46 @@ namespace atFrameWork2.SeleniumFramework
         }
 
         /// <summary>
+        /// Очищает выбранное поле
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
+        public void ClearField(IWebDriver driver = default)
+        {
+            WaitElementDisplayed(driver: driver);
+            PrintActionInfo(nameof(ClearField));
+
+            Execute((field, drv) =>
+            {
+                field.Click();
+                field.SendKeys(Keys.Control + "a");
+                field.SendKeys(Keys.Delete);
+            }, driver);
+
+            Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
+        }
+
+        /// <summary>
+        /// Заменяет текст в выбранном поле
+        /// </summary>
+        ///  <param name="textToInput"></param>
+        /// <param name="driver"></param>
+        /// <returns></returns>
+        public void ReplaceText(string textToInput, IWebDriver driver = default)
+        {
+            WaitElementDisplayed(driver: driver);
+            PrintActionInfo(nameof(ClearField));
+
+            Execute((field, drv) =>
+            {
+                field.SendKeys(Keys.Control + "a");
+                field.SendKeys(textToInput);
+            }, driver);
+
+            Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
+        }
+
+        /// <summary>
         /// Ждёт пока элемент отобразится на странице
         /// </summary>
         /// <param name="maxWait_s"></param>
