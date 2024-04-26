@@ -10,8 +10,6 @@ namespace ATframework3demo.PageObjects.Forms
     {
         public OpenedFormFrame IsQuestionBlockPresent(AllQuestionTypesForm Data)
         {
-            // WebItem Element = new WebItem($"//label[text()='{ElementName}']", $"Элемент c названием {ElementName}");
-
             foreach (var Question in Data.Questions.Values)
             {
                 WebItem Element = new WebItem($"//label[text()='{Question}']", $"Элемент c названием {Question}");
@@ -25,11 +23,6 @@ namespace ATframework3demo.PageObjects.Forms
                     throw new Exception($"Элемент c названием {Question} не отображен");
                 }
             }
-
-            // if (!Element.WaitElementDisplayed())
-            // {
-            //     throw new Exception($"Элемент c названием {ElementName} не отображен");
-            // }
 
             return this;
         }
