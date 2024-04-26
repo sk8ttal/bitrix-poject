@@ -1,7 +1,7 @@
 using atFrameWork2.BaseFramework;
 using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.PageObjects;
-using atFrameWork2.TestEntities;
+using aTframework3demo.TestEntities;
 
 namespace ATframework3demo.TestCases.Forms
 {
@@ -16,12 +16,17 @@ namespace ATframework3demo.TestCases.Forms
 
         void CreateAllQuestionTypesForm(PortalHomePage homePage)
         {
-
+            
             string Title = "Test" + DateTime.Now.Ticks.ToString();
             string SecondQuestion = "Вопрос 2";
             string ThirdQuestion = "Вопрос 3";
             string OneFromType = "Один из списка";
             string SomeFromType = "Несколько из списка";
+
+            // AllQuestionTypesForm Data = new AllQuestionTypesForm(
+            //     "Test" + DateTime.Now.Ticks.ToString(),
+            //     3
+            // );
 
             homePage
                 .LeftMenu
@@ -56,7 +61,7 @@ namespace ATframework3demo.TestCases.Forms
                 // Проверит, что сожержимое формы отображается корректно
                 
                 // Удалить форму
-
+                //.DeleteForm(Title)
                 ;
                 
         }
