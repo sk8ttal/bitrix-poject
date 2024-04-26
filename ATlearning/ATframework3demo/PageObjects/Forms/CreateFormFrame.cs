@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using atFrameWork2.BaseFramework;
 using atFrameWork2.SeleniumFramework;
+using aTframework3demo.TestEntities;
 using ATframework3demo.PageObjects.Forms;
 
 namespace ATframework3demo.PageObjects
@@ -31,20 +32,18 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame SetNumberQuestion()
+        public CreateFormFrame SetQuestionsName(Dictionary<int, string> Type)
         {
             WebItem Question = new WebItem("//h3[text()='Название']", "Поле названия вопроса");
             WebItem Field = new WebItem("//input[@value='Название']", "Поле для ввода названия вопроса");
 
-            int i = 1;
-            while (Question.WaitElementDisplayed())
+            foreach (var questionName in Type)
             {
                 Question.Click();
-                Field.ReplaceText("Вопрос " + i);
-                i++;
+                Field.ReplaceText(questionName.Value);
             }
 
-            return this;
+                return this;
         }
 
         public CreateFormFrame ChangeQuestionType(string QuestionName, string QuestionType)
@@ -73,11 +72,11 @@ namespace ATframework3demo.PageObjects
 
         public CreateFormFrame ChangeOptionName(string QuestionName)
         {
-            WebItem Option = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//label[text()='Новая опция']", 
+            WebItem Option = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//label[text()='Новая опция']",
                 $"Поле названия опции для вопроса {QuestionName}");
             WebItem Field = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//input",
                 "Поле для ввода названия опции");
-            WebItem Container = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']//input[@class='form-check-input']", 
+            WebItem Container = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']//input[@class='form-check-input']",
                 "Блок вопроса");
 
             int i = 1;
@@ -92,12 +91,14 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public FormsMainPage SaveForm(){
+        public FormsMainPage SaveForm()
+        {
             WebItem Button = new WebItem("//button[text()='Сохранить']", "Кнопка 'Сохранить'");
             Button.Hover();
             Button.Click();
 
             Waiters.StaticWait_s(2);
+            WebDriverActions.Refresh();
 
             return new FormsMainPage();
         }

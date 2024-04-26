@@ -19,9 +19,13 @@ namespace ATframework3demo.PageObjects
 
         public FormsMainPage IsFormPresent(string Title)
         {
-            WebDriverActions.Refresh();
             WebItem NextButton = new WebItem("//a[text()='Следующая']", "Кнопка 'Следующая'");
             WebItem Form = new WebItem($"//span[text()='{Title}']", "Созданная форма");
+
+            if (Form.WaitElementDisplayed())
+                {
+                    return this;
+                }
 
             while (NextButton.WaitElementDisplayed())
             {
@@ -39,6 +43,9 @@ namespace ATframework3demo.PageObjects
         {
             new WebItem($"//span[text()='{Title}']", "Созданная форма")
                 .DoubleClick();
+
+            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм созданияформы {Title}")
+                .SwitchToFrame();
                 
             return new OpenedFormFrame();
         }

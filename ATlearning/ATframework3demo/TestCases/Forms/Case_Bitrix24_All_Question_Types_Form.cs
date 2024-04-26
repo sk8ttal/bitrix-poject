@@ -16,17 +16,10 @@ namespace ATframework3demo.TestCases.Forms
 
         void CreateAllQuestionTypesForm(PortalHomePage homePage)
         {
-            
-            string Title = "Test" + DateTime.Now.Ticks.ToString();
-            string SecondQuestion = "Вопрос 2";
-            string ThirdQuestion = "Вопрос 3";
-            string OneFromType = "Один из списка";
-            string SomeFromType = "Несколько из списка";
-
-            // AllQuestionTypesForm Data = new AllQuestionTypesForm(
-            //     "Test" + DateTime.Now.Ticks.ToString(),
-            //     3
-            // );
+            AllQuestionTypesForm Data = new AllQuestionTypesForm(
+                "Test" + DateTime.Now.Ticks.ToString(),
+                3
+            );
 
             homePage
                 .LeftMenu
@@ -35,35 +28,35 @@ namespace ATframework3demo.TestCases.Forms
                 // Нажать на кнопку 'Создать'
                 .OpenCreateFormSlider()
                 // Изменить название формы
-                .ChangeFormTitle(Title)
+                .ChangeFormTitle(Data.Title)
                 // Добавить 3 блока вопросов
-                .AddQuestion(3)
+                .AddQuestion(Data.QuestionsNumber)
                 // Изменить названия блоков
-                .SetNumberQuestion()
+                .SetQuestionsName(Data.Questions)
                 // Изменить типы вопросов для вопросов 2 и 3
                 // на один из списка и несколько из списка
-                .ChangeQuestionType(SecondQuestion, OneFromType)
-                .ChangeQuestionType(ThirdQuestion, SomeFromType)
+                .ChangeQuestionType(Data.Questions[2], Data.Type[2])
+                .ChangeQuestionType(Data.Questions[3], Data.Type[3])
                 // Добавить для 2 вопроса 2 опции
-                .AddNewOption(SecondQuestion, 2)
+                .AddNewOption(Data.Questions[2], 2)
                 // Изменить названия опций для 2 вопроса
-                .ChangeOptionName(SecondQuestion)
+                .ChangeOptionName(Data.Questions[2])
                 // Добавить для 3 вопроса 3 опции
-                .AddNewOption(ThirdQuestion, 3)
+                .AddNewOption(Data.Questions[3], 3)
                 // Изменить названия опций для 3 вопроса
-                .ChangeOptionName(ThirdQuestion)
+                .ChangeOptionName(Data.Questions[3])
                 // Сохранить форму
                 .SaveForm()
                 // Проверить, что форма отображается в таблице
-                .IsFormPresent(Title)
+                .IsFormPresent(Data.Title)
                 // Открыть форму
-                .OpenForm(Title)
-                // Проверит, что сожержимое формы отображается корректно
-                
+                .OpenForm(Data.Title)
+                // Проверить, что все 3 блока отображаются
+                .IsQuestionBlockPresent(Data)
+                // Закрыть форму
+                .CloseForm()
                 // Удалить форму
-                //.DeleteForm(Title)
-                ;
-                
+                .DeleteForm(Data.Title);
         }
     }
 }

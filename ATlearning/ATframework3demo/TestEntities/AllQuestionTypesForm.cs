@@ -10,15 +10,20 @@ namespace aTframework3demo.TestEntities
         public AllQuestionTypesForm(string title, int questionsNumber)
         {
             Title = title ?? throw new ArgumentNullException(nameof(title));
-            var Questions = new Dictionary<int, string>() ?? throw new ArgumentNullException(nameof(questionsNumber));;
+            var questions = new Dictionary<int, string>();
+            QuestionsNumber = questionsNumber;
 
-            for (int i = questionsNumber; i > 0; i--)
+            for (int i = 1; i <= questionsNumber; i++)
             {
-                Questions.Add(i, $"Вопрос {i}");
+                questions.Add(i, $"Вопрос {i}");
             }
+
+            Questions = questions;
         }
 
         public string Title { get; set; }
+        public int QuestionsNumber { get; set; }
+        public  Dictionary<int, string> Questions { get; set; }
         public Dictionary<int, string> Type = new Dictionary<int, string>()
         {
             [1] = "Текстоввый ввод",
