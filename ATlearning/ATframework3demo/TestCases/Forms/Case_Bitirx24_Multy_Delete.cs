@@ -17,8 +17,8 @@ namespace ATframework3demo.TestCases
 
         void MultyDelete(PortalHomePage homePage)
         {
-            string Title1 = "Test" + DateTime.Now.Ticks;
-            string Title2 = "Test" + DateTime.Now.Ticks + 1;
+            string Title1 = "Test1" + DateTime.Now.Ticks;
+            string Title2 = "Test2" + DateTime.Now.Ticks;
 
             bool Result_1 = homePage
                 .LeftMenu
