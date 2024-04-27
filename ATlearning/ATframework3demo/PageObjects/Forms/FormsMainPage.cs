@@ -17,47 +17,77 @@ namespace ATframework3demo.PageObjects
             return new CreateFormFrame();
         }
 
-        public FormsMainPage IsFormPresent(string Title)
+        public bool IsFormPresent(string Title)
         {
             WebItem NextButton = new WebItem("//a[text()='Следующая']", "Кнопка 'Следующая'");
-            WebItem Form = new WebItem($"//span[text()='{Title}']", "Созданная форма");
+            WebItem Form = new WebItem($"//a[text()='{Title}']", "Созданная форма");
 
             if (Form.WaitElementDisplayed())
-                {
-                    return this;
-                }
+            {
+                return true;
+            }
 
             while (NextButton.WaitElementDisplayed())
             {
                 NextButton.Click();
                 if (Form.WaitElementDisplayed())
                 {
-                    return this;
+                    return true;
                 }
             }
 
-            throw new Exception("Созданная форма не отображена в таблице форм");
+            return false;
         }
 
         public OpenedFormFrame OpenForm(string Title)
         {
-            new WebItem($"//span[text()='{Title}']", "Созданная форма")
-                .DoubleClick();
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
+                .Click();
+            new WebItem("//div[@class='popup-window']//span[text()='Открыть']", "Опция 'Открыть'")
+                .Click();
 
-            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм созданияформы {Title}")
+            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм создания формы {Title}")
                 .SwitchToFrame();
-                
+
             return new OpenedFormFrame();
+        }
+
+        public FormsMainPage SelectForm(string Title)
+        {
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//td[@class='main-grid-cell main-grid-cell-checkbox']/span", 
+                $"Чекбокс формы {Title}").Click();
+
+            return this;
+        }
+
+        public FormsMainPage DeleteSelectedForms()
+        {
+            new WebItem("//span[text()='Удалить']", "Кнопка множественного действия 'Удалить'")
+                .Click();
+            new WebItem("//span[text()='Подтвердить']", "Кнопка 'Потвердить' всплывающего окна")
+                .Click();
+
+            return this;
         }
 
         public FormsMainPage DeleteForm(string Title)
         {
-            new WebItem($"//span[text()='{Title}']/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
                 .Click();
             new WebItem("//div[@class='popup-window']//span[text()='Удалить']", "Опция 'Удалить'")
                 .Click();
 
-            return this; 
+            return this;
+        }
+
+        public FormsMainPage CreateForm(string Title)
+        {
+            CreateFormFrame Form = OpenCreateFormSlider();
+            Form.ChangeFormTitle(Title);
+            Form.AddQuestion();
+            Form.SaveForm();
+
+            return this;
         }
     }
 }

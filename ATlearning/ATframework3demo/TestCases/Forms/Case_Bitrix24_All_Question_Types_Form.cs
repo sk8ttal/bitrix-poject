@@ -2,6 +2,7 @@ using atFrameWork2.BaseFramework;
 using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.PageObjects;
 using aTframework3demo.TestEntities;
+using ATframework3demo.PageObjects;
 
 namespace ATframework3demo.TestCases.Forms
 {
@@ -21,7 +22,7 @@ namespace ATframework3demo.TestCases.Forms
                 3
             );
 
-            homePage
+            bool Result = homePage
                 .LeftMenu
                 // Открыть формы
                 .OpenForms()
@@ -48,7 +49,18 @@ namespace ATframework3demo.TestCases.Forms
                 // Сохранить форму
                 .SaveForm()
                 // Проверить, что форма отображается в таблице
-                .IsFormPresent(Data.Title)
+                .IsFormPresent(Data.Title);
+
+            if (Result)
+            {
+                Log.Info($"Форма {Data.Title} создана");
+            }
+            else
+            {
+                throw new Exception($"Форма {Data.Title} не создана");
+            }
+
+                new FormsMainPage()
                 // Открыть форму
                 .OpenForm(Data.Title)
                 // Проверить, что все 3 блока отображаются

@@ -75,7 +75,6 @@ namespace atFrameWork2.SeleniumFramework
 
             Execute((field, drv) =>
             {
-                field.Click();
                 field.SendKeys(Keys.Control + "a");
                 field.SendKeys(Keys.Delete);
             }, driver);
@@ -86,19 +85,20 @@ namespace atFrameWork2.SeleniumFramework
         /// <summary>
         /// Заменяет текст в выбранном поле
         /// </summary>
-        ///  <param name="textToInput"></param>
+        ///  <param name="textToLog"></param>
         /// <param name="driver"></param>
         /// <returns></returns>
-        public void ReplaceText(string textToInput, IWebDriver driver = default)
+        public void ReplaceText(string textToLog, IWebDriver driver = default)
         {
             WaitElementDisplayed(driver: driver);
-            PrintActionInfo(nameof(ClearField));
 
             Execute((field, drv) =>
             {
                 field.SendKeys(Keys.Control + "a");
-                field.SendKeys(textToInput);
+                field.SendKeys(textToLog);
             }, driver);
+
+            PrintActionInfo($"Ввод текста {textToLog} в элемент");
 
             Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
         }
