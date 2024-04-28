@@ -17,6 +17,8 @@ namespace ATframework3demo.PageObjects
                 .Click();
             new WebItem("//input[@type='text' and @value='Новая форма']", "Полее ввода названия формы")
                 .ReplaceText(Title);
+            new WebItem("//body", "Фрейм создания формы")
+                .Click();
 
             return this;
         }

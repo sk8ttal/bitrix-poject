@@ -9,9 +9,9 @@ namespace ATframework3demo.PageObjects
     {
         public CreateFormFrame OpenCreateFormSlider()
         {
-            new WebItem("//button[@class='ui-btn ui-btn-success']", "Кнопка 'Создать'")
+            new WebItem("//button[@class='ui-btn ui-btn-success']", "РљРЅРѕРїРєР° 'РЎРѕР·РґР°С‚СЊ'")
                 .Click();
-            new WebItem("//iframe[@class='side-panel-iframe']", "Фрейм создания формы")
+            new WebItem("//iframe[@class='side-panel-iframe']", "Р¤СЂРµР№Рј СЃРѕР·РґР°РЅРёСЏ С„РѕСЂРјС‹")
                 .SwitchToFrame();
 
             return new CreateFormFrame();
@@ -19,8 +19,8 @@ namespace ATframework3demo.PageObjects
 
         public bool IsFormPresent(string Title)
         {
-            WebItem NextButton = new WebItem("//a[text()='Следующая']", "Кнопка 'Следующая'");
-            WebItem Form = new WebItem($"//a[text()='{Title}']", "Созданная форма");
+            WebItem NextButton = new WebItem("//a[text()='РЎР»РµРґСѓСЋС‰Р°СЏ']", "РљРЅРѕРїРєР° 'РЎР»РµРґСѓСЋС‰Р°СЏ'");
+            WebItem Form = new WebItem($"//a[text()='{Title}']", "РЎРѕР·РґР°РЅРЅР°СЏ С„РѕСЂРјР°");
 
             if (Form.WaitElementDisplayed())
             {
@@ -41,12 +41,12 @@ namespace ATframework3demo.PageObjects
 
         public OpenedFormFrame OpenForm(string Title)
         {
-            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"РљРѕРЅС‚РµРєСЃРЅРѕРµ РјРµРЅСЋ С„РѕСЂРјС‹ {Title}")
                 .Click();
-            new WebItem("//div[@class='popup-window']//span[text()='Открыть']", "Опция 'Открыть'")
+            new WebItem("//div[@class='popup-window']//span[text()='РћС‚РєСЂС‹С‚СЊ']", "РћРїС†РёСЏ 'РћС‚РєСЂС‹С‚СЊ'")
                 .Click();
 
-            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм создания формы {Title}")
+            new WebItem("//iframe[@class='side-panel-iframe']", $"Р¤СЂРµР№Рј СЃРѕР·РґР°РЅРёСЏ С„РѕСЂРјС‹ {Title}")
                 .SwitchToFrame();
 
             return new OpenedFormFrame();
@@ -55,16 +55,16 @@ namespace ATframework3demo.PageObjects
         public FormsMainPage SelectForm(string Title)
         {
             new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//td[@class='main-grid-cell main-grid-cell-checkbox']/span", 
-                $"Чекбокс формы {Title}").Click();
+                $"Р§РµРєР±РѕРєСЃ С„РѕСЂРјС‹ {Title}").Click();
 
             return this;
         }
 
         public FormsMainPage DeleteSelectedForms()
         {
-            new WebItem("//span[text()='Удалить']", "Кнопка множественного действия 'Удалить'")
+            new WebItem("//span[text()='РЈРґР°Р»РёС‚СЊ']", "РљРЅРѕРїРєР° РјРЅРѕР¶РµСЃС‚РІРµРЅРЅРѕРіРѕ РґРµР№СЃС‚РІРёСЏ 'РЈРґР°Р»РёС‚СЊ'")
                 .Click();
-            new WebItem("//span[text()='Подтвердить']", "Кнопка 'Потвердить' всплывающего окна")
+            new WebItem("//span[text()='РџРѕРґС‚РІРµСЂРґРёС‚СЊ']", "РљРЅРѕРїРєР° 'РџРѕС‚РІРµСЂРґРёС‚СЊ' РІСЃРїР»С‹РІР°СЋС‰РµРіРѕ РѕРєРЅР°")
                 .Click();
 
             return this;
@@ -72,9 +72,9 @@ namespace ATframework3demo.PageObjects
 
         public FormsMainPage DeleteForm(string Title)
         {
-            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"РљРѕРЅС‚РµРєСЃРЅРѕРµ РјРµРЅСЋ С„РѕСЂРјС‹ {Title}")
                 .Click();
-            new WebItem("//div[@class='popup-window']//span[text()='Удалить']", "Опция 'Удалить'")
+            new WebItem("//div[@class='popup-window']//span[text()='РЈРґР°Р»РёС‚СЊ']", "РћРїС†РёСЏ 'РЈРґР°Р»РёС‚СЊ'")
                 .Click();
 
             return this;

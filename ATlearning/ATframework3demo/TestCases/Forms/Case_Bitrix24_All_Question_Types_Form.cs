@@ -17,7 +17,7 @@ namespace ATframework3demo.TestCases.Forms
 
         void CreateAllQuestionTypesForm(PortalHomePage homePage)
         {
-            AllQuestionTypesForm Data = new AllQuestionTypesForm(
+            Form Data = new Form(
                 "Test" + DateTime.Now.Ticks.ToString(),
                 3
             );
@@ -63,6 +63,7 @@ namespace ATframework3demo.TestCases.Forms
                 new FormsMainPage()
                 // Открыть форму
                 .OpenForm(Data.Title)
+                .StartForm()
                 // Проверить, что все 3 блока отображаются
                 .IsQuestionBlockPresent(Data)
                 // Закрыть форму

@@ -8,7 +8,7 @@ namespace ATframework3demo.PageObjects.Forms
 {
     public class OpenedFormFrame
     {
-        public OpenedFormFrame IsQuestionBlockPresent(AllQuestionTypesForm Data)
+        public OpenedFormFrame IsQuestionBlockPresent(Form Data)
         {
             foreach (var Question in Data.Questions.Values)
             {
@@ -34,6 +34,14 @@ namespace ATframework3demo.PageObjects.Forms
                 .Click();
 
             return new FormsMainPage();
+        }
+
+        public OpenedFormFrame StartForm()
+        {
+            new WebItem("//button[text()='Начать']", "Кнопка 'Начать'")
+                .Click();
+
+            return this;
         }
     }
 }
