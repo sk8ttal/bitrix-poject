@@ -52,6 +52,19 @@ namespace ATframework3demo.PageObjects
             return new OpenedFormFrame();
         }
 
+        public NewTaskFrame CreateTask(string Title)
+        {
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
+                .Click();
+            new WebItem("//div[@class='popup-window']//span[text()='Создать задачу']", "Опция 'Создать задачу'")
+                .Click();
+
+            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм создания задачи для {Title}")
+                .SwitchToFrame();
+
+            return new NewTaskFrame();
+        }
+
         public FormsMainPage SelectForm(string Title)
         {
             new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//td[@class='main-grid-cell main-grid-cell-checkbox']/span", 

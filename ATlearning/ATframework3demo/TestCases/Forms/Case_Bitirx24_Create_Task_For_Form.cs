@@ -3,6 +3,8 @@ using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.PageObjects;
 using atFrameWork2.TestEntities;
 using ATframework3demo.PageObjects;
+using aTframework3demo.TestEntities;
+using ATframework3demo.PageObjects.Forms;
 
 namespace ATframework3demo.TestCases
 {
@@ -17,12 +19,54 @@ namespace ATframework3demo.TestCases
 
         void TaskFromForm(PortalHomePage homePage)
         {
-            homePage
+            string Title = "Test" + DateTime.Now.Ticks;
+            TaskFromForm Participants = new TaskFromForm(
+                "Олег Иванов",
+                "Михаил Виктор",
+                "Vlad Zorin"
+            );
+
+            bool TaskNameExists = homePage
                 .LeftMenu
                 .OpenForms()
-                // 
-                
-                ;
+                // Создать форму
+                .CreateForm(Title)
+                // Выбрать опцию 'Создать задачу'
+                .CreateTask(Title)
+                // Проверить, что название задачи соответствует названию формы
+                .CheckTaskTitle(Title);
+
+            if (TaskNameExists)
+            {
+                Log.Info($"Поле названия задачи сожержит название формы {Title}");
+            }
+            else
+            {
+                throw new Exception($"Поле названия задачи не сожержит название формы {Title}");
+            }
+
+            Waiters.StaticWait_s(3);
+
+            new NewTaskFrame()
+                .SetContractor(Participants.Contractor)
+                .SetWatcher(Participants.Watcher)
+                .SetDirector(Participants.Director)
+                .CreateTast();
+
+            bool IsFormNameCorrect = homePage.LeftMenu
+            .OpenTasks()
+            .OpenTask(Title)
+            .OpenForm()
+            .IsFormNameCorrect(Title);
+
+            if (IsFormNameCorrect)
+            {
+                Log.Info($"Открыта форма {Title}");
+            }
+            else
+            {
+                throw new Exception($"Форма {Title} не была открыта");
+            }
         }
 
     }

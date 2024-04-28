@@ -25,7 +25,7 @@ namespace ATframework3demo.PageObjects
 
         public CreateFormFrame AddQuestion(int QuestionsNumber = 1)
         {
-            for (int i = QuestionsNumber; i >= 0; i--)
+            for (int i = QuestionsNumber; i > 0; i--)
             {
                 new WebItem("//button[text()='+']", "Кнопка добавления вопроса")
                     .Click();
