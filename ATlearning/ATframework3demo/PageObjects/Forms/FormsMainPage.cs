@@ -102,5 +102,11 @@ namespace ATframework3demo.PageObjects
 
             return this;
         }
+
+        public FormsMainPage CreateFormWithProperties(string Title)
+        {
+
+            return this;
+        }
     }
 }

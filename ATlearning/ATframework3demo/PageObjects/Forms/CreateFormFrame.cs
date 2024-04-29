@@ -11,6 +11,11 @@ namespace ATframework3demo.PageObjects
 {
     public class CreateFormFrame
     {
+        WebItem Question = new WebItem("//h3[text()='Название']", "Поле названия вопроса");
+        WebItem Field = new WebItem("//input[@value='Название']", "Поле для ввода названия вопроса");
+        WebItem Container = new WebItem($"//p[text()='Короткий ответ']", "Блок вопроса");
+        WebItem Button = new WebItem("//button[text()='Сохранить']", "Кнопка 'Сохранить'");
+
         public CreateFormFrame ChangeFormTitle(string Title)
         {
             new WebItem("//h1[text()='Новая форма']", "Название формы")
@@ -28,30 +33,33 @@ namespace ATframework3demo.PageObjects
             for (int i = QuestionsNumber; i > 0; i--)
             {
                 new WebItem("//button[text()='+']", "Кнопка добавления вопроса")
-                    .Click();
+                    .Click(0);
             }
 
             return this;
         }
 
-        public CreateFormFrame SetQuestionsName(Dictionary<int, string> Type)
+        public CreateFormFrame SetQuestionsName(Dictionary<int, string> Names)
         {
-            WebItem Question = new WebItem("//h3[text()='Название']", "Поле названия вопроса");
-            WebItem Field = new WebItem("//input[@value='Название']", "Поле для ввода названия вопроса");
 
-            foreach (var questionName in Type)
+
+            foreach (var questionName in Names)
             {
+                Question.Hover();
                 Question.Click();
                 Field.ReplaceText(questionName.Value);
             }
 
-                return this;
+            return this;
         }
 
         public CreateFormFrame ChangeQuestionType(string QuestionName, string QuestionType)
         {
+            WebItem Selector = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='row']//select", $"Список типов вопроса для блока {QuestionName}");
             // ancestor и многое другое можно найти на https://msiter.ru/tutorials/xpath/axes (не реклама)
-            new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='row']//select", $"Список типов вопроса для блока {QuestionName}")
+            Selector
+                .Hover();
+            Selector
                 .Click();
             new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='row']//option[text()='{QuestionType}']", $"Тип вопроса {QuestionType}")
                 .Click();
@@ -66,6 +74,7 @@ namespace ATframework3demo.PageObjects
 
             for (int i = OptionsNumber; i > 0; i--)
             {
+                Button.Hover();
                 Button.Click();
             }
 
@@ -95,7 +104,6 @@ namespace ATframework3demo.PageObjects
 
         public FormsMainPage SaveForm()
         {
-            WebItem Button = new WebItem("//button[text()='Сохранить']", "Кнопка 'Сохранить'");
             Button.Hover();
             Button.Click();
 
@@ -103,6 +111,32 @@ namespace ATframework3demo.PageObjects
             WebDriverActions.Refresh();
 
             return new FormsMainPage();
+        }
+
+        public CreateFormFrame CreateHighLoadedQuestion(Dictionary<int, string> Names, string QuestionType, int QuestionsNumber, int OptionsNumber = 5)
+        {
+            for (int i = 1; i <= QuestionsNumber; i++)
+            {
+                string Name = Names[i];
+                WebItem Selector = new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='row']//select", $"Список типов вопроса для блока {Name}");
+                WebItem Button = new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='card mb-3 mt-3']//button[text()='+']",
+                    $"Кнопка добавления опции к вопросу {Name}");
+
+                Container.Hover(0);
+                Question.Click(0);
+                Field.ReplaceText(Name);
+                Container.Click(0);
+                Selector.Click(0);
+                new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='row']//option[text()='{QuestionType}']", $"Тип вопроса {QuestionType}")
+                    .Click(0);
+
+                for (int j = OptionsNumber; j > 0; j--)
+                {
+                    Button.Click(0);
+                }
+            }
+
+            return this;
         }
     }
 }

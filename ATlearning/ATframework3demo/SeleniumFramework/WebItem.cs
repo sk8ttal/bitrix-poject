@@ -23,7 +23,7 @@ namespace atFrameWork2.SeleniumFramework
         /// Наведение курсора на объект
         /// </summary>
         /// <param name="driver"></param>
-        public void Hover(IWebDriver driver = default)
+        public void Hover(int WaitAfterActiveAction_s = 1, IWebDriver driver = default)
         {
             PrintActionInfo("Наведение курсора мыши");
 
@@ -33,7 +33,7 @@ namespace atFrameWork2.SeleniumFramework
                 action.MoveToElement(element).Build().Perform();
             }, driver);
 
-            Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
+            Waiters.StaticWait_s(WaitAfterActiveAction_s);
         }
 
         /// <summary>

@@ -37,7 +37,7 @@ namespace atFrameWork2.SeleniumFramework
 
         public int DefaultWaitAfterActiveAction_s { get; set; } = 1;
 
-        public void Click(IWebDriver driver = default)
+        public void Click(int WaitAfterActiveAction_s = 1, IWebDriver driver = default)
         {
             WaitElementDisplayed(driver: driver);
             PrintActionInfo(nameof(Click));
@@ -47,7 +47,7 @@ namespace atFrameWork2.SeleniumFramework
                 button.Click();
             }, driver);
 
-            Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
+            Waiters.StaticWait_s(WaitAfterActiveAction_s);
         }
 
         public void DoubleClick(IWebDriver driver = default)
@@ -88,7 +88,7 @@ namespace atFrameWork2.SeleniumFramework
         ///  <param name="textToLog"></param>
         /// <param name="driver"></param>
         /// <returns></returns>
-        public void ReplaceText(string textToLog, IWebDriver driver = default)
+        public void ReplaceText(string textToLog, int WaitAfterActiveAction_s = 1, IWebDriver driver = default)
         {
             WaitElementDisplayed(driver: driver);
 
@@ -100,7 +100,7 @@ namespace atFrameWork2.SeleniumFramework
 
             PrintActionInfo($"Ввод текста {textToLog} в элемент");
 
-            Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
+            Waiters.StaticWait_s(WaitAfterActiveAction_s);
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace atFrameWork2.SeleniumFramework
                             {
                                 if (ex.Message.Contains("helpdesk-notification-popup"))
                                 {
-                                    new WebItem("//div[contains(@class, 'popup-close-btn')]", "Кнопка закрытия баннера").Click(driver);
+                                    new WebItem("//div[contains(@class, 'popup-close-btn')]", "Кнопка закрытия баннера").Click(default, driver);
                                     if (interceptedHandlerFirstTry)
                                         i++;
                                     interceptedHandlerFirstTry = false;
