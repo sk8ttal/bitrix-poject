@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using atFrameWork2.BaseFramework;
 using atFrameWork2.SeleniumFramework;
-using aTframework3demo.TestEntities;
-using ATframework3demo.PageObjects.Forms;
 
 namespace ATframework3demo.PageObjects
 {
@@ -17,17 +11,51 @@ namespace ATframework3demo.PageObjects
                 .Click();
             new WebItem("//input[@type='text' and @value='Новая форма']", "Полее ввода названия формы")
                 .ReplaceText(Title);
+            //пока нужно выходить из поля названия формы таким костылем
+            new WebItem("//body", "Фрейм создания формы")
+                .Click();
 
             return this;
         }
 
         public CreateFormFrame AddQuestion(int QuestionsNumber = 1)
         {
-            for (int i = QuestionsNumber; i >= 0; i--)
+            for (int i = QuestionsNumber; i > 0; i--)
             {
                 new WebItem("//button[text()='+']", "Кнопка добавления вопроса")
                     .Click();
             }
+
+            return this;
+        }
+
+        public CreateFormFrame DeleteQuestionByName(string questionName)
+        {
+            new WebItem($"//button[@class='btn btn-danger' and ./parent::div/parent::div//div[@class='col text-left' and .//h3[text()='{questionName}']]]", $"Кнопка удалить вопроса с названием {questionName}")
+                .Click();
+
+            return this;
+        }
+
+        public CreateFormFrame DeleteQuestionsFromTop(int questionNumber)
+        {
+            for (int i = 0; i < questionNumber; i++)
+            {
+                new WebItem("//button[@class='btn btn-danger']", "Кнопка удаления вопроса")
+                    .Click();
+            }
+
+            return this;
+        }
+
+        public CreateFormFrame RenameOneQuestion(string questionNameBefore, string questionNameAfter)
+        {
+            WebItem Question = new WebItem($"//h3[text()='{questionNameBefore}']", "Поле названия вопроса");
+            WebItem Field = new WebItem($"//input[@value='{questionNameBefore}']", "Поле для ввода названия вопроса");
+            Question.Click();
+            Field.ReplaceText(questionNameAfter);
+            //костыль чтобы выйти из инпута имени вопроса
+            new WebItem("//body", "Верхняя панель в блоке вопроса").Click();
 
             return this;
         }
@@ -43,7 +71,9 @@ namespace ATframework3demo.PageObjects
                 Field.ReplaceText(questionName.Value);
             }
 
-                return this;
+            new WebItem("//body", "Фрейм слайдера создания формы").Click();
+
+            return this;
         }
 
         public CreateFormFrame ChangeQuestionType(string QuestionName, string QuestionType)
@@ -101,6 +131,23 @@ namespace ATframework3demo.PageObjects
             WebDriverActions.Refresh();
 
             return new FormsMainPage();
+        }
+
+        public CreateFormFrame SaveEmptyForm()
+        {
+            WebItem Button = new WebItem("//button[text()='Сохранить']", "Кнопка 'Сохранить'");
+            Button.Hover();
+            Button.Click();
+
+            return this;
+        }
+
+        public bool IsEmptyFormAlertPresent()
+        {
+            var alertMessage = new WebItem("//div[@class='alert alert-danger' and text()='Нельзя создать форму без вопросов']", "Предупреждение после попытки форму без вопросов");
+            bool isAlertPresent = Waiters.WaitForCondition(() => alertMessage.WaitElementDisplayed(), 2, 6, "Ожидание появления сообщения об ошибке");
+
+            return isAlertPresent;
         }
     }
 }
