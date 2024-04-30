@@ -17,7 +17,7 @@ namespace ATframework3demo.TestCases.Forms
         void EditForm(PortalHomePage homePage)
         {
             string formTitle = "testForm" + DateTime.Now.Ticks;
-            var testForm = new AllQuestionTypesForm(formTitle, 3);
+            var testForm = new Form(formTitle, 3);
 
             //подготовка формы для редактирования
             var formsMainPage = homePage
@@ -90,7 +90,7 @@ namespace ATframework3demo.TestCases.Forms
             }
 
             formTitle = "testForm" + DateTime.Now.Ticks;
-            var editedTestForm = new AllQuestionTypesForm(formTitle, 2);
+            var editedTestForm = new Form(formTitle, 2);
 
             formsMainPage = formEditPage
                 //переименовать форму

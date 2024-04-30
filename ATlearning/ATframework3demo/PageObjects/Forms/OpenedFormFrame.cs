@@ -25,14 +25,6 @@ namespace ATframework3demo.PageObjects.Forms
             return this;
         }
 
-        public OpenedFormFrame StartForm()
-        {
-            new WebItem("//button[@class='btn btn-primary']", "Кнопка 'Начать' в фрейме формы")
-                .Click();
-
-            return this;
-        }
-
         public bool IsFirstQuestionNamed(string referenceName)
         {
             var firstEncounteredQuestionBlock = new WebItem($"//div[@class='mb-3']//label", "Первый вопрос в форме");

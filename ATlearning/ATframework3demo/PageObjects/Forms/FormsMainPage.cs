@@ -62,15 +62,15 @@ namespace ATframework3demo.PageObjects
 
             return new NewTaskFrame();
         }
-            
+
         public CreateFormFrame EditForm(string Title)
         {
-            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"���������� ���� ����� {Title}")
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
                 .Click();
-            new WebItem("//div[@class='popup-window']//span[text()='�������������']", "����� '�������������'")
+            new WebItem("//div[@class='popup-window']//span[text()='Редактировать']", "Опция 'Редактировать'")
                 .Click();
 
-            new WebItem("//iframe[@class='side-panel-iframe']", $"����� �������������� ����� {Title}")
+            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм редактирования формы {Title}")
                 .SwitchToFrame();
 
             return new CreateFormFrame();
@@ -78,7 +78,7 @@ namespace ATframework3demo.PageObjects
 
         public FormsMainPage SelectForm(string Title)
         {
-            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//td[@class='main-grid-cell main-grid-cell-checkbox']/span", 
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//td[@class='main-grid-cell main-grid-cell-checkbox']/span",
                 $"Чекбокс формы {Title}").Click();
 
             return this;
