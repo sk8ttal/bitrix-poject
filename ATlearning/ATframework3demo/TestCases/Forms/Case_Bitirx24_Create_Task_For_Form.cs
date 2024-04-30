@@ -51,7 +51,7 @@ namespace ATframework3demo.TestCases
                 .SetContractor(Participants.Contractor)
                 .SetWatcher(Participants.Watcher)
                 .SetDirector(Participants.Director)
-                .CreateTast();
+                .CreateTask();
 
             bool IsFormNameCorrect = homePage.LeftMenu
             .OpenTasks()

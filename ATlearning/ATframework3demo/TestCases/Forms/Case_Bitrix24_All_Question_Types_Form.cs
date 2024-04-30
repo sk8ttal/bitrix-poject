@@ -65,7 +65,7 @@ namespace ATframework3demo.TestCases.Forms
                 .OpenForm(Data.Title)
                 .StartForm()
                 // Проверить, что все 3 блока отображаются
-                .IsQuestionBlockPresent(Data)
+                .IsQuestionBlocksPresent(Data)
                 // Закрыть форму
                 .CloseForm()
                 // Удалить форму

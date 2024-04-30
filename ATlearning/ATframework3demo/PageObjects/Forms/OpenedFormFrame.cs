@@ -6,7 +6,7 @@ namespace ATframework3demo.PageObjects.Forms
 {
     public class OpenedFormFrame
     {
-        public OpenedFormFrame IsQuestionBlockPresent(Form Data)
+        public OpenedFormFrame IsQuestionBlocksPresent(Form Data)
         {
             foreach (var Question in Data.Questions.Values)
             {
@@ -14,7 +14,6 @@ namespace ATframework3demo.PageObjects.Forms
                 if (Element.WaitElementDisplayed())
                 {
                     Log.Info($"Элемент c названием {Question} отображен");
-
                 }
                 else
                 {

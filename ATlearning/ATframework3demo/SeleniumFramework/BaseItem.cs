@@ -162,6 +162,27 @@ namespace atFrameWork2.SeleniumFramework
             Waiters.StaticWait_s(DefaultWaitAfterActiveAction_s);
         }
 
+        public void NotTextKey(string key, int WaitAfterActiveAction_s = 1, IWebDriver driver = default)
+        {
+            WaitElementDisplayed(driver: driver);
+            PrintActionInfo(nameof(Click));
+
+            Execute((elem, drv) =>
+            {
+                switch (key)
+                {
+                    case "ArrowRight":
+                        elem.SendKeys(Keys.ArrowRight);
+                        break;
+                    default:
+                        Log.Error($"Клавиши {key} нет или не поддерживается");
+                        break;
+                }
+            }, driver);
+
+            Waiters.StaticWait_s(WaitAfterActiveAction_s);
+        }
+
         protected void Execute(Action<IWebElement, IWebDriver> seleniumCode, IWebDriver driver, bool throwAtDebug = false)
         {
             driver ??= DefaultDriver;

@@ -57,7 +57,7 @@ namespace ATframework3demo.PageObjects.Forms
             return this;
         }
 
-        public FormsMainPage CreateTast()
+        public FormsMainPage CreateTask()
         {
             new WebItem("//span[text()='Ctrl']", "Кнопка создания задачи")
                 .Click();

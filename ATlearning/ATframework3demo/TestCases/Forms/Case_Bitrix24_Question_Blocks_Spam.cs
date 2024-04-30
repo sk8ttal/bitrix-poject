@@ -30,7 +30,7 @@ namespace aTframework3demo.TestCases.Forms
                 .OpenCreateFormSlider()
                 .ChangeFormTitle(Data.Title)
                 .AddQuestion(Data.QuestionsNumber)
-                .CreateHighLoadedQuestion(Data.Questions, Data.Type[2], Data.QuestionsNumber)
+                .CreateHighLoadedQuestions(Data.Questions, Data.Type[2], Data.QuestionsNumber)
                 .SaveForm()
                 .OpenForm(Data.Title)
                 .StartForm();

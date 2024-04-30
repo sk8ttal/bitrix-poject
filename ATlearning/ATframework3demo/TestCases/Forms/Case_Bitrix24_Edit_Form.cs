@@ -128,7 +128,7 @@ namespace ATframework3demo.TestCases.Forms
                 //нажать 'начать'
                 .StartForm()
                 //проверить есть ли нужные блоки вопросов
-                .IsQuestionBlockPresent(editedTestForm);
+                .IsQuestionBlocksPresent(editedTestForm);
         }
     }
 }

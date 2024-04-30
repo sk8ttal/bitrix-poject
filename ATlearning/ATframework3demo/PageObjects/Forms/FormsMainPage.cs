@@ -1,15 +1,62 @@
 using atFrameWork2.SeleniumFramework;
 using ATframework3demo.PageObjects.Forms;
 
+
 namespace ATframework3demo.PageObjects
 {
     public class FormsMainPage
     {
-        public CreateFormFrame OpenCreateFormSlider()
+        public FormsMainPage CreateForm(string Title)
         {
-            new WebItem("//button[@class='ui-btn ui-btn-success']", "Кнопка 'Создать'")
+            CreateFormFrame Form = OpenCreateFormSlider();
+            Form.ChangeFormTitle(Title);
+            Form.AddQuestion();
+            Form.SaveForm();
+
+            return this;
+        }
+    
+        public NewTaskFrame CreateTask(string Title)
+        {
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
                 .Click();
-            new WebItem("//iframe[@class='side-panel-iframe']", "Фрейм создания формы")
+            new WebItem("//div[@class='popup-window']//span[text()='Создать задачу']", "Опция 'Создать задачу'")
+                .Click();
+
+            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм создания задачи для {Title}")
+                .SwitchToFrame();
+
+            return new NewTaskFrame();
+        }
+
+        public FormsMainPage DeleteSelectedForms()
+        {
+            new WebItem("//span[text()='Удалить']", "Кнопка множественного действия 'Удалить'")
+                .Click();
+            new WebItem("//span[text()='Подтвердить']", "Кнопка 'Потвердить' всплывающего окна")
+                .Click();
+
+            return this;
+        }
+
+        public FormsMainPage DeleteForm(string Title)
+        {
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
+                .Click();
+            new WebItem("//div[@class='popup-window']//span[text()='Удалить']", "Опция 'Удалить'")
+                .Click();
+
+            return this;
+        }
+
+         public CreateFormFrame EditForm(string Title)
+        {
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
+                .Click();
+            new WebItem("//div[@class='popup-window']//span[text()='Редактировать']", "Опция 'Редактировать'")
+                .Click();
+
+            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм редактирования формы {Title}")
                 .SwitchToFrame();
 
             return new CreateFormFrame();
@@ -50,27 +97,11 @@ namespace ATframework3demo.PageObjects
             return new OpenedFormFrame();
         }
 
-        public NewTaskFrame CreateTask(string Title)
+        public CreateFormFrame OpenCreateFormSlider()
         {
-            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
+            new WebItem("//button[@class='ui-btn ui-btn-success']", "Кнопка 'Создать'")
                 .Click();
-            new WebItem("//div[@class='popup-window']//span[text()='Создать задачу']", "Опция 'Создать задачу'")
-                .Click();
-
-            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм создания задачи для {Title}")
-                .SwitchToFrame();
-
-            return new NewTaskFrame();
-        }
-
-        public CreateFormFrame EditForm(string Title)
-        {
-            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
-                .Click();
-            new WebItem("//div[@class='popup-window']//span[text()='Редактировать']", "Опция 'Редактировать'")
-                .Click();
-
-            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм редактирования формы {Title}")
+            new WebItem("//iframe[@class='side-panel-iframe']", "Фрейм создания формы")
                 .SwitchToFrame();
 
             return new CreateFormFrame();
@@ -84,40 +115,5 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public FormsMainPage DeleteSelectedForms()
-        {
-            new WebItem("//span[text()='Удалить']", "Кнопка множественного действия 'Удалить'")
-                .Click();
-            new WebItem("//span[text()='Подтвердить']", "Кнопка 'Потвердить' всплывающего окна")
-                .Click();
-
-            return this;
-        }
-
-        public FormsMainPage DeleteForm(string Title)
-        {
-            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
-                .Click();
-            new WebItem("//div[@class='popup-window']//span[text()='Удалить']", "Опция 'Удалить'")
-                .Click();
-
-            return this;
-        }
-
-        public FormsMainPage CreateForm(string Title)
-        {
-            CreateFormFrame Form = OpenCreateFormSlider();
-            Form.ChangeFormTitle(Title);
-            Form.AddQuestion();
-            Form.SaveForm();
-
-            return this;
-        }
-
-        public FormsMainPage CreateFormWithProperties(string Title)
-        {
-
-            return this;
-        }
     }
 }
