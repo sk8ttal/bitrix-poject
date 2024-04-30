@@ -1,7 +1,5 @@
-using atFrameWork2.BaseFramework;
 using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.SeleniumFramework;
-using atFrameWork2.TestEntities;
 using aTframework3demo.TestEntities;
 
 namespace ATframework3demo.PageObjects.Forms
@@ -16,7 +14,7 @@ namespace ATframework3demo.PageObjects.Forms
                 if (Element.WaitElementDisplayed())
                 {
                     Log.Info($"Элемент c названием {Question} отображен");
-                    
+
                 }
                 else
                 {
@@ -25,6 +23,23 @@ namespace ATframework3demo.PageObjects.Forms
             }
 
             return this;
+        }
+
+        public OpenedFormFrame StartForm()
+        {
+            new WebItem("//button[@class='btn btn-primary']", "Кнопка 'Начать' в фрейме формы")
+                .Click();
+
+            return this;
+        }
+
+        public bool IsFirstQuestionNamed(string referenceName)
+        {
+            var firstEncounteredQuestionBlock = new WebItem($"//div[@class='mb-3']//label", "Первый вопрос в форме");
+            bool isQustionAsReference = firstEncounteredQuestionBlock.AssertTextContains(referenceName, "Wrong text");
+
+            return isQustionAsReference;
+
         }
 
         public FormsMainPage CloseForm()
