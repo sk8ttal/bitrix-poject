@@ -18,6 +18,19 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
+        public CreateFormFrame RenameForm(string formNameBefore, string formNameAfter)
+        {
+            new WebItem($"//h1[text()='{formNameBefore}']", "Название формы")
+                .Click();
+            new WebItem($"//input[@type='text' and @value='{formNameBefore}']", "Полее ввода названия формы")
+                .ReplaceText(formNameAfter);
+            //пока нужно выходить из поля названия формы таким костылем
+            new WebItem("//body", "Фрейм создания формы")
+                .Click();
+
+            return this;
+        }
+
         public CreateFormFrame AddQuestion(int QuestionsNumber = 1)
         {
             for (int i = QuestionsNumber; i > 0; i--)
@@ -113,7 +126,7 @@ namespace ATframework3demo.PageObjects
             while (Option.WaitElementDisplayed())
             {
                 Option.Click();
-                Field.ReplaceText("Ответ " + i);
+                Field.ReplaceText($"Ответ {i} {DateTime.Now.Ticks}");
                 Container.Click();
                 i++;
             }
