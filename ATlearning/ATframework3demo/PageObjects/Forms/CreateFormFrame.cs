@@ -135,7 +135,7 @@ namespace ATframework3demo.PageObjects
             while (Option.WaitElementDisplayed())
             {
                 Option.Click();
-                Field.ReplaceText($"Ответ {i} {DateTime.Now.Ticks}");
+                Field.ReplaceText($"Ответ {i}");
                 Container.Click();
                 i++;
             }

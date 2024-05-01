@@ -1,3 +1,4 @@
+using atFrameWork2.BaseFramework;
 using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.SeleniumFramework;
 using aTframework3demo.TestEntities;
@@ -31,7 +32,22 @@ namespace ATframework3demo.PageObjects.Forms
             bool isQustionAsReference = firstEncounteredQuestionBlock.AssertTextContains(referenceName, "Wrong text");
 
             return isQustionAsReference;
+        }
 
+        public bool IsQuestionWithNamePresent(string referenceName)
+        {
+            var formQuestion = new WebItem($"//label[@class='form-label' and text()='{referenceName}']", "Название вопроса");
+            bool isQuestionPresent = Waiters.WaitForCondition(() => formQuestion.WaitElementDisplayed(), 2, 6, "Ожидание появления вопроса");
+
+            return isQuestionPresent;
+        }
+
+        public OpenedFormFrame ChooseOptionInQuestion(string optionName, string questionName)
+        {
+            new WebItem($"//label[text()='{optionName}']/ancestor::div[@class='form-check']/input[contains(@name,'{questionName}')]", $"Опция '{optionName}' вопроса '{questionName}'")
+                .Click();
+
+            return this;
         }
 
         public FormsMainPage CloseForm()
@@ -49,6 +65,14 @@ namespace ATframework3demo.PageObjects.Forms
                 .Click();
 
             return this;
+        }
+
+        public FormsMainPage FinishForm()
+        {
+            new WebItem("//button[@class='btn btn-primary']", "Кнопка 'Подтвердить'")
+                .Click();
+
+            return new FormsMainPage();
         }
     }
 }

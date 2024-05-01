@@ -47,7 +47,7 @@ namespace ATframework3demo.TestCases.Forms
                 //открыть фрейм редактирования формы
                 .EditForm(testForm.Title)
                 //удалить вопрос 2
-                .DeleteQuestionByName("Вопрос 2")
+                .DeleteQuestionByName(testForm.Questions[2])
                 //добавить новый вопрос
                 .AddQuestion()
                 //переименовать созданный вопрос
@@ -69,6 +69,12 @@ namespace ATframework3demo.TestCases.Forms
                 Log.Error($"Неверный порядок вопросов. Ожидался вопрос '{testForm.Questions[1]}', фактический - '{questionTitle}'");
             }
 
+            //ассерт удаления вопроса в форме
+            bool isQuestionPresent = openedFormFrame.IsQuestionWithNamePresent(testForm.Questions[2]);
+            if (isQuestionPresent)
+            {
+                Log.Error($"Вопрос '{testForm.Questions[2]}' не удален");
+            }
 
             formsMainPage = openedFormFrame
                 //закрыть форму

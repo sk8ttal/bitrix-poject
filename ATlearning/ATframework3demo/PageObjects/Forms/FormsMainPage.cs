@@ -1,4 +1,5 @@
 using atFrameWork2.SeleniumFramework;
+using aTframework3demo.PageObjects.Forms;
 using ATframework3demo.PageObjects.Forms;
 
 namespace ATframework3demo.PageObjects
@@ -76,6 +77,19 @@ namespace ATframework3demo.PageObjects
             return new CreateFormFrame();
         }
 
+        public FormResultPage OpenResults(string Title)
+        {
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
+                .Click();
+            new WebItem("//div[@class='popup-window']//span[text()='Результаты']", "Опция 'Результаты'")
+                .Click();
+
+            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм результатов формы {Title}")
+                .SwitchToFrame();
+
+            return new FormResultPage();
+        }
+
         public FormsMainPage SelectForm(string Title)
         {
             new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//td[@class='main-grid-cell main-grid-cell-checkbox']/span",
@@ -110,12 +124,6 @@ namespace ATframework3demo.PageObjects
             Form.ChangeFormTitle(Title);
             Form.AddQuestion();
             Form.SaveForm();
-
-            return this;
-        }
-
-        public FormsMainPage CreateFormWithProperties(string Title)
-        {
 
             return this;
         }
