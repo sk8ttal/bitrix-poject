@@ -134,6 +134,7 @@ namespace ATframework3demo.PageObjects
             int i = 1;
             while (Option.WaitElementDisplayed())
             {
+                Option.Hover();
                 Option.Click();
                 Field.ReplaceText($"Ответ {i}");
                 Container.Click();
@@ -149,7 +150,7 @@ namespace ATframework3demo.PageObjects
             Button.Click();
 
             Waiters.StaticWait_s(2);
-            WebDriverActions.Refresh();
+            WebDriverActions.SwitchToDefaultContent();
 
             return new FormsMainPage();
         }

@@ -50,6 +50,15 @@ namespace ATframework3demo.PageObjects.Forms
             return this;
         }
 
+        public OpenedFormFrame SendKeysToTextQuestion(string inputValue, string questionName)
+        {
+            var inputField = new WebItem($"//label[@class='form-label' and text()='{questionName}']/ancestor::div[@class='mb-3']//input[@class='form-control']", $"Поле ввода текста вопроса '{questionName}'");
+            inputField.Click();
+            inputField.SendKeys(inputValue);
+
+            return this;
+        }
+
         public FormsMainPage CloseForm()
         {
             WebDriverActions.SwitchToDefaultContent();
@@ -71,6 +80,10 @@ namespace ATframework3demo.PageObjects.Forms
         {
             new WebItem("//button[@class='btn btn-primary']", "Кнопка 'Подтвердить'")
                 .Click();
+
+            //без этого костыля селениум кликает на элементы слишком быстро
+            Waiters.StaticWait_s(2);
+            WebDriverActions.SwitchToDefaultContent();
 
             return new FormsMainPage();
         }
