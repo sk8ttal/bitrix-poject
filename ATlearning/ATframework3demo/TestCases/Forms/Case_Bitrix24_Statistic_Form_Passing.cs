@@ -122,7 +122,7 @@ namespace aTframework3demo.TestCases.Forms
                 .LeftMenu
                 .OpenForms()
                 .OpenResults(Form.Title)
-                .CkeckAnswers(Form);
+                .CheckAnswers(Form);
                 
             if (Result){
                 Log.Info("Все ответы и вопросы отображены");

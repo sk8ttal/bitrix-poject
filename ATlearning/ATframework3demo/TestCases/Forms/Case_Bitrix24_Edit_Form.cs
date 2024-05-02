@@ -1,6 +1,7 @@
 using atFrameWork2.BaseFramework;
 using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.PageObjects;
+using atFrameWork2.SeleniumFramework;
 using aTframework3demo.TestEntities;
 
 namespace ATframework3demo.TestCases.Forms
@@ -47,7 +48,7 @@ namespace ATframework3demo.TestCases.Forms
                 //открыть фрейм редактирования формы
                 .EditForm(testForm.Title)
                 //удалить вопрос 2
-                .DeleteQuestionByName("Вопрос 2")
+                .DeleteQuestionByName(testForm.Questions[2])
                 //добавить новый вопрос
                 .AddQuestion()
                 //переименовать созданный вопрос
@@ -66,9 +67,15 @@ namespace ATframework3demo.TestCases.Forms
                 .IsFirstQuestionNamed(testForm.Questions[1]);
             if (!isInOrder)
             {
-                Log.Error($"Неверный порядок вопросов. Ожидался вопрос '{testForm.Questions[1]}', фактический - '{questionTitle}'");
+                Log.Error($"Неверный порядок вопросов.");
             }
 
+            //ассерт удаления вопроса в форме
+            bool isQuestionPresent = openedFormFrame.IsQuestionWithNamePresent(testForm.Questions[2]);
+            if (isQuestionPresent)
+            {
+                Log.Error($"Вопрос '{testForm.Questions[2]}' не удален");
+            }
 
             formsMainPage = openedFormFrame
                 //закрыть форму
@@ -121,12 +128,11 @@ namespace ATframework3demo.TestCases.Forms
                 Log.Error($"Созданная форма с названием '{formTitle}' не отображается");
             }
 
+            WebDriverActions.Refresh();
             //ассерт наличия блоков вопросов в отредактированной форме
             openedFormFrame = formsMainPage
                 //открыть форму
                 .OpenForm(editedTestForm.Title)
-                //нажать 'начать'
-                .StartForm()
                 //проверить есть ли нужные блоки вопросов
                 .IsQuestionBlocksPresent(editedTestForm);
         }
