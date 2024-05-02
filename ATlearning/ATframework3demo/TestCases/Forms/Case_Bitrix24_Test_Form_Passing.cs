@@ -43,15 +43,15 @@ namespace aTframework3demo.TestCases.Forms
                 // Добавить для 2 вопроса 2 опции
                 .AddNewOption(testForm.Questions[2], 2)
                 // Изменить названия опций для 2 вопроса
-                .ChangeOptionName(testForm.Questions[2])
+                .ChangeOptionName(testForm.Questions[2], testForm.Options)
                 // Добавить для 3 вопроса 2 опции
                 .AddNewOption(testForm.Questions[3], 2)
                 // Изменить названия опций для 3 вопроса
-                .ChangeOptionName(testForm.Questions[3])
+                .ChangeOptionName(testForm.Questions[3], testForm.Options)
                 // Добавить для 4 вопроса 3 опции
                 .AddNewOption(testForm.Questions[4], 3)
                 // Изменить названия опций для 4 вопроса
-                .ChangeOptionName(testForm.Questions[4])
+                .ChangeOptionName(testForm.Questions[4], testForm.Options)
                 // Сохранить форму
                 .SaveForm();
 
