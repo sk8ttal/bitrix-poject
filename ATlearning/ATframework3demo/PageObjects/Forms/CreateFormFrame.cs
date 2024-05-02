@@ -1,4 +1,5 @@
 using atFrameWork2.BaseFramework;
+using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.SeleniumFramework;
 using ATframework3demo.TestEntities;
 
@@ -48,7 +49,7 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame ChangeOptionName(string QuestionName)
+        public CreateFormFrame ChangeOptionName(string QuestionName, Dictionary<string, List<string>> Options)
         {
             WebItem Option = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//label[text()='Новая опция']",
                 $"Поле названия опции для вопроса {QuestionName}");
@@ -57,16 +58,20 @@ namespace ATframework3demo.PageObjects
             WebItem Container = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']//input[@class='form-check-input']",
                 "Блок вопроса");
 
+            List<string> OptionNames = new List<string>();
             int i = 1;
             while (Option.WaitElementDisplayed())
             {
+                string Name = $"Ответ {i} {DateTime.Now.Ticks}";
+                OptionNames.Add(Name);
                 Option.Hover(0);
                 Option.Click(0);
-                Field.ReplaceText($"Ответ {i} {DateTime.Now.Ticks}");
+                Field.ReplaceText(Name);
                 Container.Click(0);
                 i++;
             }
-
+            Options.Add(QuestionName, OptionNames);     
+                 
             return this;
         }
 

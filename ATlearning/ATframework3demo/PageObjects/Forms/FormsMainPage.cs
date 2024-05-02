@@ -97,6 +97,16 @@ namespace ATframework3demo.PageObjects
             return new OpenedFormFrame();
         }
 
+        public ResultsFrame OpenResults(string Title)
+        {
+            new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
+                .Click();
+            new WebItem("//div[@class='popup-window']//span[text()='Результаты']", "Опция 'Результаты'")
+                .Click();
+
+            return new ResultsFrame();
+        }
+
         public CreateFormFrame OpenCreateFormSlider()
         {
             new WebItem("//button[@class='ui-btn ui-btn-success']", "Кнопка 'Создать'")

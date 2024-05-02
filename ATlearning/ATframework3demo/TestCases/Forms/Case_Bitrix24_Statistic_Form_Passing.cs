@@ -15,7 +15,7 @@ namespace aTframework3demo.TestCases.Forms
         protected override List<TestCase> GetCases()
         {
             var caseCollection = new List<TestCase>();
-            caseCollection.Add(new TestCase("FORMS: Прохождение оппроса сотрудником", homePage => FormPassing(homePage)));
+            caseCollection.Add(new TestCase("FORMS: Прохождение опроса сотрудником", homePage => FormPassing(homePage)));
             return caseCollection;
         }
 
@@ -46,9 +46,8 @@ namespace aTframework3demo.TestCases.Forms
             {
                 StartDate = Date.ToString(),
                 EndDate = Date.ToString(),
-                StartTime = Time.AddMinutes(4).ToString(),
+                StartTime = Time.AddMinutes(2).ToString(),
                 EndTime = Time.AddMinutes(5).ToString(),
-                Timer = "0001",
                 Attempts = "1"
             };
 
@@ -58,39 +57,19 @@ namespace aTframework3demo.TestCases.Forms
                 .OpenForms()
                 // Создать форму
                 .OpenCreateFormSlider()
-
-
-            //     // Проверить, что настройки открываются с перовго раза
-            //     .SwitchToSettings();
-
-            // bool IsSetingOpened = Case
-            //     .IsSettingsOpened();
-
-            // if (IsSetingOpened)
-            // {
-            //     Log.Info("Панель настроек формы открыта");
-            // }
-            // else
-            // {
-            //     Log.Error("Панель настроек формы не открыта");
-            // }
-
-            // Case
-
-
                 // Переключиться на вопросы
                 .SwitchToQuestions()
                 // Изменить название формы
                 .ChangeFormTitle(Form.Title)
                 // Добавить вопрос
                 .AddQuestion(Form.QuestionsNumber) 
-            
-            .CreateHighLoadedQuestions(Form.Questions, Form.Type[2],  Form.QuestionsNumber, 1);
+                // Создать вопросы для опроса
+                .CreateHighLoadedQuestions(Form.Questions, Form.Type[2],  Form.QuestionsNumber, 1);
 
             // Переименовать опции
             for (int i = 1; i <= Form.QuestionsNumber; i++)
             {
-                Case.ChangeOptionName(Form.Questions[i]);
+                Case.ChangeOptionName(Form.Questions[i], Form.Options);
             }
             
             Case
@@ -101,26 +80,60 @@ namespace aTframework3demo.TestCases.Forms
                 // Сделать форму анонимной
                 .SetAnon()
                 // Сделать форму активной
-                .SetActive()
+                // .SetActive()
                 // Сохранить форму
                 .SaveForm()
+                // Открыть создание задачи
                 .CreateTask(Form.Title)
+                // Назначить ответстветнного
                 .SetContractor(Participants.Contractor)
+                // Назначить поставщика
                 .SetDirector(Participants.Director)
+                // Назначить смотрящего
                 .SetWatcher(Participants.Watcher)
+                // Создать задачу
                 .CreateTask();
                 
             Waiters.StaticWait_s(8);
 
-            new TopMenu()
+            var ContinueCase = new TopMenu()
+                // Выйти из аккаунта
                 .LogOut()
-                .Login(User.Login, User.Password)
+                // Войти в аккаунт
+                .Login(User.Login, User.Password);
+            
+            Waiters.StaticWait_s(3);
+
+            ContinueCase
+                // Открыть задачи
                 .OpenTasks()
+                // Открыть задачу
                 .OpenTask(Form.Title)
-                .OpenForm();
+                // Открыть форму
+                .OpenForm()
+                // Начать прохождение
+                .StartForm()
+                .AnswerTheQuestions(Form)
+                .SubmitForm();
 
-            Waiters.StaticWait_s(4);
+            Waiters.StaticWait_s(3);
 
+            bool Result = homePage
+                .LeftMenu
+                .OpenForms()
+                .OpenResults(Form.Title)
+                .CkeckAnswers(Form);
+                
+            if (Result){
+                Log.Info("Все ответы и вопросы отображены");
+            }
+            else
+            {
+                Log.Error("Не все ответы и вопросы отображены");
+            }
+                
+            new FormsMainPage()
+                .DeleteForm(Form.Title);
         }
     }
 }

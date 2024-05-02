@@ -11,19 +11,22 @@ namespace aTframework3demo.TestEntities
         {
             Title = title ?? throw new ArgumentNullException(nameof(title));
             var questions = new Dictionary<int, string>();
+            Options = new Dictionary<string, List<string>>();
+            Answers = new Dictionary<string, string>();
             QuestionsNumber = questionsNumber;
-
+            
             for (int i = 1; i <= questionsNumber; i++)
             {
                 questions.Add(i, $"Вопрос {i}");
             }
-
-            Questions = questions;
+            Questions = questions; 
         }
 
         public string Title { get; set; }
         public int QuestionsNumber { get; set; }
         public  Dictionary<int, string> Questions { get; set; }
+        public  Dictionary<string, List<string>> Options { get; set; }
+        public  Dictionary<string, string> Answers { get; set; }
         public Dictionary<int, string> Type = new Dictionary<int, string>()
         {
             [1] = "Текстоввый ввод",

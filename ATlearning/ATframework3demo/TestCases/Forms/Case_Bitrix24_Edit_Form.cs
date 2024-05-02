@@ -106,11 +106,11 @@ namespace ATframework3demo.TestCases.Forms
                 //создать 2 опции в вопросе 1
                 .AddNewOption(editedTestForm.Questions[1], 2)
                 //изменить название опций в вопросе 1
-                .ChangeOptionName(editedTestForm.Questions[1])
+                .ChangeOptionName(editedTestForm.Questions[1], editedTestForm.Options)
                 //создать 3 опции в вопросе 2
                 .AddNewOption(editedTestForm.Questions[2], 3)
                 //изменить название опций в вопросе 2
-                .ChangeOptionName(editedTestForm.Questions[2])
+                .ChangeOptionName(editedTestForm.Questions[2], editedTestForm.Options)
                 //сохранить форму
                 .SaveForm();
 

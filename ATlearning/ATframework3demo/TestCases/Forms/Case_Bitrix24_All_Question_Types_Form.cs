@@ -41,11 +41,11 @@ namespace ATframework3demo.TestCases.Forms
                 // Добавить для 2 вопроса 2 опции
                 .AddNewOption(Data.Questions[2], 2)
                 // Изменить названия опций для 2 вопроса
-                .ChangeOptionName(Data.Questions[2])
+                .ChangeOptionName(Data.Questions[2], Data.Options)
                 // Добавить для 3 вопроса 3 опции
                 .AddNewOption(Data.Questions[3], 3)
                 // Изменить названия опций для 3 вопроса
-                .ChangeOptionName(Data.Questions[3])
+                .ChangeOptionName(Data.Questions[3], Data.Options)
                 // Сохранить форму
                 .SaveForm()
                 // Проверить, что форма отображается в таблице
