@@ -5,25 +5,17 @@ using aTframework3demo.TestEntities;
 
 namespace aTframework3demo.TestCases.Forms
 {
-    public class Case_Bitrix24_Statistic_Form_Passing : CaseCollectionBuilder
+    public class Case_Bitrix24_Test_Form_Passing : CaseCollectionBuilder
     {
         protected override List<TestCase> GetCases()
         {
             var caseCollection = new List<TestCase>();
-            caseCollection.Add(new TestCase("FORMS: Прохождение опроса сотрудником", homePage => FormPassing(homePage)));
+            caseCollection.Add(new TestCase("FORMS: Прохождение теста сотрудником", homePage => FormPassing(homePage)));
             return caseCollection;
         }
 
         public void FormPassing(PortalHomePage homePage)
         {
-            string userName = homePage
-                //открыть мини окно профиля
-                .OpenProfileMiniWindow()
-                //открыть слайдер профиля
-                .OpenProfileSlider()
-                //получить текущее имя пользователя
-                .GetUserName();
-
             string formTitle = "testForm" + DateTime.Now.Ticks;
             var testForm = new Form(formTitle, 4);
             string textAnswerValue = "testAnswer" + DateTime.Now.Ticks;
@@ -85,7 +77,6 @@ namespace aTframework3demo.TestCases.Forms
 
             var expectedRow = new Dictionary<int, string>()
             {
-                [0] = userName,
                 [1] = textAnswerValue,
                 [2] = "Ответ 1",
                 [3] = "Ответ 2",

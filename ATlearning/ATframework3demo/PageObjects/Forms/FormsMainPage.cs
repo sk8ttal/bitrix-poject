@@ -90,6 +90,7 @@ namespace ATframework3demo.PageObjects
             return new FormResultPage();
         }
 
+
         public FormsMainPage SelectForm(string Title)
         {
             new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//td[@class='main-grid-cell main-grid-cell-checkbox']/span",

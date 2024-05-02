@@ -29,9 +29,17 @@ namespace ATframework3demo.PageObjects.Forms
         public bool IsFirstQuestionNamed(string referenceName)
         {
             var firstEncounteredQuestionBlock = new WebItem($"//div[@class='mb-3']//label", "Первый вопрос в форме");
-            bool isQustionAsReference = firstEncounteredQuestionBlock.AssertTextContains(referenceName, "Wrong text");
+            string actualName = firstEncounteredQuestionBlock.InnerText();
+            if (actualName == referenceName)
+            {
+                return true;
+            }
 
-            return isQustionAsReference;
+            else
+            {
+                Log.Error($"Ожидался вопрос '{referenceName}', фактический - '{actualName}'");
+                return false;
+            }
         }
 
         public bool IsQuestionWithNamePresent(string referenceName)
