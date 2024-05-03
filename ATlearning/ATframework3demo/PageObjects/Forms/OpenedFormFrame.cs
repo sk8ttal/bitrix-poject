@@ -9,7 +9,7 @@ namespace ATframework3demo.PageObjects.Forms
     {
         public OpenedFormFrame IsQuestionBlocksPresent(Form Data)
         {
-            foreach (var Question in Data.Questions.Values)
+            foreach (var Question in Data.Questions)
             {
                 WebItem Element = new WebItem($"//label[text()='{Question}']", $"Элемент c названием {Question}");
                 if (Element.WaitElementDisplayed())

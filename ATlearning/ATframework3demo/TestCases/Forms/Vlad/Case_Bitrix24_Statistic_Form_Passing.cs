@@ -23,8 +23,8 @@ namespace aTframework3demo.TestCases.Forms
         {
             UserForTests User = new UserForTests()
             {
-                Login = "Oleg", 
-                Password = "Qwerty123&", 
+                Login = "Oleg",
+                Password = "Qwerty123&",
                 Uri = new Uri("http://dev.bx/")
             };
 
@@ -38,10 +38,10 @@ namespace aTframework3demo.TestCases.Forms
             TimeOnly Time = TimeOnly.Parse(DateTime.Now.ToShortTimeString());
 
             Form Form = new Form(
-                "Test" + DateTime.Now.Ticks.ToString(),
+                "Test" + DateTime.Now.Ticks,
                 3
             );
-               
+
             FormSettings Settings = new FormSettings()
             {
                 StartDate = Date.ToString(),
@@ -57,30 +57,18 @@ namespace aTframework3demo.TestCases.Forms
                 .OpenForms()
                 // Создать форму
                 .OpenCreateFormSlider()
-                // Переключиться на вопросы
-                .SwitchToQuestions()
                 // Изменить название формы
                 .ChangeFormTitle(Form.Title)
-                // Добавить вопрос
-                .AddQuestion(Form.QuestionsNumber) 
                 // Создать вопросы для опроса
-                .CreateHighLoadedQuestions(Form.Questions, Form.Type[2],  Form.QuestionsNumber, 1);
-
-            // Переименовать опции
-            for (int i = 1; i <= Form.QuestionsNumber; i++)
-            {
-                Case.ChangeOptionName(Form.Questions[i], Form.Options);
-            }
-            
-            Case
+                .CreateSingleQuestionBlock(Form, Form.Type[1])
+                .CreateSingleQuestionBlock(Form, Form.Type[2], 1)
+                .CreateSingleQuestionBlock(Form, Form.Type[3], 3)
                 // Переключится на настройик
                 .SwitchToSettings()
                 // Установить настройки для формы
                 .SetFormProperties(Settings)
                 // Сделать форму анонимной
                 .SetAnon()
-                // Сделать форму активной
-                // .SetActive()
                 // Сохранить форму
                 .SaveForm()
                 // Открыть создание задачи
@@ -93,7 +81,7 @@ namespace aTframework3demo.TestCases.Forms
                 .SetWatcher(Participants.Watcher)
                 // Создать задачу
                 .CreateTask();
-                
+
             Waiters.StaticWait_s(8);
 
             var ContinueCase = new TopMenu()
@@ -101,7 +89,7 @@ namespace aTframework3demo.TestCases.Forms
                 .LogOut()
                 // Войти в аккаунт
                 .Login(User.Login, User.Password);
-            
+
             Waiters.StaticWait_s(3);
 
             ContinueCase
@@ -123,16 +111,18 @@ namespace aTframework3demo.TestCases.Forms
                 .OpenForms()
                 .OpenResults(Form.Title)
                 .CheckAnswers(Form);
-                
-            if (Result){
+
+            if (Result)
+            {
                 Log.Info("Все ответы и вопросы отображены");
             }
             else
             {
                 Log.Error("Не все ответы и вопросы отображены");
             }
-                
-            new FormsMainPage()
+
+            new FormResultPage()
+                .CloseFrame()
                 .DeleteForm(Form.Title);
         }
     }

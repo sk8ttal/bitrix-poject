@@ -33,19 +33,19 @@ namespace ATframework3demo.TestCases.Forms
                 // Добавить 3 блока вопросов
                 .AddQuestion(Data.QuestionsNumber)
                 // Изменить названия блоков
-                .SetQuestionsName(Data.Questions)
+                .SetQuestionsName(Data.QuestionsNumber, Data)
                 // Изменить типы вопросов для вопросов 2 и 3
                 // на один из списка и несколько из списка
-                .ChangeQuestionType(Data.Questions[2], Data.Type[2])
-                .ChangeQuestionType(Data.Questions[3], Data.Type[3])
+                .ChangeQuestionType(Data.Questions[1], Data.Type[2])
+                .ChangeQuestionType(Data.Questions[2], Data.Type[3])
                 // Добавить для 2 вопроса 2 опции
-                .AddNewOption(Data.Questions[2], 2)
+                .AddNewOption(Data.Questions[1], 2)
                 // Изменить названия опций для 2 вопроса
-                .ChangeOptionName(Data.Questions[2], Data.Options)
+                .ChangeOptionsName(Data.Questions[1], Data.Options)
                 // Добавить для 3 вопроса 3 опции
-                .AddNewOption(Data.Questions[3], 3)
+                .AddNewOption(Data.Questions[2], 3)
                 // Изменить названия опций для 3 вопроса
-                .ChangeOptionName(Data.Questions[3], Data.Options)
+                .ChangeOptionsName(Data.Questions[2], Data.Options)
                 // Сохранить форму
                 .SaveForm()
                 // Проверить, что форма отображается в таблице

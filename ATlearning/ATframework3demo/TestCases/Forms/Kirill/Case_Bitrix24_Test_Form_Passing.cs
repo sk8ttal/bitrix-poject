@@ -10,11 +10,11 @@ namespace aTframework3demo.TestCases.Forms
         protected override List<TestCase> GetCases()
         {
             var caseCollection = new List<TestCase>();
-            caseCollection.Add(new TestCase("FORMS: Прохождение теста сотрудником", homePage => FormPassing(homePage)));
+            caseCollection.Add(new TestCase("FORMS: Прохождение теста сотрудником", homePage => TestFormPassing(homePage)));
             return caseCollection;
         }
 
-        public void FormPassing(PortalHomePage homePage)
+        public void TestFormPassing(PortalHomePage homePage)
         {
             string formTitle = "testForm" + DateTime.Now.Ticks;
             var testForm = new Form(formTitle, 4);
@@ -32,26 +32,34 @@ namespace aTframework3demo.TestCases.Forms
                 // Добавить 3 блока вопросов
                 .AddQuestion(testForm.QuestionsNumber)
                 // Изменить названия блоков
-                .SetQuestionsName(testForm.Questions)
+                .SetQuestionsName(testForm.QuestionsNumber, testForm)
+                //сделать вопрос тестовым
+                .SetQuestionToTestType(testForm.Questions[0])
                 // Изменить типы вопросов для вопросов 2, 3 и 4
                 //один из списка
-                .ChangeQuestionType(testForm.Questions[2], testForm.Type[2])
+                .ChangeQuestionType(testForm.Questions[1], testForm.Type[2])
+                //сделать вопрос тестовым
+                .SetQuestionToTestType(testForm.Questions[1])
                 //один из списка
-                .ChangeQuestionType(testForm.Questions[3], testForm.Type[2])
+                .ChangeQuestionType(testForm.Questions[2], testForm.Type[2])
+                //сделать вопрос тестовым
+                .SetQuestionToTestType(testForm.Questions[2])
                 //несколько из списка
-                .ChangeQuestionType(testForm.Questions[4], testForm.Type[3])
+                .ChangeQuestionType(testForm.Questions[3], testForm.Type[3])
+                //сделать вопрос тестовым
+                .SetQuestionToTestType(testForm.Questions[3])
                 // Добавить для 2 вопроса 2 опции
-                .AddNewOption(testForm.Questions[2], 2)
+                .AddNewOption(testForm.Questions[1], 2)
                 // Изменить названия опций для 2 вопроса
-                .ChangeOptionName(testForm.Questions[2], testForm.Options)
+                .ChangeOptionsName(testForm.Questions[1], testForm.Options)
                 // Добавить для 3 вопроса 2 опции
-                .AddNewOption(testForm.Questions[3], 2)
+                .AddNewOption(testForm.Questions[2], 2)
                 // Изменить названия опций для 3 вопроса
-                .ChangeOptionName(testForm.Questions[3], testForm.Options)
+                .ChangeOptionsName(testForm.Questions[3], testForm.Options)
                 // Добавить для 4 вопроса 3 опции
-                .AddNewOption(testForm.Questions[4], 3)
+                .AddNewOption(testForm.Questions[3], 3)
                 // Изменить названия опций для 4 вопроса
-                .ChangeOptionName(testForm.Questions[4], testForm.Options)
+                .ChangeOptionsName(testForm.Questions[3], testForm.Options)
                 // Сохранить форму
                 .SaveForm();
 

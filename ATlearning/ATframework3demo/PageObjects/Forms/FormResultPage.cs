@@ -1,4 +1,5 @@
-﻿using atFrameWork2.BaseFramework.LogTools;
+﻿using atFrameWork2.BaseFramework;
+using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.SeleniumFramework;
 using aTframework3demo.TestEntities;
 
@@ -9,23 +10,31 @@ namespace ATframework3demo.PageObjects.Forms
 
         public bool CheckAnswers(Form Form)
         {
-            Dictionary<int, string> Questions = Form.Questions;
-            Dictionary<string, string> Answers = Form.Answers;
+            Waiters.StaticWait_s(3);
+
+            List<string> Questions = Form.Questions;
 
             for (int i = 0; i < Form.QuestionsNumber; i++)
             {
                 string QuestionName = Questions[i];
-                string AnswerName = Answers[QuestionName];
-                WebItem Question = new WebItem($"//span[text()='{QuestionName}']", "span");
-                WebItem Answer = new WebItem($"//span[text()='{AnswerName}']", "span");
+                List<string> AnswerName = Form.Answers[QuestionName];
 
-                if (!Question.WaitElementDisplayed() || !Answer.WaitElementDisplayed())
+                for (int j = 0; j < AnswerName.Count; j++)
                 {
-                    return false;
-                }
+                    WebItem AnswerOnQuestion = new WebItem($"//span[text()='{QuestionName}']/ancestor::table//span[text()='{AnswerName[j]}']",
+                        $"Ответ {AnswerName[j]} на вопрос {QuestionName}");
+
+                    if (!AnswerOnQuestion.WaitElementDisplayed())
+                    {
+                        Log.Error($"Ответ {AnswerName[j]} на вопрос {QuestionName} не найден");
+
+                        return false;
+                    }
+                    Log.Info($"Ответ {AnswerName[j]} на вопрос {QuestionName} найден");
+                } 
             }
 
-            return true;        
+            return true;
         }
 
         public FormsMainPage CloseFrame()

@@ -24,13 +24,18 @@ namespace aTframework3demo.TestCases.Forms
                 55
             );
 
-            homePage
+            var Case = homePage
                 .LeftMenu
                 .OpenForms()
                 .OpenCreateFormSlider()
-                .ChangeFormTitle(Data.Title)
-                .AddQuestion(Data.QuestionsNumber)
-                .CreateHighLoadedQuestions(Data.Questions, Data.Type[2], Data.QuestionsNumber)
+                .ChangeFormTitle(Data.Title);
+                // .AddQuestion(Data.QuestionsNumber)
+
+            for (int i = 0; i < Data.QuestionsNumber; i++)
+            {
+                Case.CreateSingleQuestionBlock(Data, Data.Type[2], 5);
+            }
+            Case
                 .SaveForm()
                 .OpenForm(Data.Title)
                 .StartForm();
