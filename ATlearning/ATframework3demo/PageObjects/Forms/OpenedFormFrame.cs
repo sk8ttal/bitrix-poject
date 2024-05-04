@@ -1,12 +1,43 @@
 using atFrameWork2.BaseFramework;
 using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.SeleniumFramework;
+using aTframework3demo.PageObjects.Forms;
 using aTframework3demo.TestEntities;
 
 namespace ATframework3demo.PageObjects.Forms
 {
-    public class OpenedFormFrame
+    public class OpenedFormFrame : FormPage
     {
+        /// <summary>
+        /// Отвечает на тестовые вопросы формы по ключу, записанному в объекте Form
+        /// </summary>
+        /// <param name="answersDict"></param>
+        /// <returns></returns>
+        public OpenedFormFrame AnswerTest(Form form)
+        {
+
+            //рассматриваем каждую ключевую пару
+            foreach (var keyPair in form.Answers)
+            {
+                //рассматриваем весь список ответов
+                foreach (string answerValue in keyPair.Value)
+                {
+                    //если тип вопроса текстовый то применяем один метод
+                    if (form.QuestionTypes[keyPair.Key] == form.Type[1])
+                    {
+                        SendKeysToTextQuestion(answerValue, keyPair.Key);
+                    }
+
+                    //иначе применяем другой (если будут другие типы вопросов это нужно будет дополнить)
+                    else
+                    {
+                        ChooseOptionInQuestion(answerValue, keyPair.Key);
+                    }
+                }
+            }
+
+            return this;
+        }
         public OpenedFormFrame IsQuestionBlocksPresent(Form Data)
         {
             foreach (var Question in Data.Questions)
@@ -85,8 +116,9 @@ namespace ATframework3demo.PageObjects.Forms
 
         public FormsMainPage FinishForm()
         {
-            new WebItem("//button[@class='btn btn-primary']", "Кнопка 'Подтвердить'")
-                .Click();
+            var submitButton = new WebItem("//button[@class='btn btn-primary submit-button']", "Кнопка 'ОТПРАВИТЬ'");
+            submitButton.Hover();
+            submitButton.Click();
 
             //без этого костыля селениум кликает на элементы слишком быстро
             Waiters.StaticWait_s(2);

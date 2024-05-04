@@ -107,6 +107,29 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
+        public CreateFormFrame ChangeQuestionTypeWithFormSave(string questionName, string questionType, Dictionary<string, string> formQuestionTypesDict)
+        {
+            if (!formQuestionTypesDict.ContainsKey(questionName))
+            {
+                formQuestionTypesDict.Add(questionName, questionType);
+            }
+
+            else
+            {
+                formQuestionTypesDict.Remove(questionName);
+                formQuestionTypesDict.Add(questionName, questionType);
+            }
+
+            WebItem Selector = new WebItem($"//h3[text()='{questionName}']/ancestor::div[@class='row']//select", $"Список типов вопроса для блока {questionName}");
+
+            Selector.Hover(0);
+            Selector.Click(0);
+            new WebItem($"//h3[text()='{questionName}']/ancestor::div[@class='row']//option[text()='{questionType}']", $"Тип вопроса {questionType}")
+                .Click(0);
+
+            return this;
+        }
+
         public CreateFormFrame CreateSingleQuestionBlock(Form Form, string QuestionType, int OptionsNumber = 1)
         {
             WebItem NextButton = new WebItem("//button[text()='»']", "Кнопка следующего раздела");
@@ -170,7 +193,7 @@ namespace ATframework3demo.PageObjects
 
         public bool IsAllQuestionsNamed(int QuestionsNumber)
         {
-            
+
 
             for (int i = 0; i < QuestionsNumber; i++)
             {
@@ -214,6 +237,7 @@ namespace ATframework3demo.PageObjects
                 Question.Click(0);
                 Field.ReplaceText(Name, 0);
                 Form.Questions.Add(Name);
+                Form.QuestionTypes.Add(Name, Form.Type[1]);
             }
 
             return this;
@@ -276,9 +300,9 @@ namespace ATframework3demo.PageObjects
 
         public CreateFormFrame SetQuestionToTestType(string questionName)
         {
-            WebItem Button = 
+            WebItem Button =
                 new WebItem($"(//h3[text()='{questionName}']//ancestor::div[@class='row']//div[@class='form-check']/input)[last()]", "Радиокнопка переключения вопроса в тестовый тип");
-            
+
             Button.Hover(0);
             Button.Click(0);
 
@@ -287,17 +311,58 @@ namespace ATframework3demo.PageObjects
 
         public CreateFormFrame SetQuestionToNonTestType(string questionName)
         {
-            WebItem Button = 
+            WebItem Button =
                 new WebItem($"(//h3[text()='{questionName}']//ancestor::div[@class='row']//div[@class='form-check']/input)[1]", "Радиокнопка переключения вопроса в тип без проверки");
 
-            Button.Hover(0);    
+            Button.Hover(0);
             Button.Click(0);
 
             return this;
         }
 
-        public CreateFormFrame SetFormRightAnswers(Form form)
+        /// <summary>
+        /// Вводит строку в тестовый текстовый вопрос
+        /// </summary>
+        /// <param name="questionName"> Строка с названием вопроса </param>
+        /// <param name="inputText"> Строка с текстом, для ввода </param>
+        /// <param name="testForm"> Объект класса Form в который запишется ответ </param>
+        public CreateFormFrame SetTextQuestionRightAnswer(string questionName, string inputText, Dictionary<string, List<string>> answersDict)
         {
+            //поскольку текстовый вопрос всего с одной опцией, список из 1 элемента
+            List<string> questionAnswers = new List<string>() { inputText };
+            //добавляем объекту Form пару ключ-значение для дальнейшего обращения к ним
+            answersDict.Add(questionName, questionAnswers);
+
+            //прокликиваем нужный импут и вводим туда текст
+            var questionInput = new WebItem($"//h3[text()='{questionName}']/ancestor::div[@class='card mb-3 mt-3']//input[@class='form-control']", "Поле ввода текста для тестового вопроса");
+            questionInput.Hover(0);
+            questionInput.Click(0);
+            questionInput.SendKeys(inputText);
+
+            return this;
+        }
+        /// <summary>
+        /// В тестовом вопросе с выбором ставит правильный ответ
+        /// </summary>
+        public CreateFormFrame SetOptionQuestionRightAnswer(string questionName, string rightOptionName, Dictionary<string, List<string>> answersDict)
+        {
+            //если данного вопроса еще нет в ответах, то мы его добавляем
+            if (!answersDict.ContainsKey(questionName))
+            {
+                List<string> answerOptions = new List<string>() { rightOptionName };
+                answersDict.Add(questionName, answerOptions);
+            }
+
+            //иначе просто добавляем в существующий список очередную опцию
+            else
+            {
+                answersDict[questionName].Add(rightOptionName);
+            }
+
+            var rightOptionRadioButton = new WebItem($"//h3[text()='{questionName}']/ancestor::div[@class='card mb-3 mt-3']//label[text()='{rightOptionName}']/ancestor::div[@class='form-check inner-question-options-wrap']//input", "Checkbox/radiobutton в вопросе с выбором");
+            rightOptionRadioButton.Hover();
+            rightOptionRadioButton.Click();
+
 
             return this;
         }

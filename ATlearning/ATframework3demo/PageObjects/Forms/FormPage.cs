@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using atFrameWork2.SeleniumFramework;
 using aTframework3demo.TestEntities;
 
@@ -39,9 +35,10 @@ namespace aTframework3demo.PageObjects.Forms
                 if (Form.QuestionTypes[Question] == Form.Type[1])
                 {
                     string Answer = "Ответ" + DateTime.Now.Ticks;
-
-                    new WebItem($"//label[text()='{QuestionName}']/parent::div/input", $"Поле ввода ответа для вопроса {QuestionName}")
-                        .SendKeys(Answer);
+                    var input = new WebItem($"//label[text()='{QuestionName}']/parent::div/input", $"Поле ввода ответа для вопроса {QuestionName}");
+                    input.Hover();
+                    input.Click();
+                    input.SendKeys(Answer);
 
                     Form.Answers.Add(QuestionName, new List<string> { Answer });
 
@@ -51,21 +48,23 @@ namespace aTframework3demo.PageObjects.Forms
                     int Index = Random.Next(Form.Options[QuestionName].Count);
                     string OptionName = Form.Options[QuestionName][Index];
 
-                    new WebItem($"//label[text()='{QuestionName}']/parent::div//label[text()='{OptionName}']/parent::div/input", $"Опция {OptionName}")
-                        .Click();
+                    var radioButton = new WebItem($"//label[text()='{QuestionName}']/parent::div//label[text()='{OptionName}']/parent::div/input", $"Опция {OptionName}");
+                    radioButton.Hover();
+                    radioButton.Click();
 
                     Form.Answers.Add(QuestionName, new List<string> { OptionName });
                 }
                 else
                 {
                     List<string> Answers = new List<string>();
-                    int AnswersNumber = Random.Next(2,Form.Options[QuestionName].Count);
+                    int AnswersNumber = Random.Next(2, Form.Options[QuestionName].Count);
                     for (int j = 0; j < AnswersNumber; j++)
                     {
                         string OptionName = Form.Options[QuestionName][j];
 
-                        new WebItem($"//label[text()='{QuestionName}']/parent::div//label[text()='{OptionName}']/parent::div/input", $"Опция {OptionName}")
-                        .Click();
+                        var checkBox = new WebItem($"//label[text()='{QuestionName}']/parent::div//label[text()='{OptionName}']/parent::div/input", $"Опция {OptionName}");
+                        checkBox.Hover();
+                        checkBox.Click();
 
                         Answers.Add(OptionName);
                     }

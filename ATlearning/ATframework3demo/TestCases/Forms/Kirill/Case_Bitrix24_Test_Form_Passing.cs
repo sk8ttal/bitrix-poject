@@ -1,7 +1,9 @@
 using atFrameWork2.BaseFramework;
 using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.PageObjects;
+using atFrameWork2.TestEntities;
 using aTframework3demo.TestEntities;
+using ATframework3demo.PageObjects;
 
 namespace aTframework3demo.TestCases.Forms
 {
@@ -16,6 +18,19 @@ namespace aTframework3demo.TestCases.Forms
 
         public void TestFormPassing(PortalHomePage homePage)
         {
+            UserForTests testUser = new UserForTests()
+            {
+                Login = "Oleg",
+                Password = "Qwerty123&",
+                Uri = new Uri("http://dev.bx/")
+            };
+
+            TaskFromForm Participants = new TaskFromForm(
+                "Олег Иванов",
+                "Кирилл Винников",
+                "Кирилл Винников"
+            );
+
             string formTitle = "testForm" + DateTime.Now.Ticks;
             var testForm = new Form(formTitle, 4);
             string textAnswerValue = "testAnswer" + DateTime.Now.Ticks;
@@ -33,21 +48,13 @@ namespace aTframework3demo.TestCases.Forms
                 .AddQuestion(testForm.QuestionsNumber)
                 // Изменить названия блоков
                 .SetQuestionsName(testForm.QuestionsNumber, testForm)
-                //сделать вопрос тестовым
-                .SetQuestionToTestType(testForm.Questions[0])
                 // Изменить типы вопросов для вопросов 2, 3 и 4
                 //один из списка
-                .ChangeQuestionType(testForm.Questions[1], testForm.Type[2])
-                //сделать вопрос тестовым
-                .SetQuestionToTestType(testForm.Questions[1])
+                .ChangeQuestionTypeWithFormSave(testForm.Questions[1], testForm.Type[2], testForm.QuestionTypes)
                 //один из списка
-                .ChangeQuestionType(testForm.Questions[2], testForm.Type[2])
-                //сделать вопрос тестовым
-                .SetQuestionToTestType(testForm.Questions[2])
+                .ChangeQuestionTypeWithFormSave(testForm.Questions[2], testForm.Type[2], testForm.QuestionTypes)
                 //несколько из списка
-                .ChangeQuestionType(testForm.Questions[3], testForm.Type[3])
-                //сделать вопрос тестовым
-                .SetQuestionToTestType(testForm.Questions[3])
+                .ChangeQuestionTypeWithFormSave(testForm.Questions[3], testForm.Type[3], testForm.QuestionTypes)
                 // Добавить для 2 вопроса 2 опции
                 .AddNewOption(testForm.Questions[1], 2)
                 // Изменить названия опций для 2 вопроса
@@ -55,48 +62,69 @@ namespace aTframework3demo.TestCases.Forms
                 // Добавить для 3 вопроса 2 опции
                 .AddNewOption(testForm.Questions[2], 2)
                 // Изменить названия опций для 3 вопроса
-                .ChangeOptionsName(testForm.Questions[3], testForm.Options)
+                .ChangeOptionsName(testForm.Questions[2], testForm.Options)
                 // Добавить для 4 вопроса 3 опции
                 .AddNewOption(testForm.Questions[3], 3)
                 // Изменить названия опций для 4 вопроса
                 .ChangeOptionsName(testForm.Questions[3], testForm.Options)
-                // Сохранить форму
-                .SaveForm();
+                //сменить тип вопроса на тестовый
+                .SetQuestionToTestType(testForm.Questions[0])
+                //поставить в вопросе 1 (текстовый вопрос) правильный ответ
+                .SetTextQuestionRightAnswer(testForm.Questions[0], textAnswerValue, testForm.RightAnswers)
+                //сменить тип вопроса на тестовый
+                .SetQuestionToTestType(testForm.Questions[1])
+                //поставить в вопросе 2 (один из списка) правильный ответ
+                .SetOptionQuestionRightAnswer(testForm.Questions[1], testForm.Options[testForm.Questions[1]][0], testForm.RightAnswers)
+                //сменить тип вопроса на тестовый
+                .SetQuestionToTestType(testForm.Questions[2])
+                //поставить в вопросе 3 (один из списка) правильный ответ
+                .SetOptionQuestionRightAnswer(testForm.Questions[2], testForm.Options[testForm.Questions[2]][1], testForm.RightAnswers)
+                //сменить тип вопроса на тестовый
+                .SetQuestionToTestType(testForm.Questions[3])
+                //поставить в вопросе 4 (несколько из списка) 2 правильных ответа
+                .SetOptionQuestionRightAnswer(testForm.Questions[3], testForm.Options[testForm.Questions[3]][2], testForm.RightAnswers)
+                .SetOptionQuestionRightAnswer(testForm.Questions[3], testForm.Options[testForm.Questions[3]][3], testForm.RightAnswers)
+                //сохранить форму
+                .SaveForm()
+                .CreateTask(testForm.Title)
+                // Назначить ответстветнного
+                .SetContractor(Participants.Contractor)
+                // Назначить поставщика
+                .SetDirector(Participants.Director)
+                // Создать задачу
+                .CreateTask();
 
-            formsMainPage = formsMainPage
-                //открыть форму
-                .OpenForm(testForm.Title)
-                //начать выполнение формы
+            Waiters.StaticWait_s(8);
+
+            var ContinueCase = new TopMenu()
+                // Выйти из аккаунта
+                .LogOut()
+                // Войти в аккаунт
+                .Login(testUser.Login, testUser.Password);
+
+            Waiters.StaticWait_s(3);
+
+            ContinueCase
+                // Открыть задачи
+                .OpenTasks()
+                // Открыть задачу
+                .OpenTask(testForm.Title)
+                // Открыть форму
+                .OpenForm()
+                // Начать прохождение
                 .StartForm()
-                //в текстовом вопросе 1 написать строку
-                .SendKeysToTextQuestion(textAnswerValue, testForm.Questions[1])
-                //выбрать опцию 2 в вопросе 2 (один из списка)
-                .ChooseOptionInQuestion("Ответ 2", testForm.Questions[2])
-                //выбрать опцию 1 в вопросе 2 (один из списка)
-                .ChooseOptionInQuestion("Ответ 1", testForm.Questions[2])
-                //выбрать опцию 1 в вопросе 3 (несколько из списка)
-                .ChooseOptionInQuestion("Ответ 2", testForm.Questions[3])
-                //выбрать опцию 3 в вопросе 3 (несколько из списка)
-                .ChooseOptionInQuestion("Ответ 1", testForm.Questions[4])
-                //выбрать опцию 2 в вопросе 4 (один из списка)
-                .ChooseOptionInQuestion("Ответ 3", testForm.Questions[4])
-                //завершить прохождение формы
-                .FinishForm();
+                .AnswerTheQuestions(testForm)
+                .SubmitForm();
 
-            var expectedRow = new Dictionary<int, string>()
-            {
-                [1] = textAnswerValue,
-                [2] = "Ответ 1",
-                [3] = "Ответ 2",
-                [4] = "Ответ 3\r\nОтвет 1",
-            };
+            Waiters.StaticWait_s(3);
 
-
-            bool isResultRowAsExpected = formsMainPage
+            bool isResultRowAsExpected = homePage
+                .LeftMenu
+                .OpenForms()
                 //открыть результаты
                 .OpenResults(testForm.Title)
                 //просмотреть соответствует ли строка таблицы результатов ожидаемой expectedRow
-                .IsResultRowAsExpected(expectedRow);
+                .AreTestAnswersAsExpected(testForm);
 
             if (!isResultRowAsExpected)
             {

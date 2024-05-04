@@ -7,7 +7,33 @@ namespace ATframework3demo.PageObjects.Forms
 {
     public class FormResultPage
     {
-
+        //public static bool ScrambledEquals<T>(IEnumerable<T> list1, IEnumerable<T> list2)
+        //{
+        //    var cnt = new Dictionary<T, int>();
+        //    foreach (T s in list1)
+        //    {
+        //        if (cnt.ContainsKey(s))
+        //        {
+        //            cnt[s]++;
+        //        }
+        //        else
+        //        {
+        //            cnt.Add(s, 1);
+        //        }
+        //    }
+        //    foreach (T s in list2)
+        //    {
+        //        if (cnt.ContainsKey(s))
+        //        {
+        //            cnt[s]--;
+        //        }
+        //        else
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    return cnt.Values.All(c => c == 0);
+        //}
         public bool CheckAnswers(Form Form)
         {
             Waiters.StaticWait_s(3);
@@ -31,7 +57,7 @@ namespace ATframework3demo.PageObjects.Forms
                         return false;
                     }
                     Log.Info($"Ответ {AnswerName[j]} на вопрос {QuestionName} найден");
-                } 
+                }
             }
 
             return true;
@@ -46,22 +72,68 @@ namespace ATframework3demo.PageObjects.Forms
             return new FormsMainPage();
         }
 
-
-        public bool IsResultRowAsExpected(Dictionary<int, string> ChosenOptions)
+        /// <summary>
+        /// Сверяет полученные ответы в форме с ключом, проверяет количество баллов за правильные ответы
+        /// </summary>
+        /// <param name="chosenOptions"></param>
+        /// <param name="rightOptions"></param>
+        /// <returns></returns>
+        public bool AreTestAnswersAsExpected(Form testForm)
         {
-            string xPath = "//tr[@class='main-grid-row main-grid-row-body']//td/following-sibling::td/following-sibling::td/following-sibling::td/following-sibling::td/following-sibling::td";
+            Waiters.StaticWait_s(3);
+            int maxScore = testForm.RightAnswers.Count;
+            int actualScore = 0;
 
-            foreach (var optionId in ChosenOptions)
+            //каждая пара вопрос ответ - 
+            foreach (var questionAnswersPair in testForm.Answers)
             {
-                xPath += "/following-sibling::td";
-                var encounteredCellInRow = new WebItem(xPath, "Очередная ячейка в строке результата");
-                string encounteredAnswer = encounteredCellInRow.InnerText();
-
-                if (encounteredAnswer != optionId.Value)
+                string question = questionAnswersPair.Key;
+                int rightOptionsQuantity = testForm.RightAnswers[question].Count;
+                int actualRightOptionsQuantity = 0;
+                bool allCorrectAnswers = true;
+                //каждый ответ в списке ответов в исходной паре
+                foreach (string answer in questionAnswersPair.Value)
                 {
-                    Log.Error($"Очередное полученное значение '{encounteredAnswer}' не совпадает с ожидаемым'{optionId.Value}'");
-                    return false;
+                    //если в правильных ответах нет хотя бы одного нужного элемента весь ответ считается неправильным
+                    if (!testForm.RightAnswers[question].Contains(answer))
+                    {
+                        allCorrectAnswers = false;
+                    }
+
+                    else
+                    {
+                        actualRightOptionsQuantity++;
+                    }
+
+                    var spanAnswer = new WebItem($"//span[text()='{questionAnswersPair.Key}']/ancestor::table//span[text()='{answer}']", $"Ответ {answer} на вопрос {questionAnswersPair.Key}");
+                    bool isSpanAnswerPresent = Waiters.WaitForCondition(() => spanAnswer.WaitElementDisplayed(), 2, 6, "Ожидание отображения ответа на вопрос");
+
+                    if (!isSpanAnswerPresent)
+                    {
+                        Log.Error($"Ответ {answer} на вопрос {questionAnswersPair.Key} не найден");
+                        return false;
+                    }
                 }
+
+                if (actualRightOptionsQuantity != rightOptionsQuantity)
+                {
+                    allCorrectAnswers = false;
+                }
+
+                if (allCorrectAnswers)
+                {
+                    actualScore++;
+                }
+            }
+
+            var expectedScoreCell = new WebItem($"//span[text()='Количество правильных ответов']/ancestor::table//span[contains(text(), '{actualScore} из {maxScore}')]", "Ожидаемое количество отвеченных правильно вопросов");
+            bool isScoreAsExpected = Waiters.WaitForCondition(() => expectedScoreCell.WaitElementDisplayed(), 2, 6, "Ожидание отображения результата теста");
+
+            if (!isScoreAsExpected)
+            {
+                var actualScoreCell = new WebItem($"//span[text()='Количество правильных ответов']/ancestor::table//span[contains(text(), 'из')]", "Фактическое количество отвеченных правильно вопросов");
+                Log.Error($"Фактически засчитано {actualScoreCell.InnerText()} вопросов, ожидалось {actualScore}");
+                return false;
             }
 
             return true;
