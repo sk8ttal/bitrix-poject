@@ -3,8 +3,11 @@ using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.SeleniumFramework;
 using aTframework3demo.TestEntities;
 
-namespace ATframework3demo.PageObjects.Forms
+namespace aTframework3demo.PageObjects.Forms
 {
+    /// <summary>
+    /// Сущность слайдера для прохождения формы. Открывается через контексное меню.
+    /// </summary>
     public class OpenedFormFrame
     {
         public OpenedFormFrame IsQuestionBlocksPresent(Form Data)

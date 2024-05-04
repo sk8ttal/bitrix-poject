@@ -3,11 +3,13 @@ using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.SeleniumFramework;
 using aTframework3demo.TestEntities;
 
-namespace ATframework3demo.PageObjects.Forms
+namespace aTframework3demo.PageObjects.Forms
 {
+    /// <summary>
+    /// Сущность слайдера результатов формы
+    /// </summary>
     public class FormResultPage
     {
-
         public bool CheckAnswers(Form Form)
         {
             Waiters.StaticWait_s(3);
@@ -31,7 +33,7 @@ namespace ATframework3demo.PageObjects.Forms
                         return false;
                     }
                     Log.Info($"Ответ {AnswerName[j]} на вопрос {QuestionName} найден");
-                } 
+                }
             }
 
             return true;

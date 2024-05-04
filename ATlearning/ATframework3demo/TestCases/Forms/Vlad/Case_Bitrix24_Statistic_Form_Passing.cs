@@ -4,8 +4,7 @@ using atFrameWork2.PageObjects;
 using atFrameWork2.TestEntities;
 using ATframework3demo.PageObjects;
 using aTframework3demo.TestEntities;
-using ATframework3demo.PageObjects.Forms;
-using ATframework3demo.TestEntities;
+using aTframework3demo.PageObjects.Forms;
 using atFrameWork2.SeleniumFramework;
 
 namespace aTframework3demo.TestCases.Forms

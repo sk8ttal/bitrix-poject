@@ -2,18 +2,20 @@ using atFrameWork2.BaseFramework;
 using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.SeleniumFramework;
 using aTframework3demo.TestEntities;
-using ATframework3demo.TestEntities;
 
-namespace ATframework3demo.PageObjects
+namespace aTframework3demo.PageObjects.Forms
 {
-    public class CreateFormFrame
+    /// <summary>
+    /// Сущность слайдера редактора форма. Раздел с вопросами
+    /// </summary>
+    public class FormQuestionsFrame
     {
         WebItem Question = new WebItem("//h3[text()='Название']", "Поле названия вопроса");
         WebItem Field = new WebItem("//input[@value='Название']", "Поле для ввода названия вопроса");
         WebItem Container = new WebItem("(//p[text()='Здесь будет поле для ввода ответа'])[last()]", "Блок вопроса");
         WebItem Button = new WebItem("//button[text()='СОХРАНИТЬ']", "Кнопка 'Сохранить'");
 
-        public CreateFormFrame AddQuestion(int QuestionsNumber = 1)
+        public FormQuestionsFrame AddQuestion(int QuestionsNumber = 1)
         {
             for (int i = 0; i < QuestionsNumber; i++)
             {
@@ -26,7 +28,7 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame AddNewOption(string QuestionName, int OptionsNumber = 1)
+        public FormQuestionsFrame AddNewOption(string QuestionName, int OptionsNumber = 1)
         {
             WebItem Button = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']//button[text()='+']",
                 $"Кнопка добавления опции к вопросу {QuestionName}");
@@ -40,7 +42,16 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame ChangeFormTitle(string Title)
+        public FormsMainPage CloseForm()
+        {
+            WebDriverActions.SwitchToDefaultContent();
+            new WebItem("//div[@class='side-panel-label-icon side-panel-label-icon-close']", "Кнопка закрытия слайдера")
+                .Click();
+
+            return new FormsMainPage();
+        }
+
+        public FormQuestionsFrame ChangeFormTitle(string Title)
         {
             new WebItem("//h1[text()='Новая форма']", "Название формы")
                 .Click();
@@ -52,24 +63,24 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame ChangeOptionName(string QuestionName, string OptionName)
+        public FormQuestionsFrame ChangeOptionName(string QuestionName, string OptionName)
         {
             WebItem Option = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//label[text()='Новая опция']",
                 $"Поле названия опции для вопроса {QuestionName}");
-            WebItem Field = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//input",
+            WebItem Field = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//input[@type='text']",
                 "Поле для ввода названия опции");
-            WebItem Container = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']//input[@class='form-check-input']",
-                "Блок вопроса");
+            WebItem Container = new WebItem($"//body", "Блок вопроса");
 
             Option.Hover(0);
             Option.Click(0);
             Field.ReplaceText(OptionName, 0);
+            Container.Hover(0);
             Container.Click(0);
 
             return this;
         }
 
-        public CreateFormFrame ChangeOptionsName(string QuestionName, Dictionary<string, List<string>> Options)
+        public FormQuestionsFrame ChangeOptionsName(string QuestionName, Dictionary<string, List<string>> Options)
         {
             WebItem Option = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//label[text()='Новая опция']",
                 $"Поле названия опции для вопроса {QuestionName}");
@@ -94,7 +105,7 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame ChangeQuestionType(string QuestionName, string QuestionType)
+        public FormQuestionsFrame ChangeQuestionType(string QuestionName, string QuestionType)
         {
             // ancestor и многое другое можно найти на  (не реклама)
             WebItem Selector = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='row']//select", $"Список типов вопроса для блока {QuestionName}");
@@ -107,7 +118,7 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame CreateSingleQuestionBlock(Form Form, string QuestionType, int OptionsNumber = 1)
+        public FormQuestionsFrame CreateSingleQuestionBlock(Form Form, string QuestionType, int OptionsNumber = 1)
         {
             WebItem NextButton = new WebItem("//button[text()='»']", "Кнопка следующего раздела");
 
@@ -115,6 +126,7 @@ namespace ATframework3demo.PageObjects
             {
                 NextButton.Hover(0);
                 NextButton.Click(0);
+                Waiters.StaticWait_s(4);
             }
 
             AddQuestion();
@@ -149,7 +161,7 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame DeleteQuestionByName(string questionName)
+        public FormQuestionsFrame DeleteQuestionByName(string questionName)
         {
             new WebItem($"//h3[text()='{questionName}']//ancestor::div[@class='header-question-title']//button", $"Кнопка удалить вопроса с названием {questionName}")
                 .Click();
@@ -157,7 +169,7 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame DeleteQuestionsFromTop(int questionNumber)
+        public FormQuestionsFrame DeleteQuestionsFromTop(int questionNumber)
         {
             for (int i = 0; i < questionNumber; i++)
             {
@@ -168,18 +180,18 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public bool IsAllQuestionsNamed(int QuestionsNumber)
+        public bool IsAllQuestionsNamed(Form Form)
         {
-            
 
-            for (int i = 0; i < QuestionsNumber; i++)
+
+            for (int i = 0; i < Form.QuestionsNumber; i++)
             {
-                if (!new WebItem($"(//h3[text()='Название'])[{i}]", "Блок вопроса номер " + i).WaitElementDisplayed())
+                if (!new WebItem($"//h3[text()='{Form.Questions[i]}']", $"Блок вопроса {Form.Questions[i]}").WaitElementDisplayed())
                 {
-                    Log.Error("Блок вопроса номер " + i + " не найден");
+                    Log.Error($"Блок вопроса {Form.Questions[i]} не найден");
                     return false;
                 }
-                Log.Info("Блок вопроса номер " + i + " найден");
+                Log.Info($"Блок вопроса {Form.Questions[i]} найден");
             }
 
             return true;
@@ -187,24 +199,22 @@ namespace ATframework3demo.PageObjects
 
         public bool IsEmptyFormAlertPresent()
         {
-            var alertMessage = new WebItem("//div[@class='alert alert-danger' and text()='Нельзя создать форму без вопросов']", "Предупреждение после попытки форму без вопросов");
+            WebItem alertMessage = new WebItem("//div[@class='alert alert-danger' and text()='Нельзя создать форму без вопросов']", "Предупреждение после попытки форму без вопросов");
             bool isAlertPresent = Waiters.WaitForCondition(() => alertMessage.WaitElementDisplayed(), 2, 6, "Ожидание появления сообщения об ошибке");
 
             return isAlertPresent;
         }
 
-        public bool IsSettingsOpened()
+        public bool IsNotSelectedCorrectAnswerErrorPresent()
         {
-            WebItem Field = new WebItem("//div[@class='mb-3']//label[text()='Время начала доступа к тесту']", "Описание поля даты и времени появления теста");
+            WebItem Message = new WebItem("//div[@class='alert alert-danger' and text()='Для тестовых вопросов хотя бы один вариант должен быть правильным']", 
+                "Предупреждение после попытки создать форму без указания правильных вариантов ответов");
+            bool IsAlertPresent = Waiters.WaitForCondition(() => Message.WaitElementDisplayed(), 2, 6, "Ожидание появления сообщения об ошибке");
 
-            if (Field.WaitElementDisplayed())
-            {
-                return true;
-            }
-            return false;
+            return IsAlertPresent;
         }
 
-        public CreateFormFrame SetQuestionsName(int QuestionsNumber, Form Form)
+        public FormQuestionsFrame SetQuestionsName(int QuestionsNumber, Form Form)
         {
 
             for (int i = 0; i < QuestionsNumber; i++)
@@ -219,117 +229,47 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame SetStartDate(string Date, string Time)
+        public FormQuestionsFrame SetQuestionToTestType(string questionName)
         {
-            WebItem StartField = new WebItem("//div[@class='mb-3']//label[text()='Время начала доступа к тесту']/parent::div/child::input", "Поле ввода даты и времени появления теста");
-
-            StartField.SendKeys(Date);
-            StartField.NotTextKey("ArrowRight");
-            StartField.SendKeys(Time);
-
-            return this;
-        }
-
-        public CreateFormFrame SetEndDate(string Date, string Time)
-        {
-            WebItem EndField = new WebItem("//div[@class='mb-3']//label[text()='Время конца доступа к тесту']/parent::div/child::input", "Поле ввода даты и времени закрытия теста");
-
-            EndField.SendKeys(Date);
-            EndField.NotTextKey("ArrowRight");
-            EndField.SendKeys(Time);
-
-            return this;
-        }
-
-        public CreateFormFrame SetTimer(string Time)
-        {
-            new WebItem("//div[@class='mb-3']//label[text()='Таймер на прохождение']/parent::div/child::input", "Поле ввода даты и времени")
-                .SendKeys(Time);
-
-            return this;
-
-        }
-
-        public CreateFormFrame SetAttempts(string Attempts)
-        {
-            new WebItem("//div[@class='mb-3']//label[text()='Количество попыток']/parent::div/child::input", "Поле ввода даты и времени")
-                .SendKeys(Attempts);
-
-            return this;
-        }
-
-        public CreateFormFrame SetAnon()
-        {
-            new WebItem("//div[@class='mb-3']//label[text()='Анонимная форма']/parent::div/child::input", "Пункт 'Анонимная форма'")
-                .Click();
-
-            return this;
-        }
-
-        public CreateFormFrame SetActive()
-        {
-            new WebItem("//div[@class='mb-3']//label[text()='Форма активна']/parent::div/child::input", "Пункт 'Форма активна'")
-                .Click();
-
-            return this;
-        }
-
-        public CreateFormFrame SetQuestionToTestType(string questionName)
-        {
-            WebItem Button = 
+            WebItem Button =
                 new WebItem($"(//h3[text()='{questionName}']//ancestor::div[@class='row']//div[@class='form-check']/input)[last()]", "Радиокнопка переключения вопроса в тестовый тип");
-            
+
+            Button.Hover();
+            Button.Click();
+
+            return this;
+        }
+
+        public FormQuestionsFrame SetQuestionToNonTestType(string questionName)
+        {
+            WebItem Button =
+                new WebItem($"(//h3[text()='{questionName}']//ancestor::div[@class='row']//div[@class='form-check']/input)[1]", "Радиокнопка переключения вопроса в тип без проверки");
+
             Button.Hover(0);
             Button.Click(0);
 
             return this;
         }
 
-        public CreateFormFrame SetQuestionToNonTestType(string questionName)
+        public FormQuestionsFrame SetFormRightAnswers(Form Form)
         {
-            WebItem Button = 
-                new WebItem($"(//h3[text()='{questionName}']//ancestor::div[@class='row']//div[@class='form-check']/input)[1]", "Радиокнопка переключения вопроса в тип без проверки");
+            
 
-            Button.Hover(0);    
+            return this;
+        }
+
+        public FormQuestionsFrame SetAnswer(string QuestionName)
+        {
+            WebItem Button =
+                new WebItem($"//h3[text()='{QuestionName}']//ancestor::div[@class='card mb-3 mt-3']//input[@value]", "Радиокнопка переключения вопроса в тип без проверки");
+
+            Button.Hover(0);
             Button.Click(0);
 
             return this;
         }
 
-        public CreateFormFrame SetFormRightAnswers(Form form)
-        {
 
-            return this;
-        }
-
-        public CreateFormFrame SetFormProperties(FormSettings Settings)
-        {
-            CreateFormFrame Form = new CreateFormFrame();
-
-            if (Settings.StartDate != null && Settings.StartTime != null)
-            {
-                Form.SetStartDate(Settings.StartDate, Settings.StartTime);
-            }
-
-            if (Settings.EndDate != null && Settings.EndTime != null)
-            {
-                Form.SetEndDate(Settings.EndDate, Settings.EndTime);
-
-            }
-
-            if (Settings.Timer != null)
-            {
-                Form.SetTimer(Settings.Timer);
-            }
-
-            if (Settings.Attempts != null)
-            {
-                Form.SetAttempts(Settings.Attempts);
-
-            }
-
-            return this;
-        }
         public FormsMainPage SaveForm()
         {
             Button.Hover();
@@ -340,7 +280,7 @@ namespace ATframework3demo.PageObjects
             return new FormsMainPage();
         }
 
-        public CreateFormFrame SaveFormWithErrors()
+        public FormQuestionsFrame SaveFormWithErrors()
         {
             //WebItem Button = new WebItem("//button[text()='Сохранить']", "Кнопка 'Сохранить'");
             Button.Hover();
@@ -349,26 +289,10 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame SwitchToSettings()
+        public FormQuestionsFrame RenameForm(string formNameBefore, string formNameAfter)
         {
-            WebItem Settings = new WebItem("//button[text()='Настройки']", "Панель настроек");
-
-            Settings.Hover();
-            Settings.Click();
-
-            return this;
-        }
-
-        public CreateFormFrame SwitchToQuestions()
-        {
-            new WebItem("//button[text()='Вопросы']", "Панель вопросов")
-                .Click();
-
-            return this;
-        }
-
-        public CreateFormFrame RenameForm(string formNameBefore, string formNameAfter)
-        {
+            new WebItem($"//h1[text()='{formNameBefore}']", "Название формы")
+                .Hover();
             new WebItem($"//h1[text()='{formNameBefore}']", "Название формы")
                 .Click();
             new WebItem($"//input[@type='text' and @value='{formNameBefore}']", "Полее ввода названия формы")
@@ -379,19 +303,30 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-        public CreateFormFrame RenameOneQuestion(string questionNameBefore, string questionNameAfter)
+        public FormQuestionsFrame RenameOneQuestion(string questionNameBefore, string questionNameAfter)
         {
             WebItem Question = new WebItem($"//h3[text()='{questionNameBefore}']", "Поле названия вопроса");
             WebItem Field = new WebItem($"//input[@value='{questionNameBefore}']", "Поле для ввода названия вопроса");
             Question.Hover(0);
             Question.Click(0);
-            Field.ReplaceText(questionNameAfter);
+            Field.ReplaceText(questionNameAfter, 0);
             //костыль чтобы выйти из инпута имени вопроса
-            new WebItem("//body", "Верхняя панель в блоке вопроса").Click();
+            new WebItem("//body", "Верхняя панель в блоке вопроса").Click(0);
 
             return this;
         }
+
+
+        public FormSettingsFrame SwitchToSettings()
+        {
+            WebItem Settings = new WebItem("//button[text()='Настройки']", "Панель настроек");
+
+            Settings.Hover();
+            Settings.Click();
+
+            return new FormSettingsFrame();
+        }
+
+
     }
-
-
 }

@@ -4,7 +4,7 @@ using atFrameWork2.PageObjects;
 using atFrameWork2.TestEntities;
 using ATframework3demo.PageObjects;
 using aTframework3demo.TestEntities;
-using ATframework3demo.PageObjects.Forms;
+using aTframework3demo.PageObjects.Tasks;
 
 namespace ATframework3demo.TestCases
 {
@@ -13,7 +13,7 @@ namespace ATframework3demo.TestCases
         protected override List<TestCase> GetCases()
         {
             var caseCollection = new List<TestCase>();
-            caseCollection.Add(new TestCase("FORMS: Интеграция с задачами", homePage => TaskFromForm(homePage)));
+            caseCollection.Add(new TestCase("FORMS: Создание формы с задачей на прохождение", homePage => TaskFromForm(homePage)));
             return caseCollection;
         }
 

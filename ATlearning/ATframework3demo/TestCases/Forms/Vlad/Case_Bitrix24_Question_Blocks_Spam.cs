@@ -1,10 +1,9 @@
 using atFrameWork2.BaseFramework;
 using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.PageObjects;
-using atFrameWork2.TestEntities;
-using ATframework3demo.PageObjects;
+using atFrameWork2.SeleniumFramework;
 using aTframework3demo.TestEntities;
-using ATframework3demo.PageObjects.Forms;
+
 
 namespace aTframework3demo.TestCases.Forms
 {
@@ -19,25 +18,28 @@ namespace aTframework3demo.TestCases.Forms
 
         public void BlocksSpam(PortalHomePage homePage)
         {
-            Form Data = new Form(
+            Form Form = new Form(
                 "Test" + DateTime.Now.Ticks.ToString(),
-                55
+                10
             );
 
             var Case = homePage
                 .LeftMenu
                 .OpenForms()
                 .OpenCreateFormSlider()
-                .ChangeFormTitle(Data.Title);
-                // .AddQuestion(Data.QuestionsNumber)
+                .ChangeFormTitle(Form.Title);
 
-            for (int i = 0; i < Data.QuestionsNumber; i++)
+            for (int i = 0; i < Form.QuestionsNumber; i++)
             {
-                Case.CreateSingleQuestionBlock(Data, Data.Type[2], 5);
+                Case.CreateSingleQuestionBlock(Form, Form.Type[2], 14);
             }
-            Case
-                .SaveForm()
-                .OpenForm(Data.Title)
+            var Case2 = Case
+                .SaveForm();
+
+            WebDriverActions.Refresh();
+            
+            Case2
+                .OpenForm(Form.Title)
                 .StartForm();
         }
     }

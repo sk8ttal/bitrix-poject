@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using atFrameWork2.SeleniumFramework;
+using aTframework3demo.PageObjects.Forms;
 
-namespace ATframework3demo.PageObjects.Forms
+namespace aTframework3demo.PageObjects.Tasks
 {
+    /// <summary>
+    /// Сущность слайдера создания новой задачи для формы
+    /// </summary>
     public class NewTaskFrame
     {
         public bool CheckTaskTitle(string Title)

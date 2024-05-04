@@ -1,15 +1,17 @@
 using atFrameWork2.SeleniumFramework;
-using aTframework3demo.PageObjects.Forms;
-using ATframework3demo.PageObjects.Forms;
+using aTframework3demo.PageObjects.Tasks;
 
 
-namespace ATframework3demo.PageObjects
+namespace aTframework3demo.PageObjects.Forms
 {
+    /// <summary>
+    /// Сущность раздела форм
+    /// </summary>
     public class FormsMainPage
     {
         public FormsMainPage CreateForm(string Title)
         {
-            CreateFormFrame Form = OpenCreateFormSlider();
+            FormQuestionsFrame Form = OpenCreateFormSlider();
             Form.ChangeFormTitle(Title);
             Form.AddQuestion();
             Form.SaveForm();
@@ -50,7 +52,7 @@ namespace ATframework3demo.PageObjects
             return this;
         }
 
-         public CreateFormFrame EditForm(string Title)
+         public FormQuestionsFrame EditForm(string Title)
         {
             new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
                 .Click();
@@ -60,7 +62,7 @@ namespace ATframework3demo.PageObjects
             new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм редактирования формы {Title}")
                 .SwitchToFrame();
 
-            return new CreateFormFrame();
+            return new FormQuestionsFrame();
         }
 
         public bool IsFormPresent(string Title)
@@ -98,14 +100,14 @@ namespace ATframework3demo.PageObjects
             return new OpenedFormFrame();
         }
 
-        public CreateFormFrame OpenCreateFormSlider()
+        public FormQuestionsFrame OpenCreateFormSlider()
         {
             new WebItem("//button[@class='ui-btn ui-btn-success']", "Кнопка 'Создать'")
                 .Click();
             new WebItem("//iframe[@class='side-panel-iframe']", "Фрейм создания формы")
                 .SwitchToFrame();
 
-            return new CreateFormFrame();
+            return new FormQuestionsFrame();
         }
 
         public FormResultPage OpenResults(string Title)
