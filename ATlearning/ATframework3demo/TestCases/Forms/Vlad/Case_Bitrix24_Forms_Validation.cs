@@ -1,8 +1,6 @@
 using atFrameWork2.BaseFramework;
 using atFrameWork2.BaseFramework.LogTools;
 using atFrameWork2.PageObjects;
-using atFrameWork2.TestEntities;
-using ATframework3demo.PageObjects;
 using aTframework3demo.TestEntities;
 using atFrameWork2.SeleniumFramework;
 
@@ -20,17 +18,14 @@ namespace ATframework3demo.TestCases.Forms
         public void FormValidation(PortalHomePage homePage)
         {
             string XSS = "<script>alert(1)</script>";
+            DateOnly Date = DateOnly.Parse(DateTime.Now.ToShortDateString());
+            TimeOnly Time = TimeOnly.Parse(DateTime.Now.ToShortTimeString());
 
             Form Form = new Form
             (
                 "Test" + DateTime.Now.Ticks,
                 6
-            );
-
-            DateOnly Date = DateOnly.Parse(DateTime.Now.ToShortDateString());
-            TimeOnly Time = TimeOnly.Parse(DateTime.Now.ToShortTimeString());
-
-            FormSettings Settings = new FormSettings()
+            )
             {
                 EndDate = Date.ToString(),
                 EndTime = Time.ToString(),
@@ -69,10 +64,7 @@ namespace ATframework3demo.TestCases.Forms
                 .ChangeOptionName(Form.Questions[1], " ")
                 .ChangeOptionName(Form.Questions[2], " ")
                 .ChangeOptionName(Form.Questions[4], " ")
-                .ChangeOptionName(Form.Questions[5], " ")
-                ;
-
-           
+                .ChangeOptionName(Form.Questions[5], " ");
 
             // Очистить содержимое всех полей
             for (int i = 0; i < Form.QuestionsNumber; i++)
@@ -113,18 +105,10 @@ namespace ATframework3demo.TestCases.Forms
                 .CloseForm()
                 .EditForm(XSS)
                 .SwitchToSettings()
-                .SetFormProperties(Settings)
+                .SetFormProperties(Form)
                 .SwitchToQuestions();
 
             WebDriverActions.Refresh();
-
-            IsAllQuestionsNamed = Case
-                .IsAllQuestionsNamed(Form);
-
-            if (!IsAllQuestionsNamed)
-            {
-                Log.Error("Не все вопросы отображены");
-            }
 
             Case
                 .CloseForm()

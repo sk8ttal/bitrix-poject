@@ -6,9 +6,9 @@ using aTframework3demo.TestEntities;
 namespace aTframework3demo.PageObjects.Forms
 {
     /// <summary>
-    /// Сущность слайдера редактора форма. Раздел с настройками
+    /// Страница слайдера редактора форма. Раздел с настройками
     /// </summary>
-    public class FormSettingsFrame
+    public class FormSettingsFrame : FormBaseitem
     {
         public bool IsSettingsOpened()
         {
@@ -34,7 +34,7 @@ namespace aTframework3demo.PageObjects.Forms
 
         public FormSettingsFrame SetStartDate(string Date, string Time)
         {
-            WebItem StartField = new WebItem("//div[@class='mb-3']//label[text()='Время начала доступа к тесту']/parent::div/child::input", "Поле ввода даты и времени появления теста");
+            WebItem StartField = new WebItem("//div[@class='mb-3']//label[text()='Доступна с']/parent::div/child::input", "Поле ввода даты и времени появления теста");
 
             StartField.SendKeys(Date);
             StartField.NotTextKey("ArrowRight");
@@ -45,7 +45,7 @@ namespace aTframework3demo.PageObjects.Forms
 
         public FormSettingsFrame SetEndDate(string Date, string Time)
         {
-            WebItem EndField = new WebItem("//div[@class='mb-3']//label[text()='Время конца доступа к тесту']/parent::div/child::input", "Поле ввода даты и времени закрытия теста");
+            WebItem EndField = new WebItem("//div[@class='mb-3']//label[text()='Доступна до']/parent::div/child::input", "Поле ввода даты и времени закрытия теста");
 
             EndField.SendKeys(Date);
             EndField.NotTextKey("ArrowRight");
@@ -56,7 +56,7 @@ namespace aTframework3demo.PageObjects.Forms
 
         public FormSettingsFrame SetTimer(string Time)
         {
-            new WebItem("//div[@class='mb-3']//label[text()='Таймер на прохождение']/parent::div/child::input", "Поле ввода даты и времени")
+            new WebItem("//div[@class='mb-3']//label[text()='Таймер']/parent::div/child::input", "Поле таймера")
                 .SendKeys(Time);
 
             return this;
@@ -65,7 +65,7 @@ namespace aTframework3demo.PageObjects.Forms
 
         public FormSettingsFrame SetAttempts(string Attempts)
         {
-            new WebItem("//div[@class='mb-3']//label[text()='Количество попыток']/parent::div/child::input", "Поле ввода даты и времени")
+            new WebItem("//div[@class='mb-3']//label[text()='Количество попыток']/parent::div/child::input", "Поле количества попыток")
                 .SendKeys(Attempts);
 
             return this;
@@ -73,7 +73,7 @@ namespace aTframework3demo.PageObjects.Forms
 
         public FormSettingsFrame SetAnon()
         {
-            new WebItem("//div[@class='mb-3']//label[text()='Анонимная форма']/parent::div/child::input", "Пункт 'Анонимная форма'")
+            new WebItem("//div[@class='mb-3']//label[text()='Анонимная']/parent::div/child::input", "Пункт 'Анонимная'")
                 .Click();
 
             return this;
@@ -81,13 +81,13 @@ namespace aTframework3demo.PageObjects.Forms
 
         public FormSettingsFrame SetActive()
         {
-            new WebItem("//div[@class='mb-3']//label[text()='Форма активна']/parent::div/child::input", "Пункт 'Форма активна'")
+            new WebItem("//div[@class='mb-3']//label[text()='Активная']/parent::div/child::input", "Пункт 'Активная'")
                 .Click();
 
             return this;
         }
 
-        public FormSettingsFrame SetFormProperties(FormSettings Settings)
+        public FormSettingsFrame SetFormProperties(Form Settings)
         {
 
             if (Settings.StartDate != null && Settings.StartTime != null)

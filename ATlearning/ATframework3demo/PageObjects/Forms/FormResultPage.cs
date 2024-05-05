@@ -6,7 +6,7 @@ using aTframework3demo.TestEntities;
 namespace aTframework3demo.PageObjects.Forms
 {
     /// <summary>
-    /// Сущность слайдера результатов формы
+    /// Страница слайдера результатов формы
     /// </summary>
     public class FormResultPage
     {

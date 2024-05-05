@@ -6,23 +6,21 @@ using aTframework3demo.TestEntities;
 namespace aTframework3demo.PageObjects.Forms
 {
     /// <summary>
-    /// Сущность слайдера редактора форма. Раздел с вопросами
+    /// Страница слайдера редактора форма. Раздел с вопросами
     /// </summary>
-    public class FormQuestionsFrame
+    public class FormQuestionsFrame : FormBaseitem
     {
         WebItem Question = new WebItem("//h3[text()='Название']", "Поле названия вопроса");
         WebItem Field = new WebItem("//input[@value='Название']", "Поле для ввода названия вопроса");
         WebItem Container = new WebItem("(//p[text()='Здесь будет поле для ввода ответа'])[last()]", "Блок вопроса");
-        WebItem Button = new WebItem("//button[text()='СОХРАНИТЬ']", "Кнопка 'Сохранить'");
+        WebItem ButtonByText(string Text) => new WebItem($"//button[text()='{Text}']", $"Кнопка '{Text}'");
 
         public FormQuestionsFrame AddQuestion(int QuestionsNumber = 1)
         {
             for (int i = 0; i < QuestionsNumber; i++)
             {
-                WebItem AddButton = new WebItem("//button[text()='+ Добавить вопрос']", "Кнопка добавления вопроса");
-
-                AddButton.Hover(0);
-                AddButton.Click(0);
+                ButtonByText("+ Добавить вопрос").Hover(0);
+                ButtonByText("+ Добавить вопрос").Click(0);
             }
 
             return this;
@@ -40,15 +38,6 @@ namespace aTframework3demo.PageObjects.Forms
             }
 
             return this;
-        }
-
-        public FormsMainPage CloseForm()
-        {
-            WebDriverActions.SwitchToDefaultContent();
-            new WebItem("//div[@class='side-panel-label-icon side-panel-label-icon-close']", "Кнопка закрытия слайдера")
-                .Click();
-
-            return new FormsMainPage();
         }
 
         public FormQuestionsFrame ChangeFormTitle(string Title)
@@ -90,6 +79,7 @@ namespace aTframework3demo.PageObjects.Forms
                 "Блок вопроса");
 
             List<string> OptionNames = new List<string>();
+            int i = 0;
             while (Option.WaitElementDisplayed())
             {
                 string Name = $"Ответ {DateTime.Now.Ticks}";
@@ -99,6 +89,10 @@ namespace aTframework3demo.PageObjects.Forms
                 Option.Click(0);
                 Field.ReplaceText(Name, 0);
                 Container.Click(0);
+                if (i == 500)
+                {
+                    break;
+                }
             }
             Options.Add(QuestionName, OptionNames);
 
@@ -118,9 +112,9 @@ namespace aTframework3demo.PageObjects.Forms
             return this;
         }
 
-        public FormQuestionsFrame CreateSingleQuestionBlock(Form Form, string QuestionType, int OptionsNumber = 1)
+        public FormQuestionsFrame CreateSingleQuestionBlock(Form Form, Form.Type QuestionType, int OptionsNumber = 1)
         {
-            WebItem NextButton = new WebItem("//button[text()='»']", "Кнопка следующего раздела");
+            WebItem NextButton = ButtonByText("»");
 
             if (NextButton.WaitElementDisplayed(1))
             {
@@ -139,7 +133,7 @@ namespace aTframework3demo.PageObjects.Forms
             Question.Click(0);
             Field.ReplaceText(Name, 0);
 
-            if (QuestionType == Form.Type[2] || QuestionType == Form.Type[3])
+            if (Form.Type.One_from_list.Equals(QuestionType) || Form.Type.Many_from_list.Equals(QuestionType))
             {
                 WebItem Selector = new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='row']//select", $"Список типов вопроса для блока {Name}");
                 WebItem Button = new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='card mb-3 mt-3']//button[text()='+']",
@@ -282,7 +276,6 @@ namespace aTframework3demo.PageObjects.Forms
 
         public FormQuestionsFrame SaveFormWithErrors()
         {
-            //WebItem Button = new WebItem("//button[text()='Сохранить']", "Кнопка 'Сохранить'");
             Button.Hover();
             Button.Click();
 
@@ -319,7 +312,7 @@ namespace aTframework3demo.PageObjects.Forms
 
         public FormSettingsFrame SwitchToSettings()
         {
-            WebItem Settings = new WebItem("//button[text()='Настройки']", "Панель настроек");
+            WebItem Settings = ButtonByText("Настройки");
 
             Settings.Hover();
             Settings.Click();

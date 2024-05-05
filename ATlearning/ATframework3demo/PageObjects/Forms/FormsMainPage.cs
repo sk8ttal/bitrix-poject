@@ -1,3 +1,4 @@
+using atFrameWork2.BaseFramework;
 using atFrameWork2.SeleniumFramework;
 using aTframework3demo.PageObjects.Tasks;
 
@@ -5,7 +6,7 @@ using aTframework3demo.PageObjects.Tasks;
 namespace aTframework3demo.PageObjects.Forms
 {
     /// <summary>
-    /// Сущность раздела форм
+    /// Страница раздела форм
     /// </summary>
     public class FormsMainPage
     {

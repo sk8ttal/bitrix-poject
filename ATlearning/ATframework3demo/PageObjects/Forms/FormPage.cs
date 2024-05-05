@@ -8,7 +8,7 @@ using aTframework3demo.TestEntities;
 namespace aTframework3demo.PageObjects.Forms
 {
     /// <summary>
-    /// Сущность страницы для прохождения формы. Открывается при переходе по ссылки на форму
+    /// Страница для прохождения формы. Открывается при переходе по ссылки на форму
     /// </summary>
     public class FormPage
     {

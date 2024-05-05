@@ -6,7 +6,7 @@ using aTframework3demo.TestEntities;
 namespace aTframework3demo.PageObjects.Forms
 {
     /// <summary>
-    /// Сущность слайдера для прохождения формы. Открывается через контексное меню.
+    /// Страница слайдера для прохождения формы. Открывается через контексное меню.
     /// </summary>
     public class OpenedFormFrame
     {

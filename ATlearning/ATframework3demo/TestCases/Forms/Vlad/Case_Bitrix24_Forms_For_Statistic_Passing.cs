@@ -5,7 +5,7 @@ using atFrameWork2.TestEntities;
 using ATframework3demo.PageObjects;
 using aTframework3demo.TestEntities;
 using aTframework3demo.PageObjects.Forms;
-using atFrameWork2.SeleniumFramework;
+
 
 namespace aTframework3demo.TestCases.Forms
 {
@@ -17,7 +17,6 @@ namespace aTframework3demo.TestCases.Forms
             caseCollection.Add(new TestCase("FORMS: Прохождение опроса сотрудником", homePage => FormPassing(homePage)));
             return caseCollection;
         }
-
         public void FormPassing(PortalHomePage homePage)
         {
             UserForTests User = new UserForTests()
@@ -39,9 +38,7 @@ namespace aTframework3demo.TestCases.Forms
             Form Form = new Form(
                 "Test" + DateTime.Now.Ticks,
                 3
-            );
-
-            FormSettings Settings = new FormSettings()
+            )
             {
                 StartDate = Date.ToString(),
                 EndDate = Date.ToString(),
@@ -49,6 +46,7 @@ namespace aTframework3demo.TestCases.Forms
                 EndTime = Time.AddMinutes(5).ToString(),
                 Attempts = "1"
             };
+   
 
             var Case = homePage
                 .LeftMenu
@@ -59,13 +57,13 @@ namespace aTframework3demo.TestCases.Forms
                 // Изменить название формы
                 .ChangeFormTitle(Form.Title)
                 // Создать вопросы для опроса
-                .CreateSingleQuestionBlock(Form, Form.Type[1])
-                .CreateSingleQuestionBlock(Form, Form.Type[2], 1)
-                .CreateSingleQuestionBlock(Form, Form.Type[3], 3)
+                .CreateSingleQuestionBlock(Form, Form.Type.Text)
+                .CreateSingleQuestionBlock(Form, Form.Type.One_from_list, 1)
+                .CreateSingleQuestionBlock(Form, Form.Type.Many_from_list, 3)
                 // Переключится на настройик
                 .SwitchToSettings()
                 // Установить настройки для формы
-                .SetFormProperties(Settings)
+                .SetFormProperties(Form)
                 // Сделать форму анонимной
                 .SetAnon()
                 // Сохранить форму
