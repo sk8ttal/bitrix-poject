@@ -20,6 +20,11 @@ namespace ATframework3demo.TestCases
         void TaskFromForm(PortalHomePage homePage)
         {
             string Title = "Test" + DateTime.Now.Ticks;
+
+            Form Form = new (
+                Title
+            );
+
             TaskFromForm Participants = new TaskFromForm(
                 "Олег Иванов",
                 "Михаил Виктор",
@@ -30,9 +35,9 @@ namespace ATframework3demo.TestCases
                 .LeftMenu
                 .OpenForms()
                 // Создать форму
-                .CreateForm(Title)
+                .CreateForm(Form)
                 // Выбрать опцию 'Создать задачу'
-                .CreateTask(Title)
+                .CreateTask(Form)
                 // Проверить, что название задачи соответствует названию формы
                 .CheckTaskTitle(Title);
 

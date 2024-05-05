@@ -32,41 +32,41 @@ namespace aTframework3demo.PageObjects.Forms
             return new FormsMainPage();
         }
 
-        public FormSettingsFrame SetStartDate(string Date, string Time)
+        public FormSettingsFrame SetStartDate(Form Form)
         {
             WebItem StartField = new WebItem("//div[@class='mb-3']//label[text()='Доступна с']/parent::div/child::input", "Поле ввода даты и времени появления теста");
 
-            StartField.SendKeys(Date);
+            StartField.SendKeys(Form.StartDate);
             StartField.NotTextKey("ArrowRight");
-            StartField.SendKeys(Time);
+            StartField.SendKeys(Form.StartTime);
 
             return this;
         }
 
-        public FormSettingsFrame SetEndDate(string Date, string Time)
+        public FormSettingsFrame SetEndDate(Form Form)
         {
             WebItem EndField = new WebItem("//div[@class='mb-3']//label[text()='Доступна до']/parent::div/child::input", "Поле ввода даты и времени закрытия теста");
 
-            EndField.SendKeys(Date);
+            EndField.SendKeys(Form.EndDate);
             EndField.NotTextKey("ArrowRight");
-            EndField.SendKeys(Time);
+            EndField.SendKeys(Form.EndTime);
 
             return this;
         }
 
-        public FormSettingsFrame SetTimer(string Time)
+        public FormSettingsFrame SetTimer(Form Form)
         {
             new WebItem("//div[@class='mb-3']//label[text()='Таймер']/parent::div/child::input", "Поле таймера")
-                .SendKeys(Time);
+                .SendKeys(Form.Timer);
 
             return this;
 
         }
 
-        public FormSettingsFrame SetAttempts(string Attempts)
+        public FormSettingsFrame SetAttempts(Form Form)
         {
             new WebItem("//div[@class='mb-3']//label[text()='Количество попыток']/parent::div/child::input", "Поле количества попыток")
-                .SendKeys(Attempts);
+                .SendKeys(Form.Attempts);
 
             return this;
         }
@@ -92,23 +92,23 @@ namespace aTframework3demo.PageObjects.Forms
 
             if (Settings.StartDate != null && Settings.StartTime != null)
             {
-                SetStartDate(Settings.StartDate, Settings.StartTime);
+                SetStartDate(Settings);
             }
 
             if (Settings.EndDate != null && Settings.EndTime != null)
             {
-                SetEndDate(Settings.EndDate, Settings.EndTime);
+                SetEndDate(Settings);
 
             }
 
             if (Settings.Timer != null)
             {
-                SetTimer(Settings.Timer);
+                SetTimer(Settings);
             }
 
             if (Settings.Attempts != null)
             {
-                SetAttempts(Settings.Attempts);
+                SetAttempts(Settings);
             }
 
             return this;

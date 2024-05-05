@@ -10,9 +10,9 @@ namespace aTframework3demo.PageObjects.Forms
     /// </summary>
     public class OpenedFormFrame
     {
-        public OpenedFormFrame IsQuestionBlocksPresent(Form Data)
+        public OpenedFormFrame IsQuestionBlocksPresent(Form Form)
         {
-            foreach (var Question in Data.Questions)
+            foreach (var Question in Form.Questions)
             {
                 WebItem Element = new WebItem($"//label[text()='{Question}']", $"Элемент c названием {Question}");
                 if (Element.WaitElementDisplayed())

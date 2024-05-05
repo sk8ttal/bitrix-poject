@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using atFrameWork2.SeleniumFramework;
 using aTframework3demo.TestEntities;
 
@@ -33,49 +29,32 @@ namespace aTframework3demo.PageObjects.Forms
 
         public FormPage AnswerTheQuestions(Form Form)
         {
-            for (int i = 0; i < Form.QuestionsNumber; i++)
+            Random Random = new Random();
+
+            foreach (string Name in Form.Questions)
             {
-                Random Random = new Random();
-                string Question = Form.Questions[i];
-                string QuestionName = Form.Questions[i];
-
-                if (Form.QuestionTypes[Question] == Form.Type[1])
+                if (Form.QuestionTypes[Name] == Form.TypeNames[Form.QuestionType.Text])
                 {
-                    string Answer = "Ответ" + DateTime.Now.Ticks;
-
-                    new WebItem($"//label[text()='{QuestionName}']/parent::div/input", $"Поле ввода ответа для вопроса {QuestionName}")
-                        .SendKeys(Answer);
-
-                    Form.Answers.Add(QuestionName, new List<string> { Answer });
-
+                    new WebItem($"//label[text()='{Name}']/parent::div/input", $"Поле ввода ответа для вопроса {Name}")
+                        .SendKeys(Form.Answers[Name][0]);
                 }
-                else if (Form.QuestionTypes[Question] == Form.Type[2])
+                if (Form.QuestionTypes[Name] == Form.TypeNames[Form.QuestionType.One_from_list])
                 {
-                    int Index = Random.Next(Form.Options[QuestionName].Count);
-                    string OptionName = Form.Options[QuestionName][Index];
+                    string OptionName = Form.Answers[Name][0];
 
-                    new WebItem($"//label[text()='{QuestionName}']/parent::div//label[text()='{OptionName}']/parent::div/input", $"Опция {OptionName}")
+                    new WebItem($"//label[text()='{Name}']/parent::div//label[text()='{OptionName}']/parent::div/input", $"Опция {OptionName}")
                         .Click();
-
-                    Form.Answers.Add(QuestionName, new List<string> { OptionName });
                 }
-                else
+                if (Form.QuestionTypes[Name] == Form.TypeNames[Form.QuestionType.Many_from_list])
                 {
-                    List<string> Answers = new List<string>();
-                    int AnswersNumber = Random.Next(2,Form.Options[QuestionName].Count);
-                    for (int j = 0; j < AnswersNumber; j++)
+                    foreach (string OptionName in Form.Answers[Name])
                     {
-                        string OptionName = Form.Options[QuestionName][j];
-
-                        new WebItem($"//label[text()='{QuestionName}']/parent::div//label[text()='{OptionName}']/parent::div/input", $"Опция {OptionName}")
+                        new WebItem($"//label[text()='{Name}']/parent::div//label[text()='{OptionName}']/parent::div/input", $"Опция {OptionName}")
                         .Click();
-
-                        Answers.Add(OptionName);
                     }
-                    Form.Answers.Add(QuestionName, Answers);
                 }
             }
-
+            
             return this;
         }
 

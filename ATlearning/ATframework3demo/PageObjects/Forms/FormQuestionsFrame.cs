@@ -15,9 +15,9 @@ namespace aTframework3demo.PageObjects.Forms
         WebItem Container = new WebItem("(//p[text()='Здесь будет поле для ввода ответа'])[last()]", "Блок вопроса");
         WebItem ButtonByText(string Text) => new WebItem($"//button[text()='{Text}']", $"Кнопка '{Text}'");
 
-        public FormQuestionsFrame AddQuestion(int QuestionsNumber = 1)
+        public FormQuestionsFrame AddQuestion(Form Form)
         {
-            for (int i = 0; i < QuestionsNumber; i++)
+            for (int i = 0; i < Form.QuestionsNumber; i++)
             {
                 ButtonByText("+ Добавить вопрос").Hover(0);
                 ButtonByText("+ Добавить вопрос").Click(0);
@@ -69,50 +69,52 @@ namespace aTframework3demo.PageObjects.Forms
             return this;
         }
 
-        public FormQuestionsFrame ChangeOptionsName(string QuestionName, Dictionary<string, List<string>> Options)
+        public FormQuestionsFrame ChangeOptionsName(Form Form)
         {
-            WebItem Option = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//label[text()='Новая опция']",
+            WebItem Option(string QuestionName) => new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//label[text()='Новая опция']",
                 $"Поле названия опции для вопроса {QuestionName}");
-            WebItem Field = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//input",
+            WebItem Field(string QuestionName) => new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']/div[@class='card-body']//input",
                 "Поле для ввода названия опции");
-            WebItem Container = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']//input[@class='form-check-input']",
+            WebItem Container(string QuestionName) => new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='card mb-3 mt-3']//input[@class='form-check-input']",
                 "Блок вопроса");
 
-            List<string> OptionNames = new List<string>();
-            int i = 0;
-            while (Option.WaitElementDisplayed())
+            foreach (string Name in Form.Questions)
             {
-                string Name = $"Ответ {DateTime.Now.Ticks}";
-
-                OptionNames.Add(Name);
-                Option.Hover(0);
-                Option.Click(0);
-                Field.ReplaceText(Name, 0);
-                Container.Click(0);
-                if (i == 500)
+                if (Form.QuestionTypes[Name] == Form.TypeNames[Form.QuestionType.One_from_list]
+                || Form.QuestionTypes[Name] == Form.TypeNames[Form.QuestionType.Many_from_list])
                 {
-                    break;
+                    for (int i = 1; i <= Form.Options[Name].Count; i++)
+                    {
+                        Option(Name).Hover(0);
+                        Option(Name).Click(0);
+                        Field(Name).ReplaceText(Form.Options[Name][i], 0);
+                        Container(Name).Hover(0);
+                        Container(Name).Click(0);
+                    }
                 }
+
             }
-            Options.Add(QuestionName, OptionNames);
 
             return this;
         }
 
-        public FormQuestionsFrame ChangeQuestionType(string QuestionName, string QuestionType)
+        public FormQuestionsFrame ChangeQuestionType(Form Form)
         {
-            // ancestor и многое другое можно найти на  (не реклама)
-            WebItem Selector = new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='row']//select", $"Список типов вопроса для блока {QuestionName}");
+            WebItem Selector(string QuestionName) => new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='row']//select", $"Список типов вопроса для блока {QuestionName}");
 
-            Selector.Hover(0);
-            Selector.Click(0);
-            new WebItem($"//h3[text()='{QuestionName}']/ancestor::div[@class='row']//option[text()='{QuestionType}']", $"Тип вопроса {QuestionType}")
-                .Click(0);
+            foreach (string Name in Form.Questions)
+            {
+                string QuestionType = Form.QuestionTypes[Name];
+                Selector(Name).Hover(0);
+                Selector(Name).Click(0);
+                new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='row']//option[text()='{QuestionType}']", $"Тип вопроса {QuestionType}")
+                    .Click(0);
+            }
 
             return this;
         }
 
-        public FormQuestionsFrame CreateSingleQuestionBlock(Form Form, Form.Type QuestionType, int OptionsNumber = 1)
+        public FormQuestionsFrame CreateSingleQuestionBlock(Form Form)
         {
             WebItem NextButton = ButtonByText("»");
 
@@ -123,34 +125,47 @@ namespace aTframework3demo.PageObjects.Forms
                 Waiters.StaticWait_s(4);
             }
 
-            AddQuestion();
+            AddQuestion(Form);
 
-            string Name = "Вопрос " + DateTime.Now.Ticks;
-            Form.Questions.Add(Name);
-            Form.QuestionTypes.Add(Name, QuestionType);
-
-            Container.Hover(0);
-            Question.Click(0);
-            Field.ReplaceText(Name, 0);
-
-            if (Form.Type.One_from_list.Equals(QuestionType) || Form.Type.Many_from_list.Equals(QuestionType))
+            foreach (string Name in Form.Questions)
             {
-                WebItem Selector = new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='row']//select", $"Список типов вопроса для блока {Name}");
-                WebItem Button = new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='card mb-3 mt-3']//button[text()='+']",
-                $"Кнопка добавления опции к вопросу {Name}");
-
-                Container.Click(0);
-                Selector.Click(0);
-                new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='row']//option[text()='{QuestionType}']", $"Тип вопроса {QuestionType}")
-                .Click(0);
-
-                for (int j = OptionsNumber; j > 0; j--)
+                string Type = Form.QuestionTypes[Name];
+                if (Type == Form.TypeNames[Form.QuestionType.One_from_list] || Type == Form.TypeNames[Form.QuestionType.Many_from_list])
                 {
-                    Button.Click(0);
+                    WebItem Selector = new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='row']//select", $"Список типов вопроса для блока {Name}");
+                    WebItem Button = new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='card mb-3 mt-3']//button[text()='+']",
+                    $"Кнопка добавления опции к вопросу {Name}");
+
+                    Container.Click(0);
+                    Selector.Click(0);
+                    new WebItem($"//h3[text()='{Name}']/ancestor::div[@class='row']//option[text()='{Type}']", $"Тип вопроса {Type}")
+                        .Click(0);
+
+                    for (int j = Form.Options[Name].Count; j > 0; j--)
+                    {
+                        Button.Click(0);
+                    }
+
+                    ChangeOptionsName(Form);
                 }
 
-                ChangeOptionsName(Form.Questions.Last(), Form.Options);
+
             }
+
+
+            // Container.Hover(0);
+            // Question.Click(0);
+            // Field.ReplaceText(Name, 0);
+
+            // if (Form.Type.One_from_list.Equals(QuestionType) || Form.Type.Many_from_list.Equals(QuestionType))
+            // {
+
+
+
+
+
+
+            // }
 
             return this;
         }
@@ -201,23 +216,20 @@ namespace aTframework3demo.PageObjects.Forms
 
         public bool IsNotSelectedCorrectAnswerErrorPresent()
         {
-            WebItem Message = new WebItem("//div[@class='alert alert-danger' and text()='Для тестовых вопросов хотя бы один вариант должен быть правильным']", 
+            WebItem Message = new WebItem("//div[@class='alert alert-danger' and text()='Для тестовых вопросов хотя бы один вариант должен быть правильным']",
                 "Предупреждение после попытки создать форму без указания правильных вариантов ответов");
             bool IsAlertPresent = Waiters.WaitForCondition(() => Message.WaitElementDisplayed(), 2, 6, "Ожидание появления сообщения об ошибке");
 
             return IsAlertPresent;
         }
 
-        public FormQuestionsFrame SetQuestionsName(int QuestionsNumber, Form Form)
+        public FormQuestionsFrame SetQuestionsName(Form Form)
         {
-
-            for (int i = 0; i < QuestionsNumber; i++)
+            foreach (string Name in Form.Questions)
             {
-                string Name = "Вопрос " + DateTime.Now.Ticks;
                 Question.Hover(0);
                 Question.Click(0);
                 Field.ReplaceText(Name, 0);
-                Form.Questions.Add(Name);
             }
 
             return this;
@@ -247,7 +259,7 @@ namespace aTframework3demo.PageObjects.Forms
 
         public FormQuestionsFrame SetFormRightAnswers(Form Form)
         {
-            
+            throw new Exception();
 
             return this;
         }
@@ -262,7 +274,6 @@ namespace aTframework3demo.PageObjects.Forms
 
             return this;
         }
-
 
         public FormsMainPage SaveForm()
         {
@@ -308,7 +319,6 @@ namespace aTframework3demo.PageObjects.Forms
 
             return this;
         }
-
 
         public FormSettingsFrame SwitchToSettings()
         {

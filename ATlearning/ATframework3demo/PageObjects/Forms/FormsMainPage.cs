@@ -1,6 +1,7 @@
 using atFrameWork2.BaseFramework;
 using atFrameWork2.SeleniumFramework;
 using aTframework3demo.PageObjects.Tasks;
+using aTframework3demo.TestEntities;
 
 
 namespace aTframework3demo.PageObjects.Forms
@@ -10,18 +11,20 @@ namespace aTframework3demo.PageObjects.Forms
     /// </summary>
     public class FormsMainPage
     {
-        public FormsMainPage CreateForm(string Title)
+        public FormsMainPage CreateForm(Form Form)
         {
-            FormQuestionsFrame Form = OpenCreateFormSlider();
-            Form.ChangeFormTitle(Title);
-            Form.AddQuestion();
-            Form.SaveForm();
+            FormQuestionsFrame Frame = OpenCreateFormSlider();
+            Frame.ChangeFormTitle(Form.Title);
+            Frame.AddQuestion(Form);
+            Frame.SaveForm();
 
             return this;
         }
     
-        public NewTaskFrame CreateTask(string Title)
+        public NewTaskFrame CreateTask(Form Form)
         {
+            string Title = Form.Title;
+
             new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
                 .Click();
             new WebItem("//div[@class='popup-window']//span[text()='Создать задачу']", "Опция 'Создать задачу'")
@@ -43,8 +46,9 @@ namespace aTframework3demo.PageObjects.Forms
             return this;
         }
 
-        public FormsMainPage DeleteForm(string Title)
+        public FormsMainPage DeleteForm(Form Form)
         {
+            string Title = Form.Title;
             new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
                 .Click();
             new WebItem("//div[@class='popup-window']//span[text()='Удалить']", "Опция 'Удалить'")
@@ -53,8 +57,9 @@ namespace aTframework3demo.PageObjects.Forms
             return this;
         }
 
-         public FormQuestionsFrame EditForm(string Title)
+         public FormQuestionsFrame EditForm(Form Form)
         {
+            string Title = Form.Title;
             new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
                 .Click();
             new WebItem("//div[@class='popup-window']//span[text()='Редактировать']", "Опция 'Редактировать'")
@@ -66,12 +71,13 @@ namespace aTframework3demo.PageObjects.Forms
             return new FormQuestionsFrame();
         }
 
-        public bool IsFormPresent(string Title)
+        public bool IsFormPresent(Form Form)
         {
+            string Title = Form.Title;
             WebItem NextButton = new WebItem("//a[text()='Следующая']", "Кнопка 'Следующая'");
-            WebItem Form = new WebItem($"//a[text()='{Title}']", "Созданная форма");
+            WebItem CreatedForm = new WebItem($"//a[text()='{Title}']", "Созданная форма");
 
-            if (Form.WaitElementDisplayed())
+            if (CreatedForm.WaitElementDisplayed())
             {
                 return true;
             }
@@ -79,7 +85,7 @@ namespace aTframework3demo.PageObjects.Forms
             while (NextButton.WaitElementDisplayed())
             {
                 NextButton.Click();
-                if (Form.WaitElementDisplayed())
+                if (CreatedForm.WaitElementDisplayed())
                 {
                     return true;
                 }
@@ -88,8 +94,9 @@ namespace aTframework3demo.PageObjects.Forms
             return false;
         }
 
-        public OpenedFormFrame OpenForm(string Title)
+        public OpenedFormFrame OpenForm(Form Form)
         {
+            string Title = Form.Title;
             new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
                 .Click();
             new WebItem("//div[@class='popup-window']//span[text()='Открыть']", "Опция 'Открыть'")
@@ -111,8 +118,9 @@ namespace aTframework3demo.PageObjects.Forms
             return new FormQuestionsFrame();
         }
 
-        public FormResultPage OpenResults(string Title)
+        public FormResultPage OpenResults(Form Form)
         {
+            string Title = Form.Title;
             new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {Title}")
                 .Click();
             new WebItem("//div[@class='popup-window']//span[text()='Результаты']", "Опция 'Результаты'")
@@ -125,8 +133,9 @@ namespace aTframework3demo.PageObjects.Forms
         }
 
 
-        public FormsMainPage SelectForm(string Title)
+        public FormsMainPage SelectForm(Form Form)
         {
+            string Title = Form.Title;
             new WebItem($"//a[text()='{Title}']/parent::span/parent::div/parent::td/parent::tr//td[@class='main-grid-cell main-grid-cell-checkbox']/span",
                 $"Чекбокс формы {Title}").Click();
 

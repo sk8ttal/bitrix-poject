@@ -4,6 +4,7 @@ using atFrameWork2.PageObjects;
 using atFrameWork2.TestEntities;
 using aTframework3demo.PageObjects;
 using aTframework3demo.PageObjects.Forms;
+using aTframework3demo.TestEntities;
 
 namespace ATframework3demo.TestCases
 {
@@ -21,40 +22,47 @@ namespace ATframework3demo.TestCases
             string Title1 = "Test1" + DateTime.Now.Ticks;
             string Title2 = "Test2" + DateTime.Now.Ticks;
 
+            Form Form_1 = new Form(
+                Title1
+            );
+            Form Form_2 = new Form(
+                Title2
+            );
+
             bool Result_1 = homePage
                 .LeftMenu
                 // Открыть формы
                 .OpenForms()
                 // Создать 2 формы
-                .CreateForm(Title1)
-                .CreateForm(Title2)
+                .CreateForm(Form_1)
+                .CreateForm(Form_2)
                 // Выбрать в таблице созданные формы
-                .SelectForm(Title1)
-                .SelectForm(Title2)
+                .SelectForm(Form_1)
+                .SelectForm(Form_2)
                 // Нажать на кнопку 'Удалить'
                 .DeleteSelectedForms()
                 // Проверить, что выбранные формы удалены
-                .IsFormPresent(Title1);
+                .IsFormPresent(Form_1);
 
             if (Result_1)
             {
-                Log.Info($"Форма {Title1} удалена");
+                Log.Info($"Форма {Form_1} удалена");
             }
             else 
             {
-                throw new Exception($"Форма {Title1} не удалена");
+                throw new Exception($"Форма {Form_1} не удалена");
             }
 
             bool Result_2 = new FormsMainPage()
-                .IsFormPresent(Title2);
+                .IsFormPresent(Form_2);
 
             if (Result_2)
             {
-                Log.Info($"Форма {Title1} удалена");
+                Log.Info($"Форма {Form_1} удалена");
             }
             else 
             {
-                throw new Exception($"Форма {Title1} не удалена");
+                throw new Exception($"Форма {Form_1} не удалена");
             }
         }
     }
