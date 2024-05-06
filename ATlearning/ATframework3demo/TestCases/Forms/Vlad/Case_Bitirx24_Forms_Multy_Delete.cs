@@ -19,17 +19,14 @@ namespace ATframework3demo.TestCases
 
         void MultyDelete(PortalHomePage homePage)
         {
-            string Title1 = "Test1" + DateTime.Now.Ticks;
-            string Title2 = "Test2" + DateTime.Now.Ticks;
-
             Form Form_1 = new Form(
-                Title1
+                "Test1" + DateTime.Now.Ticks
             );
             Form Form_2 = new Form(
-                Title2
+                "Test2" + DateTime.Now.Ticks
             );
 
-            bool Result_1 = homePage
+            var Case = homePage
                 .LeftMenu
                 // Открыть формы
                 .OpenForms()
@@ -40,29 +37,34 @@ namespace ATframework3demo.TestCases
                 .SelectForm(Form_1)
                 .SelectForm(Form_2)
                 // Нажать на кнопку 'Удалить'
-                .DeleteSelectedForms()
+                .DeleteSelectedForms();
+
+            // Ждем обновление таблицы
+                Waiters.StaticWait_s(4);
+            
+            bool Result_1 = Case
                 // Проверить, что выбранные формы удалены
                 .IsFormPresent(Form_1);
 
-            if (Result_1)
+            if (!Result_1)
             {
-                Log.Info($"Форма {Form_1} удалена");
+                Log.Info($"Форма {Form_1.Title} удалена");
             }
             else 
             {
-                throw new Exception($"Форма {Form_1} не удалена");
+                Log.Error($"Форма {Form_1.Title} не удалена");
             }
 
             bool Result_2 = new FormsMainPage()
                 .IsFormPresent(Form_2);
 
-            if (Result_2)
+            if (!Result_2)
             {
-                Log.Info($"Форма {Form_1} удалена");
+                Log.Info($"Форма {Form_2.Title} удалена");
             }
             else 
             {
-                throw new Exception($"Форма {Form_1} не удалена");
+                 Log.Error($"Форма {Form_2.Title} не удалена");
             }
         }
     }

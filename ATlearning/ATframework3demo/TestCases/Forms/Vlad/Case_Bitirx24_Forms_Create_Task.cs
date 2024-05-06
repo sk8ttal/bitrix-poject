@@ -52,12 +52,14 @@ namespace ATframework3demo.TestCases
 
             Waiters.StaticWait_s(3);
 
+            // Задаем постановщика, ответсвенного и смотрящего
             new NewTaskFrame()
                 .SetContractor(Participants.Contractor)
                 .SetWatcher(Participants.Watcher)
                 .SetDirector(Participants.Director)
                 .CreateTask();
 
+            // Проверяем, что открывается созданная форма
             bool IsFormNameCorrect = homePage.LeftMenu
             .OpenTasks()
             .OpenTask(Title)

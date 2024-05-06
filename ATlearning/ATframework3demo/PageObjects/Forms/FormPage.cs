@@ -29,8 +29,6 @@ namespace aTframework3demo.PageObjects.Forms
 
         public FormPage AnswerTheQuestions(Form Form)
         {
-            Random Random = new Random();
-
             foreach (string Name in Form.Questions)
             {
                 if (Form.QuestionTypes[Name] == Form.TypeNames[Form.QuestionType.Text])

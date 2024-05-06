@@ -8,7 +8,7 @@ namespace aTframework3demo.TestEntities
     public class Form
     {
         static string Name() => "Вопрос " + DateTime.Now.Ticks;
-        static string Answer(string Text = "") => $"Ответ {Text}" + DateTime.Now.Ticks;
+        static string Answer(string Text = "") => $"Ответ {Text} " + DateTime.Now.Ticks;
         public Form(string title, int TextQuestions = 1, int OneFromListQuestions = 0, int ManyFromListQuestions = 0, int OptionsNumber = 0)
         {
             Title = title ?? throw new ArgumentNullException(nameof(title));
@@ -21,9 +21,10 @@ namespace aTframework3demo.TestEntities
                 {
                     string name = Name();
                     string answer = Answer();
-                    Questions.Add(name);
 
+                    Questions.Add(name);
                     CorrectAnswers.Add(name, new List<string> { answer });
+                    Answers.Add(name, new List<string> { answer });
                     QuestionTypes.Add(name, TypeNames[QuestionType.Text]);
                 }
             }
@@ -32,19 +33,20 @@ namespace aTframework3demo.TestEntities
                 for (int i = 0; i < OneFromListQuestions; i++)
                 {
                     string name = Name();
+                    List<string> OptionsList = new();
 
-                    for (int j = 0; j < OptionsNumber; j++)
+                    for (int j = 0; j < OptionsNumber+1; j++)
                     {
                         string Option = Answer($"{j + 1}");
-                        Options.Add(name, new List<string> { Option });
+                        OptionsList.Add(Option);
                     }
+                    Questions.Add(name);
+                    Options.Add(name, OptionsList);
+                    CorrectAnswers.Add(name, new List<string> { Options[name][0] });
+                    QuestionTypes.Add(name, TypeNames[QuestionType.One_from_list]);
 
                     int Index = Random.Next(Options[name].Count);
-
-                    Questions.Add(name);
                     Answers.Add(name, new List<string> { Options[name][Index] });
-                    CorrectAnswers.Add(name, new List<string> { Options[name][0] });
-                    QuestionTypes.Add(name, TypeNames[QuestionType.Text]);
                 }
             }
             if (ManyFromListQuestions > 0)
@@ -54,18 +56,18 @@ namespace aTframework3demo.TestEntities
                     string name = Name();
 
                     List<string> OptionsList = new();
-                    for (int j = 0; j < OptionsNumber; j++)
+                    for (int j = 0; j < OptionsNumber+1; j++)
                     {
                         string Option = Answer($"{j + 1}");
-                        Options.Add(name, new List<string> { Option });
+                        OptionsList.Add(Option);
                     }
-                    int Index = Random.Next(Options[name].Count);
-
                     Questions.Add(name);
-                    Answers.Add(name, new List<string> { Options[name][Index] });
-                    CorrectAnswers.Add(name, new List<string> { Options[name][0], Options[name][1] });
-                    QuestionTypes.Add(name, TypeNames[QuestionType.Text]);
                     Options.Add(name, OptionsList);
+                    CorrectAnswers.Add(name, new List<string> { Options[name][0], Options[name][1] });
+                    QuestionTypes.Add(name, TypeNames[QuestionType.Many_from_list]);
+
+                    int Index = Random.Next(Options[name].Count);
+                    Answers.Add(name, new List<string> { Options[name][Index] });
                 }
             }
         }

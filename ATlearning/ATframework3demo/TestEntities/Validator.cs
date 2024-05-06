@@ -7,17 +7,18 @@ namespace aTframework3demo.TestEntities
 {
     public class Validator
     {
-        public Validator(int questionsNumber = 6)
+        public Validator(int questionsNumber = 1)
         {
             QuestionsNumber = questionsNumber;
 
-            for (int i = 0; i < questionsNumber; i++)
+            for (int i = 1; i <= questionsNumber; i++)
             {
-                Questions.Add(i, "Вопрос " + DateTime.Now.Ticks);
+                XssQuestions.Add(i, "<script>alert(1)</script>");
             }
         }
-        public string Xss = "<script>alert(1)</script>";
+        public string XSS = "<script>alert(1)</script>";
+        public string EmptyString = " ";
         public int QuestionsNumber { get; set; }
-        public Dictionary<int, string> Questions { get; set; } = new Dictionary<int, string>();
+        public Dictionary<int, string> XssQuestions { get; set; } = new Dictionary<int, string>();
     }
 }
