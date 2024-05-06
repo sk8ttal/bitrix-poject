@@ -28,24 +28,12 @@ namespace aTframework3demo.PageObjects.Forms
             "Поле для ввода названия опции");
         WebItem OptionCheckBox(string optionName) => new WebItem($"//label[text()='{optionName}']/ancestor::div[@class='form-check inner-question-options-wrap']//input",
             $"Чекбокс опции с именем {optionName}");
+        WebItem DeleteQuestionButton(string questionName) => new WebItem($"//h3[text()='{questionName}']/ancestor::div[@class='card mb-3 mt-3']//button[@class='btn-close']", $"Конпка удаления вопроса {questionName}");
 
         public FormQuestionsFrame AddQuestion()
         {
             ButtonByText("+ Добавить вопрос").Hover(0);
             ButtonByText("+ Добавить вопрос").Click(0);
-
-            return this;
-        }
-
-        public FormQuestionsFrame AddNewOption(string QuestionName, int OptionsNumber = 1)
-        {
-
-
-            for (int i = OptionsNumber; i > 0; i--)
-            {
-                OptionButton(QuestionName).Hover(0);
-                OptionButton(QuestionName).Click(0);
-            }
 
             return this;
         }
@@ -192,71 +180,6 @@ namespace aTframework3demo.PageObjects.Forms
             return this;
         }
 
-        public FormQuestionsFrame DeleteQuestionByName(string questionName)
-        {
-            new WebItem($"//h3[text()='{questionName}']//ancestor::div[@class='header-question-title']//button", $"Кнопка удалить вопроса с названием {questionName}")
-                .Click();
-
-            return this;
-        }
-
-        public FormQuestionsFrame DeleteQuestionsFromTop(int questionNumber)
-        {
-            for (int i = 0; i < questionNumber; i++)
-            {
-                new WebItem("//button[@class='btn-close']", "Кнопка удаления вопроса")
-                    .Click();
-            }
-
-            return this;
-        }
-
-        public bool IsAllQuestionsNamed(Form Form)
-        {
-
-
-            for (int i = 0; i < Form.QuestionsNumber; i++)
-            {
-                if (!new WebItem($"//h3[text()='{Form.Questions[i]}']", $"Блок вопроса {Form.Questions[i]}").WaitElementDisplayed())
-                {
-                    Log.Error($"Блок вопроса {Form.Questions[i]} не найден");
-                    return false;
-                }
-                Log.Info($"Блок вопроса {Form.Questions[i]} найден");
-            }
-
-            return true;
-        }
-
-        public bool IsEmptyFormAlertPresent()
-        {
-            WebItem alertMessage = new WebItem("//div[@class='alert alert-danger' and text()='Нельзя создать форму без вопросов']", "Предупреждение после попытки форму без вопросов");
-            bool isAlertPresent = Waiters.WaitForCondition(() => alertMessage.WaitElementDisplayed(), 2, 6, "Ожидание появления сообщения об ошибке");
-
-            return isAlertPresent;
-        }
-
-        public bool IsNotSelectedCorrectAnswerErrorPresent()
-        {
-            WebItem Message = new WebItem("//div[@class='alert alert-danger' and text()='Для тестовых вопросов хотя бы один вариант должен быть правильным']",
-                "Предупреждение после попытки создать форму без указания правильных вариантов ответов");
-            bool IsAlertPresent = Waiters.WaitForCondition(() => Message.WaitElementDisplayed(), 2, 6, "Ожидание появления сообщения об ошибке");
-
-            return IsAlertPresent;
-        }
-
-        public FormQuestionsFrame SetQuestionsName(Form Form)
-        {
-            foreach (string Name in Form.Questions)
-            {
-                NewQuestion.Hover(0);
-                NewQuestion.Click(0);
-                NewQuestionField.ReplaceText(Name, 0);
-            }
-
-            return this;
-        }
-
         /// <summary>
         /// Меняет тип всех вопросов в форме на 'Тестовый'
         /// </summary>
@@ -331,6 +254,17 @@ namespace aTframework3demo.PageObjects.Forms
             return this;
         }
 
+        public FormQuestionsFrame DeleteAllQuestions(Form testForm)
+        {
+            foreach (string questionName in testForm.Questions)
+            {
+                DeleteQuestionButton(questionName).Hover();
+                DeleteQuestionButton(questionName).Click();
+            }
+
+            return this;
+        }
+
         public FormQuestionsFrame SetAnswer(string questionName)
         {
             SetAnswerButton(questionName).Hover(0);
@@ -338,21 +272,6 @@ namespace aTframework3demo.PageObjects.Forms
 
             return this;
         }
-
-        // public FormQuestionsFrame SetAnswers(Form Form)
-        // {
-        //     foreach (string questionName in Form.Questions)
-        //     {
-        //         if (Form.QuestionTypes[questionName] == Form.TypeNames[Form.QuestionType.One_from_list] ||
-        //         Form.QuestionTypes[questionName] == Form.TypeNames[Form.QuestionType.Many_from_list])
-        //         {
-        //             SetAnswerButton(questionName).Hover(0);
-        //             SetAnswerButton(questionName).Click(0);
-        //         }
-        //     }
-
-        //     return this;
-        // }
 
         public FormsMainPage SaveForm()
         {
@@ -409,6 +328,28 @@ namespace aTframework3demo.PageObjects.Forms
             return new FormSettingsFrame();
         }
 
+        public FormQuestionsFrame DeleteQuestionByName(string questionName)
+        {
+            DeleteQuestionButton(questionName).Hover();
+            DeleteQuestionButton(questionName).Click();
 
+            return this;
+        }
+
+        public bool IsEmptyFormAlertPresent()
+        {
+            
+            var alert = new WebItem("//div[@class='alert alert-danger' and text()='Нельзя создать форму без вопросов']", "Алерт при попытке создать пустую форму");
+
+            if(alert.WaitElementDisplayed())
+            {
+                return true;
+            }
+
+            else
+            {
+                return false;
+            }
+        }
     }
 }

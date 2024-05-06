@@ -71,14 +71,14 @@ namespace aTframework3demo.PageObjects.Forms
         /// <summary>
         /// Открыть редактор формы
         /// </summary>
-        public FormQuestionsFrame EditForm(string formName)
+        public FormQuestionsFrame EditForm(Form testForm)
         {
-            new WebItem($"//a[text()='{formName}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {formName}")
+            new WebItem($"//a[text()='{testForm.Title}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {testForm.Title}")
                 .Click();
             new WebItem("//div[@class='popup-window']//span[text()='Редактировать']", "Опция 'Редактировать'")
                 .Click();
 
-            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм редактирования формы {formName}")
+            new WebItem("//iframe[@class='side-panel-iframe']", $"Фрейм редактирования формы {testForm.Title}")
                 .SwitchToFrame();
 
             return new FormQuestionsFrame();
@@ -118,7 +118,7 @@ namespace aTframework3demo.PageObjects.Forms
 
         public OpenedFormFrame OpenForm(string formName)
         {
-            new WebItem($"//a[text()='{formName}']/parent::span/parent::div/parent::td/parent::tr//a", $"Контексное меню формы {formName}")
+            new WebItem($"//a[text()='{formName}']/parent::span/parent::div/parent::td/parent::tr//a[@href='#']", $"Контексное меню формы {formName}")
                 .Click();
             new WebItem("//div[@class='popup-window']//span[text()='Открыть']", "Опция 'Открыть'")
                 .Click();

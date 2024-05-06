@@ -8,6 +8,11 @@ namespace aTframework3demo.PageObjects.Forms
     /// </summary>
     public class FormPage
     {
+        WebItem Option(string questionName, string optionName) =>
+            new WebItem($"//label[text()='{questionName}']/parent::div//label[text()='{optionName}']/parent::div/input", $"Опция {optionName}");
+
+        WebItem TextField(string questionName) => new WebItem($"//label[text()='{questionName}']/parent::div/input", $"Поле ввода ответа для вопроса {questionName}");
+
         public bool IsFormNameCorrect(string FormName)
         {
             WebItem Title = new WebItem($"//h1[text()='{FormName}']", "Название формы");
@@ -33,22 +38,22 @@ namespace aTframework3demo.PageObjects.Forms
             {
                 if (Form.QuestionTypes[Name] == Form.TypeNames[Form.QuestionType.Text])
                 {
-                    new WebItem($"//label[text()='{Name}']/parent::div/input", $"Поле ввода ответа для вопроса {Name}")
-                        .SendKeys(Form.Answers[Name][0]);
+                    TextField(Name).Hover();
+                    TextField(Name).SendKeys(Form.Answers[Name][0]);
                 }
                 if (Form.QuestionTypes[Name] == Form.TypeNames[Form.QuestionType.One_from_list])
                 {
                     string OptionName = Form.Answers[Name][0];
-
-                    new WebItem($"//label[text()='{Name}']/parent::div//label[text()='{OptionName}']/parent::div/input", $"Опция {OptionName}")
-                        .Click();
+                    Option(Name, OptionName).Hover();
+                    Option(Name, OptionName).Click();
+                    
                 }
                 if (Form.QuestionTypes[Name] == Form.TypeNames[Form.QuestionType.Many_from_list])
                 {
                     foreach (string OptionName in Form.Answers[Name])
                     {
-                        new WebItem($"//label[text()='{Name}']/parent::div//label[text()='{OptionName}']/parent::div/input", $"Опция {OptionName}")
-                        .Click();
+                        Option(Name, OptionName).Hover();
+                        Option(Name, OptionName).Click();
                     }
                 }
             }

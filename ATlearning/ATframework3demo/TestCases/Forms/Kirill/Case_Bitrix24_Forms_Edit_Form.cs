@@ -18,7 +18,13 @@ namespace ATframework3demo.TestCases.Forms
         void EditForm(PortalHomePage homePage)
         {
             string formTitle = "testForm" + DateTime.Now.Ticks;
-            var testForm = new Form(formTitle, 3);
+            var testForm = new Form(
+                formTitle, 
+                1, 
+                1, 
+                1, 
+                3
+            );
 
             //подготовка формы для редактирования
             var formsMainPage = homePage
@@ -28,11 +34,9 @@ namespace ATframework3demo.TestCases.Forms
                 //нажать на 'создать'
                 .OpenCreateFormSlider()
                 //изменить название формы
-                .ChangeFormTitle(testForm.Title)
-                //добавить вопрос
-                .AddQuestion(testForm)
-                //задать имя вопросам
-                .SetQuestionsName(testForm)
+                .ChangeFormTitle(testForm)
+                //добавить вопросы
+                .CreateQuestionsWithParameters(testForm)
                 //сохранить форму
                 .SaveForm();
 
@@ -50,7 +54,7 @@ namespace ATframework3demo.TestCases.Forms
                 //удалить вопрос 2
                 .DeleteQuestionByName(testForm.Questions[2])
                 //добавить новый вопрос
-                .AddQuestion(testForm)
+                .AddQuestion()
                 //переименовать созданный вопрос
                 .RenameOneQuestion("Название", questionTitle)
                 //сохранить форму
@@ -58,7 +62,7 @@ namespace ATframework3demo.TestCases.Forms
 
             var openedFormFrame = formsMainPage
                 //открыть форму
-                .OpenForm(testForm)
+                .OpenForm(testForm.Title)
                 //нажать 'начать'
                 .StartForm();
 
@@ -71,11 +75,11 @@ namespace ATframework3demo.TestCases.Forms
             }
 
             //ассерт удаления вопроса в форме
-            // bool isQuestionPresent = openedFormFrame.IsQuestionWithNamePresent(testForm.Questions[1]);
-            // if (isQuestionPresent)
-            // {
-            //     Log.Error($"Вопрос '{testForm.Questions[1]}' не удален");
-            // }
+             bool isQuestionPresent = openedFormFrame.IsQuestionWithNamePresent(testForm.Questions[1]);
+             if (isQuestionPresent)
+             {
+                Log.Error($"Вопрос '{testForm.Questions[1]}' не удален");
+             }
 
             formsMainPage = openedFormFrame
                 //закрыть форму
@@ -85,44 +89,37 @@ namespace ATframework3demo.TestCases.Forms
                 //открыть фрейм редактирования формы
                 .EditForm(testForm)
                 //удалить все вопросы
-                .DeleteQuestionsFromTop(testForm.QuestionsNumber)
+                .DeleteAllQuestions(testForm)
                 //попытаться сохранить пустую форму
                 .SaveFormWithErrors();
 
             //ассерт ограничения в создании формы без вопросов
-            bool isEmptyFormAlertPresent = formEditPage.IsEmptyFormAlertPresent();
+            bool isEmptyFormAlertPresent = formEditPage
+                .IsEmptyFormAlertPresent();
             if (!isEmptyFormAlertPresent)
             {
                 Log.Error($"Создалась форма '{testForm.Title}' без вопросов");
             }
 
             formTitle = "testForm" + DateTime.Now.Ticks;
-            var editedTestForm = new Form(formTitle, 2);
+            var editedTestForm = new Form(
+                formTitle, 
+                0,
+                1,
+                1,
+                3
+            );
 
             formsMainPage = formEditPage
                 //переименовать форму
                 .RenameForm(testForm.Title, editedTestForm.Title)
                 //добавить вопросы
-                .AddQuestion(editedTestForm.QuestionsNumber)
-                //задать имя вопросам
-                .SetQuestionsName(editedTestForm.QuestionsNumber, editedTestForm)
-                //поменять тип вопроса 1 на один из списка 
-                .ChangeQuestionType(editedTestForm.Questions[0], editedTestForm.Type[2])
-                //поменять тип вопроса 2 на несколько из списка
-                .ChangeQuestionType(editedTestForm.Questions[1], editedTestForm.Type[3])
-                //создать 2 опции в вопросе 1
-                .AddNewOption(editedTestForm.Questions[0], 2)
-                //изменить название опций в вопросе 1
-                .ChangeOptionsName(editedTestForm.Questions[0], editedTestForm.Options)
-                //создать 3 опции в вопросе 2
-                .AddNewOption(editedTestForm.Questions[1], 3)
-                //изменить название опций в вопросе 2
-                .ChangeOptionsName(editedTestForm.Questions[1], editedTestForm.Options)
+                .CreateQuestionsWithParameters(editedTestForm)
                 //сохранить форму
                 .SaveForm();
 
             //ассерт отображения формы после переименования
-            isFormPresent = formsMainPage.IsFormPresent(editedTestForm.Title);
+            isFormPresent = formsMainPage.IsFormPresent(editedTestForm);
             if (!isFormPresent)
             {
                 Log.Error($"Созданная форма с названием '{formTitle}' не отображается");

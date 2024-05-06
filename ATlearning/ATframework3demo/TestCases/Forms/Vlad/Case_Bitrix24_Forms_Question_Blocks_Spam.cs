@@ -34,11 +34,13 @@ namespace aTframework3demo.TestCases.Forms
                 .CreateQuestionsWithParameters(Form)
                 .SaveForm();
 
-            WebDriverActions.Refresh();
+            Waiters.StaticWait_s(4);
             
             Case
                 .OpenForm(Form.Title)
-                .StartForm();
+                .StartForm()
+                .CloseForm()
+                .DeleteForm(Form.Title);
         }
     }
 }
