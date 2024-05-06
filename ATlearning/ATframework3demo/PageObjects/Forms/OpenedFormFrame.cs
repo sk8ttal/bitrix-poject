@@ -28,47 +28,6 @@ namespace aTframework3demo.PageObjects.Forms
             return this;
         }
 
-        public bool IsFirstQuestionNamed(string referenceName)
-        {
-            var firstEncounteredQuestionBlock = new WebItem($"//div[@class='mb-3']//label", "Первый вопрос в форме");
-            string actualName = firstEncounteredQuestionBlock.InnerText();
-            if (actualName == referenceName)
-            {
-                return true;
-            }
-
-            else
-            {
-                Log.Error($"Ожидался вопрос '{referenceName}', фактический - '{actualName}'");
-                return false;
-            }
-        }
-
-        public bool IsQuestionWithNamePresent(string referenceName)
-        {
-            var formQuestion = new WebItem($"//label[@class='form-label' and text()='{referenceName}']", "Название вопроса");
-            bool isQuestionPresent = Waiters.WaitForCondition(() => formQuestion.WaitElementDisplayed(), 2, 6, "Ожидание появления вопроса");
-
-            return isQuestionPresent;
-        }
-
-        public OpenedFormFrame ChooseOptionInQuestion(string optionName, string questionName)
-        {
-            new WebItem($"//label[text()='{optionName}']/ancestor::div[@class='form-check']/input[contains(@name,'{questionName}')]", $"Опция '{optionName}' вопроса '{questionName}'")
-                .Click();
-
-            return this;
-        }
-
-        public OpenedFormFrame SendKeysToTextQuestion(string inputValue, string questionName)
-        {
-            var inputField = new WebItem($"//label[@class='form-label' and text()='{questionName}']/ancestor::div[@class='mb-3']//input[@class='form-control']", $"Поле ввода текста вопроса '{questionName}'");
-            inputField.Click();
-            inputField.SendKeys(inputValue);
-
-            return this;
-        }
-
         public FormsMainPage CloseForm()
         {
             WebDriverActions.SwitchToDefaultContent();
@@ -84,18 +43,6 @@ namespace aTframework3demo.PageObjects.Forms
                 .Click();
 
             return this;
-        }
-
-        public FormsMainPage FinishForm()
-        {
-            new WebItem("//button[@class='btn btn-primary']", "Кнопка 'Подтвердить'")
-                .Click();
-
-            //без этого костыля селениум кликает на элементы слишком быстро
-            Waiters.StaticWait_s(2);
-            WebDriverActions.SwitchToDefaultContent();
-
-            return new FormsMainPage();
         }
     }
 }
